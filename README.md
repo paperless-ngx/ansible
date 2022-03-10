@@ -1,3 +1,5 @@
+### :warning: THIS REPO IS UNTESTED! Ansible is not currently supported by paperless-ngx. Use only at your own peril. :warning:
+
 Ansible Role: paperless-ng
 ==========================
 
