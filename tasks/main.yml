@@ -105,7 +105,7 @@
 - block:
     - name: get latest release version
       uri:
-        url: https://api.github.com/repos/jonaswinkler/paperless-ng/releases/latest
+        url: https://api.github.com/repos/paperless-ngx/paperless-ngx/releases/latest
         method: GET
       register: latest_release
     - name: parse latest release version
@@ -113,68 +113,47 @@
         paperlessng_version: "{{ latest_release.json['tag_name'] }}"
   when: paperlessng_version == "latest"
 
-- name: check if version is ref
-  fail:
-    msg: "Specifying `paperlessng_version` as git ref may not work as expected!"
-  ignore_errors: True  # Output failure (as warning), but don't consider play failed
-  when: paperlessng_version.startswith('refs/')
-
 - block:
-    - name: sanitize version string
-      set_fact:
-        paperlessng_version: "{{ paperlessng_version | regex_replace('^ng-(\\d+\\.\\d+\\.\\d+)$', '\\1') }}"
-    - name: get tag data
+    - name: check if version can be found on github
       uri:
-        url: https://api.github.com/repos/jonaswinkler/paperless-ng/tags
+        url: "https://api.github.com/repos/paperless-ngx/paperless-ngx/commits/ngx-{{ paperlessng_version }}"
         method: GET
-      register: tags
-    - name: get commit for target tag
+        status_code: [200, 404, 422]
+      register: commit
+    - name: get commit version for your configuration
       set_fact:
-        paperlessng_commit: "{{ tags.json | json_query('[?name==`ng-' + paperlessng_version +'`] | [0].commit.sha') }}"
-  when: paperlessng_version | regex_search("^(ng-)?(\d+\.\d+\.\d+)$")
+        paperlessng_commit: "{{ commit.json | json_query('sha') }}"
+      when: commit.status == 200
+    - name: get commit for target commit-or-ref check
+      fail:
+        msg: "Can not determine commit from `paperlessng_version=={{ paperlessng_version }}`!"
+      when: commit.status != 200
 
-- block:
-    - name: check if version is branch
-      uri:
-        url: "https://api.github.com/repos/jonaswinkler/paperless-ng/branches/{{ paperlessng_version }}"
-        method: GET
-        status_code: [200, 404]
-      register: branch
-    - name: get commit for target branch
-      set_fact:
-        paperlessng_commit: "{{ branch.json | json_query('commit.sha') }}"
-      when: branch.status == 200
-    - block:
-        - name: check if version is commit-or-ref
-          uri:
-            url: "https://api.github.com/repos/jonaswinkler/paperless-ng/commits/{{ paperlessng_version }}"
-            method: GET
-            status_code: [200, 404, 422]
-          register: commit
-        - name: get commit for target commit-or-ref
-          set_fact:
-            paperlessng_commit: "{{ commit.json | json_query('sha') }}"
-          when: commit.status == 200
-        - name: fail
-          fail:
-            msg: "Can not determine commit from `paperlessng_version=={{ paperlessng_version }}`!"
-          when: commit.status != 200
-      when: branch.status == 404
-  when: not(paperlessng_version | regex_search("^(ng-)?(\d+\.\d+\.\d+)$"))
+- name: check for existing paperless-ng version file
+  ansible.builtin.stat:
+    path: "{{ paperlessng_directory }}/.installed_version"
+  register: paperlessng_current_commitfile
 
-- name: check for paperless-ng installation
+- name: get the current installed version as commit
   command:
     cmd: "cat {{ paperlessng_directory }}/.installed_version"
-  changed_when: '"No such file or directory" in paperlessng_current_commit.stderr or paperlessng_current_commit.stdout != paperlessng_commit | string'
+  changed_when: 'paperlessng_current_commit.stdout != paperlessng_commit | string'
   failed_when: false
   ignore_errors: yes
   register: paperlessng_current_commit
+  when: paperlessng_current_commitfile.stat.exists
 
 - name: register current state
   set_fact:
-    fresh_installation: '{{ "No such file or directory" in paperlessng_current_commit.stderr }}'
-    update_installation: '{{ "No such file or directory" not in paperlessng_current_commit.stderr and paperlessng_current_commit.stdout != paperlessng_commit | string }}'
+    fresh_installation: '{{ not paperlessng_current_commitfile.stat.exists }}'
+    update_installation: false
+    reconfigure_only: false
+
+- name: register current existing state
+  set_fact:
+    update_installation: '{{ paperlessng_current_commit.stdout != paperlessng_commit | string }}'
     reconfigure_only: "{{ paperlessng_current_commit.stdout == paperlessng_commit | string }}"
+  when: not fresh_installation
 
 - block:
     - name: backup current paperless-ng installation
@@ -202,6 +181,7 @@
         owner: "{{ paperlessng_system_user }}"
         group: "{{ paperlessng_system_group }}"
         mode: "750"
+
     - name: create temporary directory
       become: yes
       become_user: "{{ paperlessng_system_user }}"
@@ -209,18 +189,15 @@
         state: directory
         path: "{{ paperlessng_directory }}"
       register: tempdir
-    - name: check if version is available as release archive
-      uri:
-        url: "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-{{ paperlessng_version }}/paperless-ng-{{ paperlessng_version }}.tar.xz"
-        method: GET
-        status_code: [200, 404]
-      register: release_archive
+
     - name: install paperless-ng from source
       include_tasks: install-source.yml
-      when: release_archive.status == 404
+      when: paperlessng_install_method == "source"
+
     - name: install paperless-ng from release archive
       include_tasks: install-release.yml
-      when: release_archive.status == 200
+      when: paperlessng_install_method == "precompiledrelease"
+
     - name: change owner and permissions of paperless-ng
       command:
         cmd: "{{ item }}"
@@ -229,9 +206,11 @@
         - "chown -R {{ paperlessng_system_user }}:{{ paperlessng_system_group }} {{ tempdir.path }}"
         - "find {{ tempdir.path }} -type d -exec chmod 0750 {} ;"
         - "find {{ tempdir.path }} -type f -exec chmod 0640 {} ;"
-    - name: move paperless-ng
+
+    - name: move paperless-ngx
       command:
-        cmd: "cp -a {{ tempdir.path }}/paperless-ng/. {{ paperlessng_directory }}"
+        cmd: "cp -a {{ tempdir.path }}/paperless-ngx/. {{ paperlessng_directory }}"
+
     - name: store commit hash of installed version
       copy:
         content: "{{ paperlessng_commit }}"
@@ -239,6 +218,7 @@
         owner: "{{ paperlessng_system_user }}"
         group: "{{ paperlessng_system_group }}"
         mode: "0440"
+        
     - name: remove temporary directory
       file:
         path: "{{ tempdir.path }}"
