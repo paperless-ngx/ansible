@@ -112,7 +112,6 @@ Example Playbook
         paperlessng_trash_dir: "/paperlessdata/trash"
         paperlessng_consumption_dir: "/paperlessdata/consumption"
         paperlessng_media_root: "/paperlessdata/media"
-        paperlessng_staticdir: "/paperlessdata/static"
         paperlessng_ocr_languages:
         - deu
         - eng
