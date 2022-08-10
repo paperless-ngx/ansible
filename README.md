@@ -1,5 +1,3 @@
-### :warning: THIS REPO IS UNTESTED! Ansible is not currently supported by paperless-ngx. Use only at your own peril. :warning:
-
 Ansible Role: paperless-ngx
 ===========================
 
@@ -16,8 +14,8 @@ Note that this role requires root access, so either run it in a playbook with a 
   roles:
   - role: paperless-ngx
     become: yes
-    Role Variables
 ```
+Role Variables
 ---
 
 Most configuration variables from paperless-ngx itself are available and accept their respective arguments.
@@ -29,64 +27,35 @@ For a full listing including explanations and allowed values, see the current [d
 
 Additional variables available in this role are listed below, along with default values:
 ```paperlessng_version: latest```
-The [release](https://github.com/paperless-ngx/paperless-ngx/releases) archive version of paperless-ngx to install.
-`latest` stands for the latest release of paperless-ngx.
-To install a specific version of paperless-ngx, use the tag name of the release, e. g. `1.4.4` when the tag is `ngx-1.4.4`.
-```
-paperlessng_redis_host: localhost
-paperlessng_redis_port: 6379
-```
-Separate configuration values that combine into `PAPERLESS_REDIS`.
-```
-paperlessng_db_type: sqlite
-```
-Database to use. Default is file-based SQLite.
-```
-paperlessng_db_host: localhost
-paperlessng_db_port: 5432
-paperlessng_db_name: paperlessng
-paperlessng_db_user: paperlessng
-paperlessng_db_pass: paperlessng
-paperlessng_db_sslmode: prefer
-```
-Database configuration (only applicable if `paperlessng_db_type == 'postgresql'`).
-```
-paperlessng_directory: /opt/paperless-ngx
-```
-Root directory paperless-ngx is installed into.
-```
-paperlessng_virtualenv: "{{ paperlessng_directory }}/.venv"
-```
-Directory used for the virtual environment for paperless-ngx.
-```
-paperlessng_ocr_languages:
-- eng
-```
-List of OCR languages to install and configure (`apt search tesseract-ocr-*`).
-```
-paperlessng_use_jbig2enc: True
-```
-Whether to install and use [jbig2enc](https://github.com/agl/jbig2enc) for OCRmyPDF.
-```
-paperlessng_big2enc_lossy: False
-```
-Whether to use jbig2enc's lossy compression mode.
-```
-paperlessng_superuser_name: paperlessng
-paperlessng_superuser_email: paperlessng@example.com
-paperlessng_superuser_password: paperlessng
-```
-Credentials of the initial superuser in paperless-ngx.
-```
-paperlessng_system_user: paperlessng
-paperlessng_system_group: paperlessng
-```
-System user and group to run the paperless-ngx services as (will be created if required).
-```
-paperlessng_listen_address: 127.0.0.1
-paperlessng_listen_port: 8000
-```
-Address and port for the paperless-ngx service to listen on.
+
+The [release](https://github.com/paperless-ngx/paperless-ngx/releases) archive version of paperless-ngx to install. `latest` stands for the latest release of paperless-ngx.
+
+To install a specific version of paperless-ngx, use the tag name of the release, e. g. `v1.8.0`
+
+| Additional Variables           | Required/Optional | Example Value                       | Description                                                                      |
+|--------------------------------|-------------------|-------------------------------------|----------------------------------------------------------------------------------|
+| paperlessng_version            | Required          | v1.8.0                              | Version to install                                                               |
+| paperlessng_redis_host         | Required          | localhost                           | Separate configuration values that combine into PAPERLESS_REDIS.                 |
+| paperlessng_redis_port         | Required          | 6379                                | Separate configuration values that combine into PAPERLESS_REDIS.                 |
+| paperlessng_db_type            | Required          | sqlite                              | Database to use. Default is file-based SQLite..                                  |
+| paperlessng_db_host            | Optional          | localhost                           | Database configuration **(only applicable if paperlessng_db_type == 'postgresql').** |
+| paperlessng_db_port            | Optional          | 5432                                | Database configuration **(only applicable if paperlessng_db_type == 'postgresql').** . |
+| paperlessng_db_name            | Optional          | paperlessng                         | Database configuration **(only applicable if paperlessng_db_type == 'postgresql').**  |
+| paperlessng_db_user            | Optional          | paperlessng                         | Database configuration **(only applicable if paperlessng_db_type == 'postgresql').**  |
+| paperlessng_db_pass            | Optional          | paperlessng                         | Database configuration **(only applicable if paperlessng_db_type == 'postgresql').**  |
+| paperlessng_db_sslmode         | Optional          | prefer                              | Database configuration **(only applicable if paperlessng_db_type == 'postgresql').**  |
+| paperlessng_directory          | Required          | /opt/paperless-ngx                  | Root directory paperless-ngx is installed into.                                  |
+| paperlessng_virtualenv         | Required          | "{{ paperlessng_directory }}/.venv" | Directory used for the virtual environment for paperless-ngx                     |
+| paperlessng_ocr_languages      | Required          | eng                                 | List of OCR languages to install and configure (`apt search tesseract-ocr-*`).   |
+| paperlessng_use_jbig2enc       | Optional          | True                                | Whether to install and use jbig2enc for OCRmyPDF                                 |
+| paperlessng_big2enc_lossy      | Optional          | False                               | Whether to use jbig2enc's lossy compression mode                                 |
+| paperlessng_superuser_name     | Required          | paperlessng                         | Credentials of the initial superuser in paperless-ngx.                           |
+| paperlessng_superuser_email    | Required          | paperlessng@example.com             | Credentials of the initial superuser in paperless-ngx.                           |
+| paperlessng_superuser_password | Required          | paperlessng                         | Credentials of the initial superuser in paperless-ngx.                           |
+| paperlessng_system_user        | Required          | paperlessng                         | System user to run the paperless-ngx services as (will be created if required).  |
+| paperlessng_system_group       | Required          | paperlessng                         | System group to run the paperless-ngx services as (will be created if required). |
+| paperlessng_listen_address     | Required          | 127.0.0.1                           | Address for the paperless-ngx service to listen on.                              |
+| paperlessng_listen_port        | Required          | 8000                                | Port for the paperless-ngx service to listen on.                                 |
 
 Dependencies
 ------------
@@ -104,7 +73,7 @@ Example Playbook
     roles:
         - { role: ansible-paperless-ngx,  tags: ["paperless"] }
     vars:
-        paperlessng_version: 1.6.0
+        paperlessng_version: v1.8.0
         paperlessng_install_method: precompiledrelease
         paperlessng_use_jbig2enc: true
         paperlessng_secret_key: mxsupersecurekeyforhashing
@@ -123,11 +92,4 @@ Example Playbook
         paperlessng_superuser_password: supersecurepasswordchangeme
         paperlessng_listen_address: 0.0.0.0
         paperlessng_listen_port: 8000
-```
-
-Additional:
-
-```
-paperlessng_db_type: postgresql
-paperlessng_db_pass: PLEASEPROVIDEASTRONGPASSWORDHERE
 ```

@@ -7,17 +7,7 @@
 - name: Update all packages to the latest version
   apt:
     upgrade: yes
-
-- name: Check and set fact if consumption mount point exists
-  set_fact:
-    consumption_mount_exist: true
-  when: item.mount == '{{ paperlessng_consumption_dir }}'
-  loop: "{{ ansible_facts.mounts }}"
-
-- name: Show if consumption mount exists
-  debug:
-    msg: "Consumption mount point exists"
-  when: consumption_mount_exist == true
+    state: latest
 
 - name: install base dependencies
   apt:
@@ -164,8 +154,8 @@
 - name: register current state
   set_fact:
     fresh_installation: '{{ not paperlessng_current_commitfile.stat.exists }}'
-    update_installation: true
-    reconfigure_only: true
+    update_installation: false
+    reconfigure_only: false
 
 - name: register current existing state
   set_fact:
@@ -257,15 +247,7 @@
     - "{{ paperlessng_media_root }}"
     - "{{ paperlessng_staticdir }}"
     - "{{ paperlessng_export_dir }}"
-
-- name: create paperless-ngx consumption directory and set permissions
-  file:
-    path: "{{ paperlessng_consumption_dir }}"
-    state: directory
-    owner: "{{ paperlessng_system_user }}"
-    group: "{{ paperlessng_system_group }}"
-    mode: "750"
-  when: consumption_mount_exist == false
+    - "{{ paperlessng_consumption_dir }}"
 
 - name: rename initial config
   command:
@@ -580,7 +562,10 @@
       - nfs-utils
       - nfs4-acl-tools
     state: present
-  when: ansible_os_family == "RedHat" and paperlessng_consumption_dir_nfs_enabled and paperlessng_is_lxc != "True"
+  when: 
+    - ansible_os_family == "RedHat" 
+    - paperlessng_consumption_dir_nfs_enabled
+    - paperlessng_is_lxc != "True"
 
 - name: NFS utility present for debian-like
   ansible.builtin.apt:
@@ -588,7 +573,10 @@
       - nfs-common
       - nfs4-acl-tools
     state: present
-  when: ansible_os_family == "Debian" and paperlessng_consumption_dir_nfs_enabled and paperlessng_is_lxc != "True"
+  when: 
+    - ansible_os_family == "RedHat" 
+    - paperlessng_consumption_dir_nfs_enabled
+    - paperlessng_is_lxc != "True"
 
 - name: Check consumption mountpoint exists
   ansible.builtin.file:
@@ -597,7 +585,10 @@
     mode: "{{ paperlessng_consumption_dir_permission }}"
     owner: root
     group: root
-  when: paperlessng_consumption_dir_nfs_enabled and paperlessng_is_lxc != "True" and consumption_mount_exist == 'false'
+  when: 
+    - ansible_os_family == "RedHat" 
+    - paperlessng_consumption_dir_nfs_enabled
+    - paperlessng_is_lxc != "True"
 
 - name: Mount consumption share
   ansible.posix.mount:
@@ -606,8 +597,11 @@
     fstype: nfs
     opts: "{{ paperlessng_consumption_dir_myopts }}"
     state: mounted
-  when: paperlessng_consumption_dir_nfs_enabled and paperlessng_is_lxc != "True"
-
+  when: 
+    - ansible_os_family == "RedHat" 
+    - paperlessng_consumption_dir_nfs_enabled
+    - paperlessng_is_lxc != "True"
+    
 - name: copy systemd services
   copy:
     src: "{{ paperlessng_directory }}/scripts/{{ item }}"
