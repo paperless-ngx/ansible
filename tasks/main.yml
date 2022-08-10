@@ -50,6 +50,7 @@
       - build-essential
       - python3-setuptools
       - python3-wheel
+      - git
 
 # upstream virtualenv in Ubuntu 20.04 is broken
 # https://github.com/pypa/virtualenv/issues/1873
@@ -163,8 +164,8 @@
 - name: register current state
   set_fact:
     fresh_installation: '{{ not paperlessng_current_commitfile.stat.exists }}'
-    update_installation: false
-    reconfigure_only: false
+    update_installation: true
+    reconfigure_only: true
 
 - name: register current existing state
   set_fact:
@@ -421,6 +422,15 @@
     cmd: "python3 -m virtualenv {{ paperlessng_virtualenv }} -p /usr/bin/python3"
     creates: "{{ paperlessng_virtualenv }}"
   register: venv
+
+- name: install latest pip
+  become: yes
+  become_user: "{{ paperlessng_system_user }}"
+  pip:
+    name: pip
+    executable: "{{ paperlessng_virtualenv }}/bin/pip3"
+    state: latest
+  when: not reconfigure_only
 
 - block:
     - name: install paperlessng requirements
