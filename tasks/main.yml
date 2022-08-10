@@ -4,11 +4,26 @@
     msg: Sorry, only Debian and Ubuntu supported at the moment.
   when: not(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
+- name: Update all packages to the latest version
+  apt:
+    upgrade: yes
+
+- name: Check and set fact if consumption mount point exists
+  set_fact:
+    consumption_mount_exist: true
+  when: item.mount == '{{ paperlessng_consumption_dir }}'
+  loop: "{{ ansible_facts.mounts }}"
+
+- name: Show if consumption mount exists
+  debug:
+    msg: "Consumption mount point exists"
+  when: consumption_mount_exist == true
+
 - name: install base dependencies
   apt:
     update_cache: yes
     pkg:
-      # paperless-ng
+      # paperless-ngx
       - python3-pip
       - python3-dev
       - fonts-liberation
@@ -18,6 +33,8 @@
       - libpq-dev
       - libmagic-dev
       - mime-support
+      - libzbar0
+      - poppler-utils
       # OCRmyPDF
       - unpaper
       - ghostscript
@@ -105,7 +122,7 @@
 - block:
     - name: get latest release version
       uri:
-        url: https://api.github.com/repos/jonaswinkler/paperless-ng/releases/latest
+        url: https://api.github.com/repos/paperless-ngx/paperless-ngx/releases/latest
         method: GET
       register: latest_release
     - name: parse latest release version
@@ -113,71 +130,50 @@
         paperlessng_version: "{{ latest_release.json['tag_name'] }}"
   when: paperlessng_version == "latest"
 
-- name: check if version is ref
-  fail:
-    msg: "Specifying `paperlessng_version` as git ref may not work as expected!"
-  ignore_errors: True  # Output failure (as warning), but don't consider play failed
-  when: paperlessng_version.startswith('refs/')
-
 - block:
-    - name: sanitize version string
-      set_fact:
-        paperlessng_version: "{{ paperlessng_version | regex_replace('^ng-(\\d+\\.\\d+\\.\\d+)$', '\\1') }}"
-    - name: get tag data
+    - name: check if version can be found on github
       uri:
-        url: https://api.github.com/repos/jonaswinkler/paperless-ng/tags
+        url: "https://api.github.com/repos/paperless-ngx/paperless-ngx/commits/{{ paperlessng_version }}"
         method: GET
-      register: tags
-    - name: get commit for target tag
+        status_code: [200, 404, 422]
+      register: commit
+    - name: get commit version for your configuration
       set_fact:
-        paperlessng_commit: "{{ tags.json | json_query('[?name==`ng-' + paperlessng_version +'`] | [0].commit.sha') }}"
-  when: paperlessng_version | regex_search("^(ng-)?(\d+\.\d+\.\d+)$")
+        paperlessng_commit: "{{ commit.json | json_query('sha') }}"
+      when: commit.status == 200
+    - name: get commit for target commit-or-ref check
+      fail:
+        msg: "Can not determine commit from `paperlessng_version=={{ paperlessng_version }}`!"
+      when: commit.status != 200
 
-- block:
-    - name: check if version is branch
-      uri:
-        url: "https://api.github.com/repos/jonaswinkler/paperless-ng/branches/{{ paperlessng_version }}"
-        method: GET
-        status_code: [200, 404]
-      register: branch
-    - name: get commit for target branch
-      set_fact:
-        paperlessng_commit: "{{ branch.json | json_query('commit.sha') }}"
-      when: branch.status == 200
-    - block:
-        - name: check if version is commit-or-ref
-          uri:
-            url: "https://api.github.com/repos/jonaswinkler/paperless-ng/commits/{{ paperlessng_version }}"
-            method: GET
-            status_code: [200, 404, 422]
-          register: commit
-        - name: get commit for target commit-or-ref
-          set_fact:
-            paperlessng_commit: "{{ commit.json | json_query('sha') }}"
-          when: commit.status == 200
-        - name: fail
-          fail:
-            msg: "Can not determine commit from `paperlessng_version=={{ paperlessng_version }}`!"
-          when: commit.status != 200
-      when: branch.status == 404
-  when: not(paperlessng_version | regex_search("^(ng-)?(\d+\.\d+\.\d+)$"))
+- name: check for existing paperless-ngx version file
+  ansible.builtin.stat:
+    path: "{{ paperlessng_directory }}/.installed_version"
+  register: paperlessng_current_commitfile
 
-- name: check for paperless-ng installation
+- name: get the current installed version as commit
   command:
     cmd: "cat {{ paperlessng_directory }}/.installed_version"
-  changed_when: '"No such file or directory" in paperlessng_current_commit.stderr or paperlessng_current_commit.stdout != paperlessng_commit | string'
+  changed_when: 'paperlessng_current_commit.stdout != paperlessng_commit | string'
   failed_when: false
   ignore_errors: yes
   register: paperlessng_current_commit
+  when: paperlessng_current_commitfile.stat.exists
 
 - name: register current state
   set_fact:
-    fresh_installation: '{{ "No such file or directory" in paperlessng_current_commit.stderr }}'
-    update_installation: '{{ "No such file or directory" not in paperlessng_current_commit.stderr and paperlessng_current_commit.stdout != paperlessng_commit | string }}'
+    fresh_installation: '{{ not paperlessng_current_commitfile.stat.exists }}'
+    update_installation: false
+    reconfigure_only: false
+
+- name: register current existing state
+  set_fact:
+    update_installation: '{{ paperlessng_current_commit.stdout != paperlessng_commit | string }}'
     reconfigure_only: "{{ paperlessng_current_commit.stdout == paperlessng_commit | string }}"
+  when: not fresh_installation
 
 - block:
-    - name: backup current paperless-ng installation
+    - name: backup current paperless-ngx installation
       copy:
         src: "{{ paperlessng_directory }}"
         remote_src: yes
@@ -195,13 +191,14 @@
   when: update_installation
 
 - block:
-    - name: create paperless-ng directory and set permissions
+    - name: create paperless-ngx directory and set permissions
       file:
         path: "{{ paperlessng_directory }}"
         state: directory
         owner: "{{ paperlessng_system_user }}"
         group: "{{ paperlessng_system_group }}"
         mode: "750"
+
     - name: create temporary directory
       become: yes
       become_user: "{{ paperlessng_system_user }}"
@@ -209,19 +206,16 @@
         state: directory
         path: "{{ paperlessng_directory }}"
       register: tempdir
-    - name: check if version is available as release archive
-      uri:
-        url: "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-{{ paperlessng_version }}/paperless-ng-{{ paperlessng_version }}.tar.xz"
-        method: GET
-        status_code: [200, 404]
-      register: release_archive
-    - name: install paperless-ng from source
+
+    - name: install paperless-ngx from source
       include_tasks: install-source.yml
-      when: release_archive.status == 404
-    - name: install paperless-ng from release archive
+      when: paperlessng_install_method == "source"
+
+    - name: install paperless-ngx from release archive
       include_tasks: install-release.yml
-      when: release_archive.status == 200
-    - name: change owner and permissions of paperless-ng
+      when: paperlessng_install_method == "precompiledrelease"
+
+    - name: change owner and permissions of paperless-ngx
       command:
         cmd: "{{ item }}"
         warn: false
@@ -229,9 +223,11 @@
         - "chown -R {{ paperlessng_system_user }}:{{ paperlessng_system_group }} {{ tempdir.path }}"
         - "find {{ tempdir.path }} -type d -exec chmod 0750 {} ;"
         - "find {{ tempdir.path }} -type f -exec chmod 0640 {} ;"
-    - name: move paperless-ng
+
+    - name: move paperless-ngx
       command:
-        cmd: "cp -a {{ tempdir.path }}/paperless-ng/. {{ paperlessng_directory }}"
+        cmd: "cp -a {{ tempdir.path }}/paperless-ngx/. {{ paperlessng_directory }}"
+
     - name: store commit hash of installed version
       copy:
         content: "{{ paperlessng_commit }}"
@@ -239,13 +235,14 @@
         owner: "{{ paperlessng_system_user }}"
         group: "{{ paperlessng_system_group }}"
         mode: "0440"
+        
     - name: remove temporary directory
       file:
         path: "{{ tempdir.path }}"
         state: absent
   when: not reconfigure_only
 
-- name: create paperless-ng directories and set permissions
+- name: create paperless-ngx directories and set permissions
   file:
     path: "{{ item }}"
     state: directory
@@ -254,18 +251,27 @@
     mode: "750"
   when: item
   with_items:
-    - "{{ paperlessng_consumption_dir }}"
     - "{{ paperlessng_data_dir }}"
     - "{{ paperlessng_trash_dir }}"
     - "{{ paperlessng_media_root }}"
     - "{{ paperlessng_staticdir }}"
+    - "{{ paperlessng_export_dir }}"
+
+- name: create paperless-ngx consumption directory and set permissions
+  file:
+    path: "{{ paperlessng_consumption_dir }}"
+    state: directory
+    owner: "{{ paperlessng_system_user }}"
+    group: "{{ paperlessng_system_group }}"
+    mode: "750"
+  when: consumption_mount_exist == false
 
 - name: rename initial config
   command:
     cmd: "mv -f {{ paperlessng_directory }}/paperless.conf {{ paperlessng_directory }}/paperless.conf.template"
     removes: "{{ paperlessng_directory }}/paperless.conf"
 
-- name: configure paperless-ng
+- name: configure paperless-ngx
   lineinfile:
     path: "{{ paperlessng_directory }}/paperless.conf.template"
     regexp: "^#?{{ item.regexp }}="
@@ -277,6 +283,8 @@
     # Paths and folders
     - regexp: PAPERLESS_CONSUMPTION_DIR
       line: "PAPERLESS_CONSUMPTION_DIR={{ paperlessng_consumption_dir }}"
+    - regexp: PAPERLESS_EXPORT_DIR
+      line: "PAPERLESS_EXPORT_DIR={{ paperlessng_export_dir }}"
     - regexp: PAPERLESS_DATA_DIR
       line: "PAPERLESS_DATA_DIR={{ paperlessng_data_dir }}"
     - regexp: PAPERLESS_TRASH_DIR
@@ -306,6 +314,8 @@
       line: "PAPERLESS_COOKIE_PREFIX={{ paperlessng_cookie_prefix }}"
     - regexp: PAPERLESS_ENABLE_HTTP_REMOTE_USER
       line: "PAPERLESS_ENABLE_HTTP_REMOTE_USER={{ paperlessng_enable_http_remote_user }}"
+    - regexp: PAPERLESS_URL
+      line: "PAPERLESS_URL={{ paperlessng_url }}"
     # OCR settings
     - regexp: PAPERLESS_OCR_LANGUAGE
       line: "PAPERLESS_OCR_LANGUAGE={{ paperlessng_ocr_languages | join('+') | replace('-','_') }}"
@@ -361,9 +371,11 @@
       line: "PAPERLESS_THUMBNAIL_FONT_NAME={{ paperlessng_thumbnail_font_name }}"
     - regexp: PAPERLESS_IGNORE_DATES
       line: "PAPERLESS_IGNORE_DATES={{ paperlessng_ignore_dates }}"
+    - regexp: PAPERLESS_ENABLE_UPDATE_CHECK
+      line: "PAPERLESS_ENABLE_UPDATE_CHECK={{ paperlessng_enable_update_check }}"
   no_log: yes
 
-- name: configure paperless-ng database [sqlite]
+- name: configure paperless-ngx database [sqlite]
   lineinfile:
     path: "{{ paperlessng_directory }}/paperless.conf.template"
     regexp: "^#?PAPERLESS_DBHOST=(.*)$"
@@ -371,7 +383,7 @@
     backrefs: yes
   when: paperlessng_db_type == 'sqlite'
 
-- name: configure paperless-ng database [postgresql]
+- name: configure paperless-ngx database [postgresql]
   lineinfile:
     path: "{{ paperlessng_directory }}/paperless.conf.template"
     regexp: "^#?{{ item.regexp }}="
@@ -392,7 +404,7 @@
   when: paperlessng_db_type == 'postgresql'
   no_log: yes
 
-- name: deploy paperless-ng configuration
+- name: deploy paperless-ngx configuration
   copy:
     src: "{{ paperlessng_directory }}/paperless.conf.template"
     remote_src: yes
@@ -511,6 +523,15 @@
     option: "ExecStart"
     value: "{{ paperlessng_virtualenv }}/bin/python3 manage.py document_consumer"
 
+- name: remove redis from paperless-consumer service if external
+  ini_file:
+    path: "{{ paperlessng_directory }}/scripts/paperless-consumer.service"
+    section: "Unit"
+    option: "Requires"
+    value: "redis.service"
+    state: absent
+  when: paperlessng_redis_host != 'localhost' or paperlessng_redis_host != '127.0.0.1'
+
 - name: configure paperless-scheduler service
   ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-scheduler.service"
@@ -518,12 +539,64 @@
     option: "ExecStart"
     value: "{{ paperlessng_virtualenv }}/bin/python3 manage.py qcluster"
 
+- name: remove redis from paperless-scheduler service if external
+  ini_file:
+    path: "{{ paperlessng_directory }}/scripts/paperless-scheduler.service"
+    section: "Unit"
+    option: "Requires"
+    value: "redis.service"
+    state: absent
+  when: paperlessng_redis_host != 'localhost' or paperlessng_redis_host != '127.0.0.1'
+
 - name: configure paperless-webserver service
   ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-webserver.service"
     section: "Service"
     option: "ExecStart"
     value: "{{ paperlessng_virtualenv }}/bin/gunicorn -c {{ paperlessng_directory }}/gunicorn.conf.py paperless.asgi:application"
+
+- name: remove redis from paperless-webserver service if external
+  ini_file:
+    path: "{{ paperlessng_directory }}/scripts/paperless-webserver.service"
+    section: "Unit"
+    option: "Requires"
+    value: "redis.service"
+    state: absent
+  when: paperlessng_redis_host != 'localhost' or paperlessng_redis_host != '127.0.0.1'
+
+- name: NFS utility present for redhat-like
+  ansible.builtin.yum:
+    name:
+      - nfs-utils
+      - nfs4-acl-tools
+    state: present
+  when: ansible_os_family == "RedHat" and paperlessng_consumption_dir_nfs_enabled and paperlessng_is_lxc != "True"
+
+- name: NFS utility present for debian-like
+  ansible.builtin.apt:
+    name:
+      - nfs-common
+      - nfs4-acl-tools
+    state: present
+  when: ansible_os_family == "Debian" and paperlessng_consumption_dir_nfs_enabled and paperlessng_is_lxc != "True"
+
+- name: Check consumption mountpoint exists
+  ansible.builtin.file:
+    path: "{{ paperlessng_consumption_dir }}"
+    state: directory
+    mode: "{{ paperlessng_consumption_dir_permission }}"
+    owner: root
+    group: root
+  when: paperlessng_consumption_dir_nfs_enabled and paperlessng_is_lxc != "True" and consumption_mount_exist == 'false'
+
+- name: Mount consumption share
+  ansible.posix.mount:
+    src: "{{ paperlessng_consumption_dir_nfs }}"
+    path: "{{ paperlessng_consumption_dir }}"
+    fstype: nfs
+    opts: "{{ paperlessng_consumption_dir_myopts }}"
+    state: mounted
+  when: paperlessng_consumption_dir_nfs_enabled and paperlessng_is_lxc != "True"
 
 - name: copy systemd services
   copy:

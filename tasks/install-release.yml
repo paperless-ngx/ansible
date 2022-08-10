@@ -1,6 +1,6 @@
 ---
-- name: extract paperless-ng
+- name: download and extract paperless-ngx
   unarchive:
-    src: "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-{{ paperlessng_version }}/paperless-ng-{{ paperlessng_version }}.tar.xz"
+    src: "https://github.com/paperless-ngx/paperless-ngx/releases/download/{{ paperlessng_version }}/paperless-ngx-{{ paperlessng_version }}.tar.xz"
     remote_src: yes
     dest: "{{ tempdir.path }}"

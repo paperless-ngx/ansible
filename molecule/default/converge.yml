@@ -5,6 +5,6 @@
     - name: set current github commit as version when available
       set_fact:
         paperlessng_version: "{{ lookup('env', 'TARGET_GITHUB_SHA') | default('master', True) }}"
-    - name: update to newest paperless-ng release
+    - name: update to newest paperless-ngx release
       include_role:
         name: ansible
