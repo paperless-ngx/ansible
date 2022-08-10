@@ -60,7 +60,7 @@ To install a specific version of paperless-ngx, use the tag name of the release,
 Dependencies
 ------------
 
-No ansible dependencies.
+There is a dependency on `jmespath`. This is included as part of the community.general collection within ansible. Please follow this link for more information - https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#selecting-json-data-json-queries
 
 Example Playbook
 ----------------
