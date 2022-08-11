@@ -13,7 +13,7 @@ platforms:
       - /tmp
       - /run
       - /run/lock
-    override_command: False
+    override_command: false
   # ubuntu 18.04 bionic works except that
   #   the default redis configuration expects IPv6 which is not enabled in docker by default
   #   the default Python environment is configured for ASCII instead of UTF-8
@@ -27,8 +27,8 @@ platforms:
       - /tmp
       - /run
       - /run/lock
-    override_command: False
-  # debian 9 stretch only has Python 3.5 which is EOL and breaks multiple dependencies
+    override_command: false
+# debian 9 stretch only has Python 3.5 which is EOL and breaks multiple dependencies
 provisioner:
   name: ansible
 verifier:
