@@ -1,10 +1,11 @@
 ---
-- name: update previous release to newest release
+- name: Converge
   hosts: all
+  gather_facts: false
   tasks:
     - name: set current github commit as version when available
-      set_fact:
+      ansible.builtin.set_fact:
         paperlessng_version: "{{ lookup('env', 'TARGET_GITHUB_SHA') | default('master', True) }}"
-    - name: update to newest paperless-ngx release
-      include_role:
-        name: ansible
+    - name: "Include paperless.ngx"
+      ansible.builtin.include_role:
+        name: "paperless.ngx"

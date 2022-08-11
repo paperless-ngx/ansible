@@ -1,0 +1,27 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: ubuntu_focal
+    image: ubuntu:20.04
+    pre_build_image: true
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    override_command: false
+  # - name: ubuntu_jammy
+  #   image: ubuntu:22.04
+  # - name: debian_buster
+  #   image: debian:buster
+  # - name: debian_bullseye
+  #   image: debian:bullseye
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
