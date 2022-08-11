@@ -9,6 +9,7 @@ name = "pypi"
 ansible = "*"
 ansible-lint = "*"
 jmespath = "*"
+ansible-navigator = "*"
 
 [requires]
 python_version = "3.10"

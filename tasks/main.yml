@@ -43,13 +43,6 @@
       - python3-venv
       - git
 
-# upstream virtualenv in Ubuntu 20.04 is broken
-# https://github.com/pypa/virtualenv/issues/1873
-- name: install python virtualenv
-  ansible.builtin.pip:
-    name: virtualenv
-    extra_args: --upgrade
-
 - name: install ocr languages
   ansible.builtin.apt:
     pkg: "{{ paperlessng_ocr_languages | map('regex_replace', '^(.*)$', 'tesseract-ocr-\\1') | map('replace', '_', '-') | list }}"
@@ -85,17 +78,16 @@
     update_cache: true
   when: paperlessng_use_jbig2enc
 
-- name: install redis
-  ansible.builtin.apt:
-    pkg: redis-server
-  when: paperlessng_redis_host == 'localhost' or paperlessng_redis_host == '127.0.0.1'
-
-- name: enable redis
-  ansible.builtin.systemd:
-    name: redis-server
-    enabled: true
-    masked: false
-    state: started
+- block:
+  - name: install redis
+    ansible.builtin.apt:
+      pkg: redis-server
+  - name: enable redis
+    ansible.builtin.systemd:
+      name: redis-server
+      enabled: true
+      masked: false
+      state: started
   when: paperlessng_redis_host == 'localhost' or paperlessng_redis_host == '127.0.0.1'
 
 - name: create paperless system group
@@ -166,10 +158,10 @@
 
 - block:
     - name: backup current paperless-ngx installation
-      ansible.builtin.copy:
-        src: "{{ paperlessng_directory }}"
-        remote_src: true
-        dest: "{{ paperlessng_directory }}-{{ ansible_date_time.iso8601 }}/"
+      community.general.archive:
+        path: "{{ paperlessng_directory }}"
+        dest: "{{ paperlessng_directory }}-{{ ansible_date_time.iso8601 }}.zip"
+        format: zip
     - name: remove current paperless sources
       ansible.builtin.file:
         path: "{{ paperlessng_directory }}/{{ item }}"
@@ -206,18 +198,21 @@
       include_tasks: install-release.yml
       when: paperlessng_install_method == "precompiledrelease"
 
+    - name: move paperless-ngx
+      ansible.builtin.copy:
+        src: "{{ tempdir.path }}/paperless-ngx/."
+        dest: "{{ paperlessng_directory }}"
+        remote_src: yes
+        mode: preserve
+
     - name: change owner and permissions of paperless-ngx
       ansible.builtin.command:
         cmd: "{{ item }}"
         warn: false
       with_items:
-        - chown -R {{ paperlessng_system_user }}:{{ paperlessng_system_group }} {{ tempdir.path }}
-        - find {{ tempdir.path }} -type d -exec chmod 0750 {} ;
-        - find {{ tempdir.path }} -type f -exec chmod 0640 {} ;
-
-    - name: move paperless-ngx
-      ansible.builtin.command:
-        cmd: cp -a {{ tempdir.path }}/paperless-ngx/. {{ paperlessng_directory }}
+        - chown -R {{ paperlessng_system_user }}:{{ paperlessng_system_group }} {{ paperlessng_directory}}
+        - find {{ paperlessng_directory}} -type d -exec chmod 0750 {} ;
+        - find {{ paperlessng_directory }} -type f -exec chmod 0640 {} ;
 
     - name: store commit hash of installed version
       ansible.builtin.copy:
@@ -358,6 +353,7 @@
       line: PAPERLESS_ENABLE_UPDATE_CHECK={{ paperlessng_enable_update_check }}
   no_log: true
 
+
 - name: configure paperless-ngx database [sqlite]
   ansible.builtin.lineinfile:
     path: "{{ paperlessng_directory }}/paperless.conf.template"
@@ -399,31 +395,28 @@
 
 - name: create paperlessng venv
   become: true
-  ansible.builtin.command:
-    cmd: python3 -m venv {{ paperlessng_virtualenv }}
-    creates: "{{ paperlessng_virtualenv }}"
+  ansible.builtin.pip:
+    virtualenv: "{{ paperlessng_virtualenv }}"
+    virtualenv_command: "python3 -m venv"
+    requirements: "{{ paperlessng_directory }}/requirements.txt"
+    extra_args: --upgrade
   register: venv
 
-- name: install latest pip
-  become: true
-  ansible.builtin.pip:
-    name: pip
-    executable: "{{ paperlessng_virtualenv }}/bin/pip3"
-    state: latest
-  when: not reconfigure_only
+- name: set ownership and permissions on paperlessng venv
+  ansible.builtin.file:
+    path: "{{ paperlessng_virtualenv }}"
+    state: directory
+    recurse: true
+    owner: "{{ paperlessng_system_user }}"
+    group: "{{ paperlessng_system_group }}"
+    mode: g-w,o-rwx
+  when: venv.changed or not reconfigure_only
 
-- block:
-    - name: install paperlessng requirements
-      become: true
-      ansible.builtin.pip:
-        requirements: "{{ paperlessng_directory }}/requirements.txt"
-        executable: "{{ paperlessng_virtualenv }}/bin/pip3"
-        extra_args: --upgrade
-    - name: migrate database schema
-      become: true
-      command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py migrate"
-      register: database_schema
-      changed_when: '"No migrations to apply." not in database_schema.stdout'
+- name: migrate database schema
+  become: true
+  command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py migrate"
+  register: database_schema
+  changed_when: '"No migrations to apply." not in database_schema.stdout'
   when: not reconfigure_only
 
 - name: configure paperless superuser
@@ -436,16 +429,6 @@
   register: superuser
   changed_when: '"Created superuser" in superuser.stdout'
   no_log: true
-
-- name: set ownership and permissions on paperlessng venv
-  ansible.builtin.file:
-    path: "{{ paperlessng_virtualenv }}"
-    state: directory
-    recurse: true
-    owner: "{{ paperlessng_system_user }}"
-    group: "{{ paperlessng_system_group }}"
-    mode: g-w,o-rwx
-  when: venv.changed or not reconfigure_only
 
 - name: configure ghostscript for PDF
   ansible.builtin.lineinfile:
