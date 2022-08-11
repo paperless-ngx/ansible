@@ -1,17 +1,17 @@
 ---
 - name: verify operating system
-  fail:
+  ansible.builtin.fail:
     msg: Sorry, only Debian and Ubuntu supported at the moment.
   when: not(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 - name: Update all packages to the latest version
-  apt:
-    upgrade: yes
+  ansible.builtin.apt:
+    upgrade: true
     state: latest
 
 - name: install base dependencies
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
     pkg:
       # paperless-ngx
       - python3-pip
@@ -46,28 +46,28 @@
 # upstream virtualenv in Ubuntu 20.04 is broken
 # https://github.com/pypa/virtualenv/issues/1873
 - name: install python virtualenv
-  pip:
+  ansible.builtin.pip:
     name: virtualenv
     extra_args: --upgrade
 
 - name: install ocr languages
-  apt:
+  ansible.builtin.apt:
     pkg: "{{ paperlessng_ocr_languages | map('regex_replace', '^(.*)$', 'tesseract-ocr-\\1') | map('replace', '_', '-') | list }}"
 
 - name: set up notesalexp repository key (for jbig2enc)
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://notesalexp.org/debian/alexp_key.asc
     state: present
   when: paperlessng_use_jbig2enc
 
 - name: set up notesalexp repository (for jbig2enc)
-  apt_repository:
-    repo: "deb https://notesalexp.org/debian/{{ ansible_distribution_release }}/ {{ ansible_distribution_release }} main"
+  ansible.builtin.apt_repository:
+    repo: deb https://notesalexp.org/debian/{{ ansible_distribution_release }}/ {{ ansible_distribution_release }} main
     state: present
   when: paperlessng_use_jbig2enc
 
 - name: set up notesalexp repository pinning
-  copy:
+  ansible.builtin.copy:
     content: |
       Package: *
       Pin: release o=notesalexp.org
@@ -80,40 +80,40 @@
   when: paperlessng_use_jbig2enc
 
 - name: install jbig2enc
-  apt:
+  ansible.builtin.apt:
     pkg: jbig2enc
-    update_cache: yes
+    update_cache: true
   when: paperlessng_use_jbig2enc
 
 - name: install redis
-  apt:
+  ansible.builtin.apt:
     pkg: redis-server
   when: paperlessng_redis_host == 'localhost' or paperlessng_redis_host == '127.0.0.1'
 
 - name: enable redis
-  systemd:
+  ansible.builtin.systemd:
     name: redis-server
-    enabled: yes
-    masked: no
+    enabled: true
+    masked: false
     state: started
   when: paperlessng_redis_host == 'localhost' or paperlessng_redis_host == '127.0.0.1'
 
 - name: create paperless system group
-  group:
+  ansible.builtin.group:
     name: "{{ paperlessng_system_group }}"
 
 - name: create paperless system user
-  user:
+  ansible.builtin.user:
     name: "{{ paperlessng_system_user }}"
     groups:
       - "{{ paperlessng_system_group }}"
     shell: /usr/sbin/nologin
     # GNUPG_HOME required due to paperless db.py
-    create_home: yes
+    create_home: true
 
 - block:
     - name: get latest release version
-      uri:
+      ansible.builtin.uri:
         url: https://api.github.com/repos/paperless-ngx/paperless-ngx/releases/latest
         method: GET
       register: latest_release
@@ -124,18 +124,18 @@
 
 - block:
     - name: check if version can be found on github
-      uri:
-        url: "https://api.github.com/repos/paperless-ngx/paperless-ngx/commits/{{ paperlessng_version }}"
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/paperless-ngx/paperless-ngx/commits/{{ paperlessng_version }}
         method: GET
         status_code: [200, 404, 422]
       register: commit
     - name: get commit version for your configuration
-      set_fact:
+      ansible.builtin.set_fact:
         paperlessng_commit: "{{ commit.json | json_query('sha') }}"
       when: commit.status == 200
     - name: get commit for target commit-or-ref check
-      fail:
-        msg: "Can not determine commit from `paperlessng_version=={{ paperlessng_version }}`!"
+      ansible.builtin.fail:
+        msg: Can not determine commit from `paperlessng_version=={{ paperlessng_version }}`!
       when: commit.status != 200
 
 - name: check for existing paperless-ngx version file
@@ -144,34 +144,34 @@
   register: paperlessng_current_commitfile
 
 - name: get the current installed version as commit
-  command:
-    cmd: "cat {{ paperlessng_directory }}/.installed_version"
-  changed_when: 'paperlessng_current_commit.stdout != paperlessng_commit | string'
+  ansible.builtin.command:
+    cmd: cat {{ paperlessng_directory }}/.installed_version
+  changed_when: paperlessng_current_commit.stdout != paperlessng_commit | string
   failed_when: false
-  ignore_errors: yes
+  ignore_errors: true
   register: paperlessng_current_commit
   when: paperlessng_current_commitfile.stat.exists
 
 - name: register current state
-  set_fact:
-    fresh_installation: '{{ not paperlessng_current_commitfile.stat.exists }}'
+  ansible.builtin.set_fact:
+    fresh_installation: "{{ not paperlessng_current_commitfile.stat.exists }}"
     update_installation: false
     reconfigure_only: false
 
 - name: register current existing state
-  set_fact:
-    update_installation: '{{ paperlessng_current_commit.stdout != paperlessng_commit | string }}'
+  ansible.builtin.set_fact:
+    update_installation: "{{ paperlessng_current_commit.stdout != paperlessng_commit | string }}"
     reconfigure_only: "{{ paperlessng_current_commit.stdout == paperlessng_commit | string }}"
   when: not fresh_installation
 
 - block:
     - name: backup current paperless-ngx installation
-      copy:
+      ansible.builtin.copy:
         src: "{{ paperlessng_directory }}"
-        remote_src: yes
+        remote_src: true
         dest: "{{ paperlessng_directory }}-{{ ansible_date_time.iso8601 }}/"
     - name: remove current paperless sources
-      file:
+      ansible.builtin.file:
         path: "{{ paperlessng_directory }}/{{ item }}"
         state: absent
       with_items:
@@ -184,7 +184,7 @@
 
 - block:
     - name: create paperless-ngx directory and set permissions
-      file:
+      ansible.builtin.file:
         path: "{{ paperlessng_directory }}"
         state: directory
         owner: "{{ paperlessng_system_user }}"
@@ -192,8 +192,8 @@
         mode: "750"
 
     - name: create temporary directory
-      become: yes
-      tempfile:
+      become: true
+      ansible.builtin.tempfile:
         state: directory
         path: "{{ paperlessng_directory }}"
       register: tempdir
@@ -207,20 +207,20 @@
       when: paperlessng_install_method == "precompiledrelease"
 
     - name: change owner and permissions of paperless-ngx
-      command:
+      ansible.builtin.command:
         cmd: "{{ item }}"
         warn: false
       with_items:
-        - "chown -R {{ paperlessng_system_user }}:{{ paperlessng_system_group }} {{ tempdir.path }}"
-        - "find {{ tempdir.path }} -type d -exec chmod 0750 {} ;"
-        - "find {{ tempdir.path }} -type f -exec chmod 0640 {} ;"
+        - chown -R {{ paperlessng_system_user }}:{{ paperlessng_system_group }} {{ tempdir.path }}
+        - find {{ tempdir.path }} -type d -exec chmod 0750 {} ;
+        - find {{ tempdir.path }} -type f -exec chmod 0640 {} ;
 
     - name: move paperless-ngx
-      command:
-        cmd: "cp -a {{ tempdir.path }}/paperless-ngx/. {{ paperlessng_directory }}"
+      ansible.builtin.command:
+        cmd: cp -a {{ tempdir.path }}/paperless-ngx/. {{ paperlessng_directory }}
 
     - name: store commit hash of installed version
-      copy:
+      ansible.builtin.copy:
         content: "{{ paperlessng_commit }}"
         dest: "{{ paperlessng_directory }}/.installed_version"
         owner: "{{ paperlessng_system_user }}"
@@ -228,13 +228,13 @@
         mode: "0440"
 
     - name: remove temporary directory
-      file:
+      ansible.builtin.file:
         path: "{{ tempdir.path }}"
         state: absent
   when: not reconfigure_only
 
 - name: create paperless-ngx directories and set permissions
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: "{{ paperlessng_system_user }}"
@@ -250,147 +250,147 @@
     - "{{ paperlessng_consumption_dir }}"
 
 - name: rename initial config
-  command:
-    cmd: "mv -f {{ paperlessng_directory }}/paperless.conf {{ paperlessng_directory }}/paperless.conf.template"
+  ansible.builtin.command:
+    cmd: mv -f {{ paperlessng_directory }}/paperless.conf {{ paperlessng_directory }}/paperless.conf.template
     removes: "{{ paperlessng_directory }}/paperless.conf"
 
 - name: configure paperless-ngx
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ paperlessng_directory }}/paperless.conf.template"
-    regexp: "^#?{{ item.regexp }}="
+    regexp: ^#?{{ item.regexp }}=
     line: "{{ item.line }}"
   with_items:
     # Required services
     - regexp: PAPERLESS_REDIS
-      line: "PAPERLESS_REDIS=redis://{{ paperlessng_redis_host }}:{{ paperlessng_redis_port }}"
+      line: PAPERLESS_REDIS=redis://{{ paperlessng_redis_host }}:{{ paperlessng_redis_port }}
     # Paths and folders
     - regexp: PAPERLESS_CONSUMPTION_DIR
-      line: "PAPERLESS_CONSUMPTION_DIR={{ paperlessng_consumption_dir }}"
+      line: PAPERLESS_CONSUMPTION_DIR={{ paperlessng_consumption_dir }}
     - regexp: PAPERLESS_EXPORT_DIR
-      line: "PAPERLESS_EXPORT_DIR={{ paperlessng_export_dir }}"
+      line: PAPERLESS_EXPORT_DIR={{ paperlessng_export_dir }}
     - regexp: PAPERLESS_DATA_DIR
-      line: "PAPERLESS_DATA_DIR={{ paperlessng_data_dir }}"
+      line: PAPERLESS_DATA_DIR={{ paperlessng_data_dir }}
     - regexp: PAPERLESS_TRASH_DIR
-      line: "PAPERLESS_TRASH_DIR={{ paperlessng_trash_dir }}"
+      line: PAPERLESS_TRASH_DIR={{ paperlessng_trash_dir }}
     - regexp: PAPERLESS_MEDIA_ROOT
-      line: "PAPERLESS_MEDIA_ROOT={{ paperlessng_media_root }}"
+      line: PAPERLESS_MEDIA_ROOT={{ paperlessng_media_root }}
     - regexp: PAPERLESS_STATICDIR
-      line: "PAPERLESS_STATICDIR={{ paperlessng_staticdir }}"
+      line: PAPERLESS_STATICDIR={{ paperlessng_staticdir }}
     - regexp: PAPERLESS_FILENAME_FORMAT
-      line: "PAPERLESS_FILENAME_FORMAT={{ paperlessng_filename_format }}"
+      line: PAPERLESS_FILENAME_FORMAT={{ paperlessng_filename_format }}
     - regexp: PAPERLESS_LOGGING_DIR
-      line: "PAPERLESS_LOGGING_DIR={{ paperlessng_logging_dir }}"
+      line: PAPERLESS_LOGGING_DIR={{ paperlessng_logging_dir }}
     # Hosting & Security
     - regexp: PAPERLESS_SECRET_KEY
-      line: "PAPERLESS_SECRET_KEY={{ paperlessng_secret_key }}"
+      line: PAPERLESS_SECRET_KEY={{ paperlessng_secret_key }}
     - regexp: PAPERLESS_ALLOWED_HOSTS
-      line: "PAPERLESS_ALLOWED_HOSTS={{ paperlessng_allowed_hosts }}"
+      line: PAPERLESS_ALLOWED_HOSTS={{ paperlessng_allowed_hosts }}
     - regexp: PAPERLESS_CORS_ALLOWED_HOSTS
-      line: "PAPERLESS_CORS_ALLOWED_HOSTS={{ paperlessng_cors_allowed_hosts }}"
+      line: PAPERLESS_CORS_ALLOWED_HOSTS={{ paperlessng_cors_allowed_hosts }}
     - regexp: PAPERLESS_FORCE_SCRIPT_NAME
-      line: "PAPERLESS_FORCE_SCRIPT_NAME={{ paperlessng_force_script_name }}"
+      line: PAPERLESS_FORCE_SCRIPT_NAME={{ paperlessng_force_script_name }}
     - regexp: PAPERLESS_STATIC_URL
-      line: "PAPERLESS_STATIC_URL={{ paperlessng_static_url }}"
+      line: PAPERLESS_STATIC_URL={{ paperlessng_static_url }}
     - regexp: PAPERLESS_AUTO_LOGIN_USERNAME
-      line: "PAPERLESS_AUTO_LOGIN_USERNAME={{ paperlessng_auto_login_username }}"
+      line: PAPERLESS_AUTO_LOGIN_USERNAME={{ paperlessng_auto_login_username }}
     - regexp: PAPERLESS_COOKIE_PREFIX
-      line: "PAPERLESS_COOKIE_PREFIX={{ paperlessng_cookie_prefix }}"
+      line: PAPERLESS_COOKIE_PREFIX={{ paperlessng_cookie_prefix }}
     - regexp: PAPERLESS_ENABLE_HTTP_REMOTE_USER
-      line: "PAPERLESS_ENABLE_HTTP_REMOTE_USER={{ paperlessng_enable_http_remote_user }}"
+      line: PAPERLESS_ENABLE_HTTP_REMOTE_USER={{ paperlessng_enable_http_remote_user }}
     - regexp: PAPERLESS_URL
-      line: "PAPERLESS_URL={{ paperlessng_url }}"
+      line: PAPERLESS_URL={{ paperlessng_url }}
     # OCR settings
     - regexp: PAPERLESS_OCR_LANGUAGE
-      line: "PAPERLESS_OCR_LANGUAGE={{ paperlessng_ocr_languages | join('+') | replace('-','_') }}"
+      line: PAPERLESS_OCR_LANGUAGE={{ paperlessng_ocr_languages | join('+') | replace('-','_') }}
     - regexp: PAPERLESS_OCR_MODE
-      line: "PAPERLESS_OCR_MODE={{ paperlessng_ocr_mode }}"
+      line: PAPERLESS_OCR_MODE={{ paperlessng_ocr_mode }}
     - regexp: PAPERLESS_OCR_CLEAN
-      line: "PAPERLESS_OCR_CLEAN={{ paperlessng_ocr_clean }}"
+      line: PAPERLESS_OCR_CLEAN={{ paperlessng_ocr_clean }}
     - regexp: PAPERLESS_OCR_DESKEW
-      line: "PAPERLESS_OCR_DESKEW={{ paperlessng_ocr_deskew }}"
+      line: PAPERLESS_OCR_DESKEW={{ paperlessng_ocr_deskew }}
     - regexp: PAPERLESS_OCR_ROTATE_PAGES
-      line: "PAPERLESS_OCR_ROTATE_PAGES={{ paperlessng_ocr_rotate_pages }}"
+      line: PAPERLESS_OCR_ROTATE_PAGES={{ paperlessng_ocr_rotate_pages }}
     - regexp: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
-      line: "PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD={{ paperlessng_ocr_rotate_pages_threshold }}"
+      line: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD={{ paperlessng_ocr_rotate_pages_threshold }}
     - regexp: PAPERLESS_OCR_OUTPUT_TYPE
-      line: "PAPERLESS_OCR_OUTPUT_TYPE={{ paperlessng_ocr_output_type }}"
+      line: PAPERLESS_OCR_OUTPUT_TYPE={{ paperlessng_ocr_output_type }}
     - regexp: PAPERLESS_OCR_PAGES
-      line: "PAPERLESS_OCR_PAGES={{ paperlessng_ocr_pages }}"
+      line: PAPERLESS_OCR_PAGES={{ paperlessng_ocr_pages }}
     - regexp: PAPERLESS_OCR_IMAGE_DPI
-      line: "PAPERLESS_OCR_IMAGE_DPI={{ paperlessng_ocr_image_dpi }}"
+      line: PAPERLESS_OCR_IMAGE_DPI={{ paperlessng_ocr_image_dpi }}
     - regexp: PAPERLESS_OCR_USER_ARGS
       line: "PAPERLESS_OCR_USER_ARGS={{ paperlessng_ocr_user_args | combine({'jbig2_lossy': true} if paperlessng_big2enc_lossy else {}) | to_json }}"
     # Tika settings
     - regexp: PAPERLESS_TIKA_ENABLED
-      line: "PAPERLESS_TIKA_ENABLED={{ paperlessng_tika_enabled }}"
+      line: PAPERLESS_TIKA_ENABLED={{ paperlessng_tika_enabled }}
     - regexp: PAPERLESS_TIKA_ENDPOINT
-      line: "PAPERLESS_TIKA_ENDPOINT={{ paperlessng_tika_endpoint }}"
+      line: PAPERLESS_TIKA_ENDPOINT={{ paperlessng_tika_endpoint }}
     - regexp: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
-      line: "PAPERLESS_TIKA_GOTENBERG_ENDPOINT={{ paperlessng_tika_gotenberg_endpoint }}"
+      line: PAPERLESS_TIKA_GOTENBERG_ENDPOINT={{ paperlessng_tika_gotenberg_endpoint }}
     # Software tweaks
     - regexp: PAPERLESS_TIME_ZONE
-      line: "PAPERLESS_TIME_ZONE={{ paperlessng_time_zone }}"
+      line: PAPERLESS_TIME_ZONE={{ paperlessng_time_zone }}
     - regexp: PAPERLESS_CONSUMER_POLLING
-      line: "PAPERLESS_CONSUMER_POLLING={{ paperlessng_consumer_polling }}"
+      line: PAPERLESS_CONSUMER_POLLING={{ paperlessng_consumer_polling }}
     - regexp: PAPERLESS_CONSUMER_DELETE_DUPLICATES
-      line: "PAPERLESS_CONSUMER_DELETE_DUPLICATES={{ paperlessng_consumer_delete_duplicates }}"
+      line: PAPERLESS_CONSUMER_DELETE_DUPLICATES={{ paperlessng_consumer_delete_duplicates }}
     - regexp: PAPERLESS_CONSUMER_RECURSIVE
-      line: "PAPERLESS_CONSUMER_RECURSIVE={{ paperlessng_consumer_recursive }}"
+      line: PAPERLESS_CONSUMER_RECURSIVE={{ paperlessng_consumer_recursive }}
     - regexp: PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS
-      line: "PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS={{ paperlessng_consumer_subdirs_as_tags }}"
+      line: PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS={{ paperlessng_consumer_subdirs_as_tags }}
     - regexp: PAPERLESS_CONVERT_MEMORY_LIMIT
-      line: "PAPERLESS_CONVERT_MEMORY_LIMIT={{ paperlessng_convert_memory_limit }}"
+      line: PAPERLESS_CONVERT_MEMORY_LIMIT={{ paperlessng_convert_memory_limit }}
     - regexp: PAPERLESS_CONVERT_TMPDIR
-      line: "PAPERLESS_CONVERT_TMPDIR={{ paperlessng_convert_tmpdir }}"
+      line: PAPERLESS_CONVERT_TMPDIR={{ paperlessng_convert_tmpdir }}
     - regexp: PAPERLESS_OPTIMIZE_THUMBNAILS
-      line: "PAPERLESS_OPTIMIZE_THUMBNAILS={{ paperlessng_optimize_thumbnails }}"
+      line: PAPERLESS_OPTIMIZE_THUMBNAILS={{ paperlessng_optimize_thumbnails }}
     - regexp: PAPERLESS_PRE_CONSUME_SCRIPT
-      line: "PAPERLESS_PRE_CONSUME_SCRIPT={{ paperlessng_pre_consume_script }}"
+      line: PAPERLESS_PRE_CONSUME_SCRIPT={{ paperlessng_pre_consume_script }}
     - regexp: PAPERLESS_POST_CONSUME_SCRIPT
-      line: "PAPERLESS_POST_CONSUME_SCRIPT={{ paperlessng_post_consume_script }}"
+      line: PAPERLESS_POST_CONSUME_SCRIPT={{ paperlessng_post_consume_script }}
     - regexp: PAPERLESS_FILENAME_DATE_ORDER
-      line: "PAPERLESS_FILENAME_DATE_ORDER={{ paperlessng_filename_date_order }}"
+      line: PAPERLESS_FILENAME_DATE_ORDER={{ paperlessng_filename_date_order }}
     - regexp: PAPERLESS_THUMBNAIL_FONT_NAME
-      line: "PAPERLESS_THUMBNAIL_FONT_NAME={{ paperlessng_thumbnail_font_name }}"
+      line: PAPERLESS_THUMBNAIL_FONT_NAME={{ paperlessng_thumbnail_font_name }}
     - regexp: PAPERLESS_IGNORE_DATES
-      line: "PAPERLESS_IGNORE_DATES={{ paperlessng_ignore_dates }}"
+      line: PAPERLESS_IGNORE_DATES={{ paperlessng_ignore_dates }}
     - regexp: PAPERLESS_ENABLE_UPDATE_CHECK
-      line: "PAPERLESS_ENABLE_UPDATE_CHECK={{ paperlessng_enable_update_check }}"
-  no_log: yes
+      line: PAPERLESS_ENABLE_UPDATE_CHECK={{ paperlessng_enable_update_check }}
+  no_log: true
 
 - name: configure paperless-ngx database [sqlite]
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ paperlessng_directory }}/paperless.conf.template"
-    regexp: "^#?PAPERLESS_DBHOST=(.*)$"
-    line: '#PAPERLESS_DBHOST=\1'
-    backrefs: yes
+    regexp: ^#?PAPERLESS_DBHOST=(.*)$
+    line: "#PAPERLESS_DBHOST=\\1"
+    backrefs: true
   when: paperlessng_db_type == 'sqlite'
 
 - name: configure paperless-ngx database [postgresql]
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ paperlessng_directory }}/paperless.conf.template"
-    regexp: "^#?{{ item.regexp }}="
+    regexp: ^#?{{ item.regexp }}=
     line: "{{ item.line }}"
   with_items:
     - regexp: PAPERLESS_DBHOST
-      line: "PAPERLESS_DBHOST={{ paperlessng_db_host }}"
+      line: PAPERLESS_DBHOST={{ paperlessng_db_host }}
     - regexp: PAPERLESS_DBPORT
-      line: "PAPERLESS_DBPORT={{ paperlessng_db_port }}"
+      line: PAPERLESS_DBPORT={{ paperlessng_db_port }}
     - regexp: PAPERLESS_DBNAME
-      line: "PAPERLESS_DBNAME={{ paperlessng_db_name }}"
+      line: PAPERLESS_DBNAME={{ paperlessng_db_name }}
     - regexp: PAPERLESS_DBUSER
-      line: "PAPERLESS_DBUSER={{ paperlessng_db_user }}"
+      line: PAPERLESS_DBUSER={{ paperlessng_db_user }}
     - regexp: PAPERLESS_DBPASS
-      line: "PAPERLESS_DBPASS={{ paperlessng_db_pass }}"
+      line: PAPERLESS_DBPASS={{ paperlessng_db_pass }}
     - regexp: PAPERLESS_DBSSLMODE
-      line: "PAPERLESS_DBSSLMODE={{ paperlessng_db_sslmode }}"
+      line: PAPERLESS_DBSSLMODE={{ paperlessng_db_sslmode }}
   when: paperlessng_db_type == 'postgresql'
-  no_log: yes
+  no_log: true
 
 - name: deploy paperless-ngx configuration
-  copy:
+  ansible.builtin.copy:
     src: "{{ paperlessng_directory }}/paperless.conf.template"
-    remote_src: yes
+    remote_src: true
     dest: /etc/paperless.conf
     owner: root
     group: root
@@ -398,15 +398,15 @@
   register: configuration
 
 - name: create paperlessng venv
-  become: yes
-  command:
-    cmd: "python3 -m venv {{ paperlessng_virtualenv }}"
+  become: true
+  ansible.builtin.command:
+    cmd: python3 -m venv {{ paperlessng_virtualenv }}
     creates: "{{ paperlessng_virtualenv }}"
   register: venv
 
 - name: install latest pip
-  become: yes
-  pip:
+  become: true
+  ansible.builtin.pip:
     name: pip
     executable: "{{ paperlessng_virtualenv }}/bin/pip3"
     state: latest
@@ -414,120 +414,113 @@
 
 - block:
     - name: install paperlessng requirements
-      become: yes
-      pip:
+      become: true
+      ansible.builtin.pip:
         requirements: "{{ paperlessng_directory }}/requirements.txt"
         executable: "{{ paperlessng_virtualenv }}/bin/pip3"
         extra_args: --upgrade
     - name: migrate database schema
-      become: yes
+      become: true
       command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py migrate"
       register: database_schema
       changed_when: '"No migrations to apply." not in database_schema.stdout'
   when: not reconfigure_only
 
 - name: configure paperless superuser
-  become: yes
-  command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py manage_superuser"
+  become: true
+  ansible.builtin.command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py manage_superuser"
   environment:
-      PAPERLESS_ADMIN_USER: "{{ paperlessng_superuser_name }}"
-      PAPERLESS_ADMIN_MAIL: "{{ paperlessng_superuser_email }}"
-      PAPERLESS_ADMIN_PASSWORD: "{{ paperlessng_superuser_password }}"
+    PAPERLESS_ADMIN_USER: "{{ paperlessng_superuser_name }}"
+    PAPERLESS_ADMIN_MAIL: "{{ paperlessng_superuser_email }}"
+    PAPERLESS_ADMIN_PASSWORD: "{{ paperlessng_superuser_password }}"
   register: superuser
   changed_when: '"Created superuser" in superuser.stdout'
-  no_log: yes
+  no_log: true
 
 - name: set ownership and permissions on paperlessng venv
-  file:
+  ansible.builtin.file:
     path: "{{ paperlessng_virtualenv }}"
     state: directory
-    recurse: yes
+    recurse: true
     owner: "{{ paperlessng_system_user }}"
     group: "{{ paperlessng_system_group }}"
     mode: g-w,o-rwx
   when: venv.changed or not reconfigure_only
 
 - name: configure ghostscript for PDF
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/ImageMagick-6/policy.xml
-    regexp: '(\s+)<policy domain="coder" rights=".*" pattern="PDF" />'
-    line: '\1<policy domain="coder" rights="read|write" pattern="PDF" />'
-    backrefs: yes
+    regexp: (\s+)<policy domain="coder" rights=".*" pattern="PDF" />
+    line: \1<policy domain="coder" rights="read|write" pattern="PDF" />
+    backrefs: true
 
 - name: configure gunicorn web server
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ paperlessng_directory }}/gunicorn.conf.py"
-    regexp: '^bind = '
-    line: "bind = '{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}'"
+    regexp: "^bind = "
+    line: bind = '{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}'
 
 - name: configure systemd services
-  ini_file:
+  community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/{{ item[0] }}"
-    section: "Service"
+    section: Service
     option: "{{ item[1].option  }}"
     value: "{{ item[1].value }}"
   with_nested:
-    - [
-        paperless-consumer.service,
-        paperless-scheduler.service,
-        paperless-webserver.service,
-      ]
-    - [
-        # https://www.freedesktop.org/software/systemd/man/systemd.exec.html
-        { option: "User", value: "{{ paperlessng_system_user }}" },
-        { option: "Group", value: "{{ paperlessng_system_group }}" },
-        { option: "WorkingDirectory", value: "{{ paperlessng_directory }}/src" },
-        { option: "ProtectSystem", value: "full" },
-        { option: "NoNewPrivileges", value: "true" },
-        { option: "PrivateUsers", value: "true" },
-        { option: "PrivateDevices", value: "true" },
-      ]
-
+    - [paperless-consumer.service, paperless-scheduler.service, paperless-webserver.service]
+    # https://www.freedesktop.org/software/systemd/man/systemd.exec.html
+    -   - { option: User, value: "{{ paperlessng_system_user }}" }
+        - { option: Group, value: "{{ paperlessng_system_group }}" }
+        - { option: WorkingDirectory, value: "{{ paperlessng_directory }}/src" }
+        - { option: ProtectSystem, value: full }
+        - { option: NoNewPrivileges, value: "true" }
+        - { option: PrivateUsers, value: "true" }
+        - { option: PrivateDevices, value: "true" }
 - name: configure paperless-consumer service
-  ini_file:
+  community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-consumer.service"
-    section: "Service"
-    option: "ExecStart"
+    section: Service
+    option: ExecStart
     value: "{{ paperlessng_virtualenv }}/bin/python3 manage.py document_consumer"
 
 - name: remove redis from paperless-consumer service if external
-  ini_file:
+  community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-consumer.service"
-    section: "Unit"
-    option: "Requires"
-    value: "redis.service"
+    section: Unit
+    option: Requires
+    value: redis.service
     state: absent
   when: paperlessng_redis_host != 'localhost' or paperlessng_redis_host != '127.0.0.1'
 
 - name: configure paperless-scheduler service
-  ini_file:
+  community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-scheduler.service"
-    section: "Service"
-    option: "ExecStart"
+    section: Service
+    option: ExecStart
     value: "{{ paperlessng_virtualenv }}/bin/python3 manage.py qcluster"
 
 - name: remove redis from paperless-scheduler service if external
-  ini_file:
+  community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-scheduler.service"
-    section: "Unit"
-    option: "Requires"
-    value: "redis.service"
+    section: Unit
+    option: Requires
+    value: redis.service
     state: absent
   when: paperlessng_redis_host != 'localhost' or paperlessng_redis_host != '127.0.0.1'
 
 - name: configure paperless-webserver service
-  ini_file:
+  community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-webserver.service"
-    section: "Service"
-    option: "ExecStart"
+    section: Service
+    option: ExecStart
     value: "{{ paperlessng_virtualenv }}/bin/gunicorn -c {{ paperlessng_directory }}/gunicorn.conf.py paperless.asgi:application"
 
 - name: remove redis from paperless-webserver service if external
-  ini_file:
+  community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-webserver.service"
-    section: "Unit"
-    option: "Requires"
-    value: "redis.service"
+    section: Unit
+    option: Requires
+    value: redis.service
     state: absent
   when: paperlessng_redis_host != 'localhost' or paperlessng_redis_host != '127.0.0.1'
 
@@ -578,10 +571,10 @@
     - paperlessng_is_lxc != "True"
 
 - name: copy systemd services
-  copy:
+  ansible.builtin.copy:
     src: "{{ paperlessng_directory }}/scripts/{{ item }}"
-    remote_src: yes
-    dest: "/etc/systemd/system/{{ item }}"
+    remote_src: true
+    dest: /etc/systemd/system/{{ item }}
   with_items:
     - paperless-consumer.service
     - paperless-scheduler.service
@@ -589,10 +582,10 @@
   register: paperless_services
 
 - name: reload systemd daemon
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item }}"
     state: restarted
-    daemon_reload: yes
+    daemon_reload: true
   with_items:
     - paperless-consumer
     - paperless-scheduler
@@ -600,10 +593,10 @@
   when: paperless_services.changed or configuration.changed
 
 - name: enable paperlessng services
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item }}"
-    enabled: yes
-    masked: no
+    enabled: true
+    masked: false
     state: started
   with_items:
     - paperless-consumer

@@ -1,6 +1,6 @@
 ---
 - name: download and extract paperless-ngx
-  unarchive:
-    src: "https://github.com/paperless-ngx/paperless-ngx/releases/download/{{ paperlessng_version }}/paperless-ngx-{{ paperlessng_version }}.tar.xz"
-    remote_src: yes
+  ansible.builtin.unarchive:
+    src: https://github.com/paperless-ngx/paperless-ngx/releases/download/{{ paperlessng_version }}/paperless-ngx-{{ paperlessng_version }}.tar.xz
+    remote_src: true
     dest: "{{ tempdir.path }}"

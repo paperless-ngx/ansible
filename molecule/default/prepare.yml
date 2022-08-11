@@ -1,3 +1,4 @@
+---
 - name: install previous release
   hosts: all
   tasks:
