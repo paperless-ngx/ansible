@@ -40,6 +40,7 @@
       - build-essential
       - python3-setuptools
       - python3-wheel
+      - python3-venv
       - git
 
 # upstream virtualenv in Ubuntu 20.04 is broken
@@ -192,7 +193,6 @@
 
     - name: create temporary directory
       become: yes
-      become_user: "{{ paperlessng_system_user }}"
       tempfile:
         state: directory
         path: "{{ paperlessng_directory }}"
@@ -226,7 +226,7 @@
         owner: "{{ paperlessng_system_user }}"
         group: "{{ paperlessng_system_group }}"
         mode: "0440"
-        
+
     - name: remove temporary directory
       file:
         path: "{{ tempdir.path }}"
@@ -399,15 +399,13 @@
 
 - name: create paperlessng venv
   become: yes
-  become_user: "{{ paperlessng_system_user }}"
   command:
-    cmd: "python3 -m virtualenv {{ paperlessng_virtualenv }} -p /usr/bin/python3"
+    cmd: "python3 -m venv {{ paperlessng_virtualenv }}"
     creates: "{{ paperlessng_virtualenv }}"
   register: venv
 
 - name: install latest pip
   become: yes
-  become_user: "{{ paperlessng_system_user }}"
   pip:
     name: pip
     executable: "{{ paperlessng_virtualenv }}/bin/pip3"
@@ -417,14 +415,12 @@
 - block:
     - name: install paperlessng requirements
       become: yes
-      become_user: "{{ paperlessng_system_user }}"
       pip:
         requirements: "{{ paperlessng_directory }}/requirements.txt"
         executable: "{{ paperlessng_virtualenv }}/bin/pip3"
         extra_args: --upgrade
     - name: migrate database schema
       become: yes
-      become_user: "{{ paperlessng_system_user }}"
       command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py migrate"
       register: database_schema
       changed_when: '"No migrations to apply." not in database_schema.stdout'
@@ -432,34 +428,13 @@
 
 - name: configure paperless superuser
   become: yes
-  become_user: "{{ paperlessng_system_user }}"
-  # "manage.py createsuperuser" only works on interactive TTYs
-  vars:
-    creation_script: |
-      from django.contrib.auth.models import User
-      from django.contrib.auth.hashers import get_hasher
-
-      if User.objects.filter(username='{{ paperlessng_superuser_name }}').exists():
-          user = User.objects.get(username='{{ paperlessng_superuser_name }}')
-          old = user.__dict__.copy()
-
-          user.is_superuser = True
-          user.email = '{{ paperlessng_superuser_email }}'
-          user.set_password('{{ paperlessng_superuser_password }}')
-          user.save()
-          new = user.__dict__
-
-          algorithm, iterations, old_salt, old_hash = old['password'].split('$')
-          new_password_old_salt = get_hasher(algorithm).encode(password='{{ paperlessng_superuser_password }}', salt=old_salt, iterations=int(iterations))
-          _, _, _, new_hash = new_password_old_salt.split('$')
-          if not (old_hash == new_hash and old['is_superuser'] == new['is_superuser'] and old['email'] == new['email']):
-              print('changed')
-      else:
-          User.objects.create_superuser('{{ paperlessng_superuser_name }}', '{{ paperlessng_superuser_email }}', '{{ paperlessng_superuser_password }}')
-          print('changed')
-  command: '{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py shell -c "{{ creation_script }}"'
+  command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py manage_superuser"
+  environment:
+      PAPERLESS_ADMIN_USER: "{{ paperlessng_superuser_name }}"
+      PAPERLESS_ADMIN_MAIL: "{{ paperlessng_superuser_email }}"
+      PAPERLESS_ADMIN_PASSWORD: "{{ paperlessng_superuser_password }}"
   register: superuser
-  changed_when: superuser.stdout == 'changed'
+  changed_when: '"Created superuser" in superuser.stdout'
   no_log: yes
 
 - name: set ownership and permissions on paperlessng venv
@@ -562,8 +537,8 @@
       - nfs-utils
       - nfs4-acl-tools
     state: present
-  when: 
-    - ansible_os_family == "RedHat" 
+  when:
+    - ansible_os_family == "RedHat"
     - paperlessng_consumption_dir_nfs_enabled
     - paperlessng_is_lxc != "True"
 
@@ -573,8 +548,8 @@
       - nfs-common
       - nfs4-acl-tools
     state: present
-  when: 
-    - ansible_os_family == "RedHat" 
+  when:
+    - ansible_os_family == "RedHat"
     - paperlessng_consumption_dir_nfs_enabled
     - paperlessng_is_lxc != "True"
 
@@ -585,8 +560,8 @@
     mode: "{{ paperlessng_consumption_dir_permission }}"
     owner: root
     group: root
-  when: 
-    - ansible_os_family == "RedHat" 
+  when:
+    - ansible_os_family == "RedHat"
     - paperlessng_consumption_dir_nfs_enabled
     - paperlessng_is_lxc != "True"
 
@@ -597,11 +572,11 @@
     fstype: nfs
     opts: "{{ paperlessng_consumption_dir_myopts }}"
     state: mounted
-  when: 
-    - ansible_os_family == "RedHat" 
+  when:
+    - ansible_os_family == "RedHat"
     - paperlessng_consumption_dir_nfs_enabled
     - paperlessng_is_lxc != "True"
-    
+
 - name: copy systemd services
   copy:
     src: "{{ paperlessng_directory }}/scripts/{{ item }}"
