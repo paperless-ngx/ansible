@@ -2,8 +2,9 @@
 name: Molecule Test
 on: [push, pull_request]
 jobs:
-  build:
+  molecule:
     runs-on: ubuntu-latest
+    name: Molecule Test
     steps:
       -
         name: Checkout
@@ -15,7 +16,7 @@ jobs:
         name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "${{ matrix.python-version }}"
+          python-version: "3.9"
           cache: "pipenv"
           cache-dependency-path: 'Pipfile.lock'
       -
@@ -25,4 +26,4 @@ jobs:
       -
         name: Test with molecule
         run: |
-          molecule test
+          pipenv run molecule test
