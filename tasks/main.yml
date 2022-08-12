@@ -1,8 +1,9 @@
 ---
 - name: verify operating system
-  ansible.builtin.fail:
-    msg: Sorry, only Debian and Ubuntu supported at the moment.
-  when: not(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  ansible.builtin.assert:
+    that: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    fail_msg: "Only Debian or Ubuntu are supported at this time"
+    success_msg: "This OS is supported"
 
 - name: Update all packages to the latest version
   ansible.builtin.apt:
@@ -398,9 +399,21 @@
   ansible.builtin.pip:
     virtualenv: "{{ paperlessng_virtualenv }}"
     virtualenv_command: "python3 -m venv"
+    # Seed some required packages
+    name:
+      - wheel
+      - setuptools
+      - pip
+    extra_args: --upgrade
+  register: venv_create
+
+- name: Install paperless requirements
+  become: true
+  ansible.builtin.pip:
+    executable: "{{ paperlessng_virtualenv }}/bin/pip3"
     requirements: "{{ paperlessng_directory }}/requirements.txt"
     extra_args: --upgrade
-  register: venv
+  register: venv_req_update
 
 - name: set ownership and permissions on paperlessng venv
   ansible.builtin.file:
@@ -410,7 +423,7 @@
     owner: "{{ paperlessng_system_user }}"
     group: "{{ paperlessng_system_group }}"
     mode: g-w,o-rwx
-  when: venv.changed or not reconfigure_only
+  when: venv_create.changed or venv_req_update.changed or not reconfigure_only
 
 - name: migrate database schema
   become: true

@@ -5,15 +5,45 @@ driver:
   name: docker
 platforms:
   - name: ubuntu_focal
-    image: docker.io/ubuntu:20.04
-    pre_build_image: false
-    dockerfile: Dockerfile.j2
-  # - name: ubuntu_jammy
-  #   image: ubuntu:22.04
-  # - name: debian_buster
-  #   image: debian:buster
-  # - name: debian_bullseye
-  #   image: debian:bullseye
+    image: jrei/systemd-ubuntu:20.04
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    override_command: false
+  - name: ubuntu_jammy
+    image: jrei/systemd-ubuntu:22.04
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    override_command: false
+  - name: debian_buster
+    image: jrei/systemd-debian:10
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    override_command: false
+  - name: debian_bullseye
+    image: jrei/systemd-debian:11
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    override_command: false
 provisioner:
   name: ansible
 verifier:
