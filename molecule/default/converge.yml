@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include paperless.ansible"
+      include_role:
+        name: "paperless.ansible"

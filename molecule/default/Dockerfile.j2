@@ -1,0 +1,12 @@
+{% if item.registry is defined %}
+FROM {{ item.registry.url }}/{{ item.image }}
+{% else %}
+FROM {{ item.image }}
+{% endif %}
+
+RUN apt-get update \
+    && apt-get install -y \
+        python3 \
+        python-is-python3 \
+        systemd \
+        systemd-sysv
