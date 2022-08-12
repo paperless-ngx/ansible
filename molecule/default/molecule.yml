@@ -24,16 +24,6 @@ platforms:
       - /run
       - /run/lock
     override_command: false
-  - name: debian_buster
-    image: jrei/systemd-debian:10
-    privileged: true
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
-      - /run/lock
-    override_command: false
   - name: debian_bullseye
     image: jrei/systemd-debian:11
     privileged: true

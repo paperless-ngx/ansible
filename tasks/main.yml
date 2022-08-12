@@ -404,7 +404,7 @@
       - wheel
       - setuptools
       - pip
-    extra_args: --upgrade
+    extra_args: --upgrade --progress-bar off
   register: venv_create
 
 - name: Install paperless requirements
