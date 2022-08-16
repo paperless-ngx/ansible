@@ -8,4 +8,4 @@
 
     - name: install previous paperless-ngx release
       ansible.builtin.include_role:
-        name: ansible-paperless-ngx
+        name: ansible

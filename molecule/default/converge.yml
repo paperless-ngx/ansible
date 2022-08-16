@@ -17,4 +17,4 @@
 
     - name: update to newest paperless-ngx release
       ansible.builtin.include_role:
-        name: ansible-paperless-ngx
+        name: ansible

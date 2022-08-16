@@ -10,7 +10,7 @@ name: CI
 
 defaults:
   run:
-    working-directory: 'ansible-paperless-ngx'
+    working-directory: 'ansible'
 
 jobs:
 

@@ -9,9 +9,9 @@ galaxy_info:
   role_name: paperless_ngx
 
   platforms:
-    - name: Debian
+    - name: Ubuntu
       versions:
-        - buster
+        - jammy
     - name: Ubuntu
       versions:
         - focal
