@@ -17,7 +17,8 @@
     - "{{ tempdir.path }}/paperless-ngx"
     - "{{ tempdir.path }}/paperless-ngx/scripts"
 
-- block:
+- name: Prep the deployment
+  block:
     - name: create temporary git directory
       ansible.builtin.tempfile:
         state: directory

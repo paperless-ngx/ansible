@@ -15,54 +15,92 @@ defaults:
 jobs:
 
   lint:
-    name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - name: Check out the codebase.
-        uses: actions/checkout@v2
-        with:
-          path: 'ansible-paperless-ngx'
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: ansible-lint
+        uses: ansible-community/ansible-lint-action@main
 
-      - name: Set up Python 3.
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install test dependencies.
-        run: pip3 install yamllint
-
-      - name: Lint code.
-        run: |
-          yamllint .
-  molecule:
-    name: Molecule
-    runs-on: ubuntu-latest
+  molecule-converge:
+    needs:
+      - lint
+    runs-on: ubuntu-20.04
     strategy:
-      fail-fast: ${{ !contains(github.event_name, 'pull_request') }}
+      fail-fast: false
       matrix:
-        distro:
-          - ubuntu2004
-          - ubuntu1804
-          - debian10
-          - debian11
-
+        config:
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "20.04"
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "22.04"
     steps:
-      - name: Check out the codebase.
-        uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v3
         with:
-          path: 'ansible-paperless-ngx'
-
-      - name: Set up Python 3.
-        uses: actions/setup-python@v2
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: robertdebock/molecule-action@4.0.9
         with:
-          python-version: '3.x'
+          command: converge
+          namespace: ${{ matrix.config.namespace }}
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}
 
-      - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker
+  molecule-test:
+    needs:
+      - molecule-converge
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "20.04"
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "22.04"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: robertdebock/molecule-action@4.0.9
+        with:
+          command: test
+          options: parallel
+          namespace: ${{ matrix.config.namespace }}
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}
 
-      - name: Run Molecule tests.
-        run: molecule test
-        env:
-          PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
+  molecule-idempotence:
+    needs:
+      - molecule-converge
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "20.04"
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "22.04"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        continue-on-error: true
+        uses: robertdebock/molecule-action@4.0.9
+        with:
+          command: idempotence
+          namespace: ${{ matrix.config.namespace }}
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}

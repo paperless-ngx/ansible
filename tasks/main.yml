@@ -35,13 +35,14 @@
       - pngquant
       - zlib1g
       - tesseract-ocr
-      # dev
+      # Dev
       - sudo
       - build-essential
       - python3-setuptools
       - python3-wheel
       - python3-venv
       - git
+      - python3-jmespath
 
 # upstream virtualenv in Ubuntu 20.04 is broken
 # https://github.com/pypa/virtualenv/issues/1873
@@ -54,35 +55,8 @@
   ansible.builtin.apt:
     pkg: "{{ paperlessng_ocr_languages | map('regex_replace', '^(.*)$', 'tesseract-ocr-\\1') | map('replace', '_', '-') | list }}"
 
-- name: set up notesalexp repository key (for jbig2enc)
-  ansible.builtin.apt_key:
-    url: https://notesalexp.org/debian/alexp_key.asc
-    state: present
-  when: paperlessng_use_jbig2enc
-
-- name: set up notesalexp repository (for jbig2enc)
-  ansible.builtin.apt_repository:
-    repo: deb https://notesalexp.org/debian/{{ ansible_distribution_release }}/ {{ ansible_distribution_release }} main
-    state: present
-  when: paperlessng_use_jbig2enc
-
-- name: set up notesalexp repository pinning
-  ansible.builtin.copy:
-    content: |
-      Package: *
-      Pin: release o=notesalexp.org
-      Pin-Priority: 1
-
-      Package: jbig2enc
-      Pin: release o=notesalexp.org
-      Pin-Priority: 500
-    dest: /etc/apt/preferences.d/notesalexp
-  when: paperlessng_use_jbig2enc
-
-- name: install jbig2enc
-  ansible.builtin.apt:
-    pkg: jbig2enc
-    update_cache: true
+- name: install jbig2encode from source
+  include_tasks: install-jbig2enc.yml
   when: paperlessng_use_jbig2enc
 
 - name: install redis
@@ -111,18 +85,20 @@
     # GNUPG_HOME required due to paperless db.py
     create_home: true
 
-- block:
+- name: Prep the release
+  block:
     - name: get latest release version
       ansible.builtin.uri:
         url: https://api.github.com/repos/paperless-ngx/paperless-ngx/releases/latest
         method: GET
       register: latest_release
     - name: parse latest release version
-      set_fact:
+      ansible.builtin.set_fact:
         paperlessng_version: "{{ latest_release.json['tag_name'] }}"
   when: paperlessng_version == "latest"
 
-- block:
+- name: Check the version
+  block:
     - name: check if version can be found on github
       ansible.builtin.uri:
         url: https://api.github.com/repos/paperless-ngx/paperless-ngx/commits/{{ paperlessng_version }}
@@ -164,7 +140,8 @@
     reconfigure_only: "{{ paperlessng_current_commit.stdout == paperlessng_commit | string }}"
   when: not fresh_installation
 
-- block:
+- name: Backup
+  block:
     - name: backup current paperless-ngx installation
       ansible.builtin.copy:
         src: "{{ paperlessng_directory }}"
@@ -182,7 +159,8 @@
         - static
   when: update_installation
 
-- block:
+- name: Create dirs required
+  block:
     - name: create paperless-ngx directory and set permissions
       ansible.builtin.file:
         path: "{{ paperlessng_directory }}"
@@ -191,12 +169,20 @@
         group: "{{ paperlessng_system_group }}"
         mode: "750"
 
-    - name: create temporary directory
-      become: true
+    - name: Check if tempdir exists
+      ansible.builtin.find:
+        paths: "{{ paperlessng_tmp_dir }}"
+        patterns: "tempgit*"
+        file_type: directory
+      register: tempdir_state
+
+    - name: Create temporary directory
       ansible.builtin.tempfile:
         state: directory
-        path: "{{ paperlessng_directory }}"
+        path: "{{ paperlessng_tmp_dir }}"
+        suffix: tempgit
       register: tempdir
+      when: tempdir_state.matched == 0
 
     - name: install paperless-ngx from source
       include_tasks: install-source.yml
@@ -205,6 +191,20 @@
     - name: install paperless-ngx from release archive
       include_tasks: install-release.yml
       when: paperlessng_install_method == "precompiledrelease"
+
+    - name: Find all files created
+      ansible.builtin.find:
+        path: "{{ tempdir.path }}"
+        file_type: file
+        recurse: yes
+      register: find_result_files
+
+    - name: Find all directories created
+      ansible.builtin.find:
+        path: '{{ tempdir.path }}'
+        file_type: directory
+        recurse: yes
+      register: find_result_directories
 
     - name: change owner and permissions of paperless-ngx
       ansible.builtin.command:
@@ -240,7 +240,8 @@
     owner: "{{ paperlessng_system_user }}"
     group: "{{ paperlessng_system_group }}"
     mode: "750"
-  when: item
+    recurse: yes
+  # when: item
   with_items:
     - "{{ paperlessng_data_dir }}"
     - "{{ paperlessng_trash_dir }}"
@@ -399,6 +400,7 @@
 
 - name: create paperlessng venv
   become: true
+  become_user: "{{ paperlessng_system_user }}"
   ansible.builtin.command:
     cmd: python3 -m venv {{ paperlessng_virtualenv }}
     creates: "{{ paperlessng_virtualenv }}"
@@ -406,28 +408,41 @@
 
 - name: install latest pip
   become: true
+  become_user: "{{ paperlessng_system_user }}"
   ansible.builtin.pip:
     name: pip
     executable: "{{ paperlessng_virtualenv }}/bin/pip3"
     state: latest
   when: not reconfigure_only
 
-- block:
+- name: Install needed requirements
+  block:
+    - name: Replace pikepdf version if using ngx version lower than v1.8.0
+      ansible.builtin.lineinfile:
+        path: "{{ paperlessng_directory }}/requirements.txt"
+        regexp: '^pikepdf(.*)'
+        line: 'pikepdf==5.4.0'
+      when: not paperlessng_version == "v1.8.0" or
+            paperlessng_version == "latest"
+
     - name: install paperlessng requirements
       become: true
+      become_user: "{{ paperlessng_system_user }}"
       ansible.builtin.pip:
         requirements: "{{ paperlessng_directory }}/requirements.txt"
         executable: "{{ paperlessng_virtualenv }}/bin/pip3"
         extra_args: --upgrade
     - name: migrate database schema
       become: true
-      command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py migrate"
+      become_user: "{{ paperlessng_system_user }}"
+      ansible.builtin.command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py migrate"
       register: database_schema
       changed_when: '"No migrations to apply." not in database_schema.stdout'
   when: not reconfigure_only
 
 - name: configure paperless superuser
   become: true
+  become_user: "{{ paperlessng_system_user }}"
   ansible.builtin.command: "{{ paperlessng_virtualenv }}/bin/python3 {{ paperlessng_directory }}/src/manage.py manage_superuser"
   environment:
     PAPERLESS_ADMIN_USER: "{{ paperlessng_superuser_name }}"

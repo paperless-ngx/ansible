@@ -8,7 +8,7 @@
 
   tasks:
     - name: check if webserver is up
-      uri:
+      ansible.builtin.uri:
         url: http://{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}
         status_code: [200, 302]
         return_content: true
@@ -16,12 +16,12 @@
       failed_when: "'Sign in</button>' not in landingpage.content"
 
     - name: generate random name and content
-      set_fact:
+      ansible.builtin.set_fact:
         content: "{{ lookup('password', '/dev/null length=65536 chars=ascii_letters') }}"
         filename: "{{ lookup('password', '/dev/null length=8 chars=ascii_letters') }}"
 
     - name: check if document posting works
-      uri:
+      ansible.builtin.uri:
         url: http://{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}/api/documents/post_document/
         method: POST
         body_format: form-multipart
@@ -36,8 +36,13 @@
       register: post_document
       failed_when: "'OK' not in post_document.content"
 
+    # - name: Output post register
+    #   ansible.builtin.debug:
+    #     var: post_document
+    #   run_once: true
+
     - name: verify uploaded document has been accepted
-      uri:
+      ansible.builtin.uri:
         url: http://{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}/api/logs/paperless/
         headers:
           Authorization: Basic {{ (paperlessng_superuser_name + ":" + paperlessng_superuser_password) | b64encode }}
@@ -45,12 +50,17 @@
       register: logs
       failed_when: ('Consuming ' + filename + '.txt') not in logs.content
 
+    # - name: Output logs register
+    #   ansible.builtin.debug:
+    #     var: logs
+    #   run_once: true
+
     - name: sleep till consumption finished
-      pause:
+      ansible.builtin.pause:
         seconds: 10
 
     - name: verify uploaded document has been consumed
-      uri:
+      ansible.builtin.uri:
         url: http://{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}/api/logs/paperless/
         headers:
           Authorization: Basic {{ (paperlessng_superuser_name + ":" + paperlessng_superuser_password) | b64encode }}
@@ -59,7 +69,7 @@
       failed_when: filename + ' consumption finished' not in logs.content
 
     - name: get documents
-      uri:
+      ansible.builtin.uri:
         url: http://{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}/api/documents/
         headers:
           Authorization: Basic {{ (paperlessng_superuser_name + ":" + paperlessng_superuser_password) | b64encode }}
@@ -67,11 +77,11 @@
       register: documents
 
     - name: set document index
-      set_fact:
+      ansible.builtin.set_fact:
         index: "{{ documents.json['results'][0]['id'] }}"
 
     - name: verify uploaded document is avaiable
-      uri:
+      ansible.builtin.uri:
         url: http://{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}/api/documents/{{ index }}/
         headers:
           Authorization: Basic {{ (paperlessng_superuser_name + ":" + paperlessng_superuser_password) | b64encode }}
@@ -80,7 +90,7 @@
       failed_when: "'Not found.' in document.content or content not in document.json['content']"
 
     - name: check if deleting uploaded document works
-      uri:
+      ansible.builtin.uri:
         url: http://{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}/api/documents/bulk_edit/
         method: POST
         body_format: json
