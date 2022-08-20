@@ -1,0 +1,52 @@
+---
+- name: install dev dependencies
+  ansible.builtin.package:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - autotools-dev
+    - automake
+    - libtool
+    - libleptonica-dev
+
+- name: Install Debian specific libs
+  ansible.builtin.package:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - zlib1g-dev
+  when: ansible_os_family == "Debian"
+
+- name: create temporary git directory
+  ansible.builtin.tempfile:
+    state: directory
+    path: "{{ jbig2enc_tmp_dir }}"
+  register: gitdir
+
+- name: Pull jbig2enc
+  ansible.builtin.git:
+    repo: https://github.com/agl/jbig2enc.git
+    dest: "{{ gitdir.path }}"
+    version: "{{ jbig2enc_version }}"
+    recursive: yes
+  register: jbig2enc_source
+
+- name: Run autogen for jbig2enc
+  ansible.builtin.command: ./autogen.sh
+  args:
+    chdir: "{{ gitdir.path }}"
+
+- name: Run configure for jbig2enc
+  ansible.builtin.command: ./configure
+  args:
+    chdir: "{{ gitdir.path }}"
+
+- name: Run 'make and make install' target
+  community.general.make:
+    chdir: "{{ gitdir.path }}"
+    target: install
+
+- name: remove temporary git directory
+  ansible.builtin.file:
+    path: "{{ gitdir.path }}"
+    state: absent

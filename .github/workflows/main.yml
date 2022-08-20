@@ -1,0 +1,106 @@
+---
+name: CI
+'on':
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 3 * * *"
+
+defaults:
+  run:
+    working-directory: 'ansible'
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: ansible-lint
+        uses: ansible-community/ansible-lint-action@main
+
+  molecule-converge:
+    needs:
+      - lint
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "20.04"
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "22.04"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: robertdebock/molecule-action@4.0.9
+        with:
+          command: converge
+          namespace: ${{ matrix.config.namespace }}
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}
+
+  molecule-test:
+    needs:
+      - molecule-converge
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "20.04"
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "22.04"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: robertdebock/molecule-action@4.0.9
+        with:
+          command: test
+          options: parallel
+          namespace: ${{ matrix.config.namespace }}
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}
+
+  molecule-idempotence:
+    needs:
+      - molecule-converge
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "20.04"
+          - namespace: "jrei"
+            image: "systemd-ubuntu"
+            tag: "22.04"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        continue-on-error: true
+        uses: robertdebock/molecule-action@4.0.9
+        with:
+          command: idempotence
+          namespace: ${{ matrix.config.namespace }}
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}

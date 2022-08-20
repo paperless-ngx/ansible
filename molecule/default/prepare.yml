@@ -3,9 +3,9 @@
   hosts: all
   tasks:
     - name: set previous version as installation target
-      set_fact:
-        paperlessng_version: latest
+      ansible.builtin.set_fact:
+        paperlessng_version: v1.7.1
 
     - name: install previous paperless-ngx release
-      include_role:
+      ansible.builtin.include_role:
         name: ansible

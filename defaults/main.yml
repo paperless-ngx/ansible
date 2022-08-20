@@ -16,7 +16,7 @@ paperlessng_db_pass: paperlessng
 paperlessng_db_sslmode: prefer
 
 # Paths and folders
-paperlessng_directory: /opt/paperless-ngx
+paperlessng_directory: "/opt/paperless-ngx"
 paperlessng_consumption_dir: "{{ paperlessng_directory }}/consumption"
 paperlessng_export_dir: "{{ paperlessng_directory }}/export"
 paperlessng_data_dir: "{{ paperlessng_directory }}/data"
@@ -26,15 +26,16 @@ paperlessng_staticdir: "{{ paperlessng_directory }}/static"
 paperlessng_filename_format:
 paperlessng_logging_dir: "{{ paperlessng_data_dir }}/log"
 paperlessng_virtualenv: "{{ paperlessng_directory }}/.venv"
+paperlessng_tmp_dir: "/opt/"
 
-#NFS
+# NFS
 paperlessng_consumption_dir_nfs_enabled: false
 paperlessng_consumption_dir_nfs:
 paperlessng_consumption_dir_mountpoint:
 paperlessng_consumption_dir_permission:
 paperlessng_consumption_dir_myopts:
 # Hosting & Security
-paperlessng_url: http://change-to-ip-of-host:8000
+paperlessng_url: http://localhost:8000
 paperlessng_secret_key: PLEASECHANGETHISFORTHELOVEOFGOD
 paperlessng_allowed_hosts: "*"
 paperlessng_cors_allowed_hosts: http://localhost:8000
@@ -60,6 +61,10 @@ paperlessng_ocr_user_args:
   - optimize: 1
 paperlessng_use_jbig2enc: true
 paperlessng_big2enc_lossy: false
+
+# jbig2encode settings
+jbig2enc_version: 0.29
+jbig2enc_tmp_dir: "/opt/"
 
 # Tika settings
 paperlessng_tika_enabled: false
@@ -91,7 +96,7 @@ paperlessng_system_user: paperlessng
 paperlessng_system_group: paperlessng
 
 # Webserver settings
-paperlessng_listen_address: 0.0.0.0
+paperlessng_listen_address: 127.0.0.1
 paperlessng_listen_port: 8000
 
 # Extra
