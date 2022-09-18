@@ -31,6 +31,13 @@
     recursive: yes
   register: jbig2enc_source
 
+- name: apply patch to fix reported version
+  ansible.posix.patch:
+    basedir: "{{ gitdir.path }}"
+    src: jbig2enc-0.29-fix-reported-version.patch
+    strip: 1
+    state: present
+
 - name: Run autogen for jbig2enc
   ansible.builtin.command: ./autogen.sh
   args:

@@ -55,8 +55,21 @@
   ansible.builtin.apt:
     pkg: "{{ paperlessng_ocr_languages | map('regex_replace', '^(.*)$', 'tesseract-ocr-\\1') | map('replace', '_', '-') | list }}"
 
-- name: install jbig2encode from source
-  include_tasks: install-jbig2enc.yml
+- name: install jbig2enc
+  block:
+    - name: check if jbig2enc is already installed with correct version
+      ansible.builtin.command:
+        cmd: jbig2 --version
+      changed_when:
+        jbig2enc_version_installed.rc != 0 or
+        (jbig2enc_version_installed.stderr.split(' ')[-1] != jbig2enc_version | string) | default(true)
+      failed_when: false
+      ignore_errors: true
+      register: jbig2enc_version_installed
+
+    - name: install jbig2encode from source
+      include_tasks: install-jbig2enc.yml
+      when: jbig2enc_version_installed.changed
   when: paperlessng_use_jbig2enc
 
 - name: install redis
