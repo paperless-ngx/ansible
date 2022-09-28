@@ -420,7 +420,7 @@
     creates: "{{ paperlessng_virtualenv }}"
   register: venv
 
-- name: install latest pip/pipenv/whell
+- name: install latest pip/pipenv/wheel
   become: true
   become_user: "{{ paperlessng_system_user }}"
   ansible.builtin.pip:
