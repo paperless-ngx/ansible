@@ -43,6 +43,7 @@
       - python3-venv
       - git
       - python3-jmespath
+      - default-libmysqlclient-dev
 
 # upstream virtualenv in Ubuntu 20.04 is broken
 # https://github.com/pypa/virtualenv/issues/1873
@@ -419,24 +420,24 @@
     creates: "{{ paperlessng_virtualenv }}"
   register: venv
 
-- name: install latest pip
+- name: install latest pip/pipenv/whell
   become: true
   become_user: "{{ paperlessng_system_user }}"
   ansible.builtin.pip:
-    name: pip
+    name:
+    - pip
+    - wheel
+    - pipenv
     executable: "{{ paperlessng_virtualenv }}/bin/pip3"
     state: latest
   when: not reconfigure_only
 
 - name: Install needed requirements
   block:
-    - name: Replace pikepdf version if using ngx version lower than v1.8.0
-      ansible.builtin.lineinfile:
-        path: "{{ paperlessng_directory }}/requirements.txt"
-        regexp: '^pikepdf(.*)'
-        line: 'pikepdf==5.4.0'
-      when: not paperlessng_version == "v1.8.0" or
-            paperlessng_version == "latest"
+    - name: Create requirments.txt file
+      ansible.builtin.shell: ".venv/bin/pipenv requirements > requirements.txt"
+      args:
+        chdir: "{{ paperlessng_directory }}/"
 
     - name: install paperlessng requirements
       become: true
@@ -445,6 +446,7 @@
         requirements: "{{ paperlessng_directory }}/requirements.txt"
         executable: "{{ paperlessng_virtualenv }}/bin/pip3"
         extra_args: --upgrade
+
     - name: migrate database schema
       become: true
       become_user: "{{ paperlessng_system_user }}"
@@ -570,7 +572,7 @@
       - nfs4-acl-tools
     state: present
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
     - paperlessng_consumption_dir_nfs_enabled
     - paperlessng_is_lxc != "True"
 
@@ -582,7 +584,7 @@
     owner: root
     group: root
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_os_family == "RedHat" or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
     - paperlessng_consumption_dir_nfs_enabled
     - paperlessng_is_lxc != "True"
 
@@ -594,7 +596,7 @@
     opts: "{{ paperlessng_consumption_dir_myopts }}"
     state: mounted
   when:
-    - ansible_os_family == "RedHat"
+    - ansible_os_family == "RedHat" or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
     - paperlessng_consumption_dir_nfs_enabled
     - paperlessng_is_lxc != "True"
 
