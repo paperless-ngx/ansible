@@ -1,12 +1,12 @@
 ---
-- name: install dev dependencies
+- name: Install dev dependencies
   ansible.builtin.apt:
     pkg:
       - git
       - npm
       - gettext
 
-- name: create output directories
+- name: Create output directories
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -19,20 +19,20 @@
 
 - name: Prep the deployment
   block:
-    - name: create temporary git directory
+    - name: Create temporary git directory
       ansible.builtin.tempfile:
         state: directory
         path: "{{ paperlessng_directory }}"
       register: gitdir
 
-    - name: pull paperless-ngx
+    - name: Pull paperless-ngx
       ansible.builtin.git:
         repo: https://github.com/paperless-ngx/paperless-ngx.git
         dest: "{{ gitdir.path }}"
         version: "{{ paperlessng_version }}"
         refspec: +refs/pull/*:refs/pull/*
 
-    - name: compile frontend
+    - name: Compile frontend
       ansible.builtin.command:
         cmd: "{{ item }}"
       args:
@@ -43,7 +43,7 @@
         - npm install
         - ./node_modules/.bin/ng build --prod
 
-    - name: copy application into place
+    - name: Copy application into place
       ansible.builtin.copy:
         src: "{{ gitdir.path }}/{{ item.src }}"
         remote_src: true
@@ -59,7 +59,7 @@
         - src: paperless.conf.example
           dest: paperless.conf
 
-    - name: glob all scripts
+    - name: Glob all scripts
       ansible.builtin.find:
         paths: ["{{ gitdir.path }}/scripts/"]
         patterns:
@@ -67,7 +67,7 @@
           - "*.sh"
       register: glob
 
-    - name: copy scripts
+    - name: Copy scripts
       ansible.builtin.copy:
         src: "{{ item.path }}"
         remote_src: true
@@ -75,36 +75,36 @@
       with_items:
         - "{{ glob.files }}"
 
-    - name: copy sources
+    - name: Copy sources
       ansible.builtin.command:
         cmd: cp -r src/ {{ tempdir.path }}/paperless-ngx/src
       args:
         chdir: "{{ gitdir.path }}"
 
-    - name: create paperlessng venv
+    - name: Create paperlessng venv
       ansible.builtin.command:
         cmd: python3 -m virtualenv {{ gitdir.path }}/.venv/ -p /usr/bin/python3
 
-    - name: install paperlessng requirements
+    - name: Install paperlessng requirements
       ansible.builtin.command:
         cmd: "{{ gitdir.path }}/.venv/bin/python3 -m pip install -r {{ gitdir.path }}/requirements.txt"
 
-    - name: compile messages
+    - name: Compile messages
       ansible.builtin.command: "{{ gitdir.path }}/.venv/bin/python3 manage.py compilemessages"
       args:
         chdir: "{{ tempdir.path }}/paperless-ngx/src/"
 
-    - name: collect static files
+    - name: Collect static files
       ansible.builtin.command: "{{ gitdir.path }}/.venv/bin/python3 manage.py collectstatic --no-input"
       args:
         chdir: "{{ tempdir.path }}/paperless-ngx/src/"
 
-    - name: remove pycache directories
+    - name: Remove pycache directories
       ansible.builtin.shell: find . -name __pycache__ | xargs rm -r
       args:
         chdir: "{{ tempdir.path }}"
 
-    - name: remove temporary git directory
+    - name: Remove temporary git directory
       ansible.builtin.file:
         path: "{{ gitdir.path }}"
         state: absent
