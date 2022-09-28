@@ -1,5 +1,5 @@
 ---
-- name: install dev dependencies
+- name: Install dev dependencies
   ansible.builtin.package:
     name: "{{ item }}"
     update_cache: yes
@@ -17,7 +17,7 @@
     - zlib1g-dev
   when: ansible_os_family == "Debian"
 
-- name: create temporary git directory
+- name: Create temporary git directory
   ansible.builtin.tempfile:
     state: directory
     path: "{{ jbig2enc_tmp_dir }}"
@@ -31,7 +31,7 @@
     recursive: yes
   register: jbig2enc_source
 
-- name: apply patch to fix reported version
+- name: Apply patch to fix reported version
   ansible.posix.patch:
     basedir: "{{ gitdir.path }}"
     src: jbig2enc-0.29-fix-reported-version.patch
@@ -53,7 +53,7 @@
     chdir: "{{ gitdir.path }}"
     target: install
 
-- name: remove temporary git directory
+- name: Remove temporary git directory
   ansible.builtin.file:
     path: "{{ gitdir.path }}"
     state: absent
