@@ -2,7 +2,7 @@
 - name: Verify operating system
   ansible.builtin.fail:
     msg: Sorry, only Debian and Ubuntu supported at the moment.
-  when: not (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: not(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 - name: Update all packages to the latest version
   ansible.builtin.apt:
@@ -233,7 +233,7 @@
       ansible.builtin.command:
         cmd: cp -a {{ tempdir.path }}/paperless-ngx/. {{ paperlessng_directory }}
 
-    - name: Store commit hash of installed version # noqa template-instead-of-copy
+    - name: Store commit hash of installed version
       ansible.builtin.copy:
         content: "{{ paperlessng_commit }}"
         dest: "{{ paperlessng_directory }}/.installed_version"
@@ -316,7 +316,7 @@
       line: PAPERLESS_URL={{ paperlessng_url }}
     # OCR settings
     - regexp: PAPERLESS_OCR_LANGUAGE
-      line: PAPERLESS_OCR_LANGUAGE={{ paperlessng_ocr_languages | join('+') | replace('-', '_') }}
+      line: PAPERLESS_OCR_LANGUAGE={{ paperlessng_ocr_languages | join('+') | replace('-','_') }}
     - regexp: PAPERLESS_OCR_MODE
       line: PAPERLESS_OCR_MODE={{ paperlessng_ocr_mode }}
     - regexp: PAPERLESS_OCR_CLEAN
@@ -489,12 +489,13 @@
     path: "{{ paperlessng_directory }}/gunicorn.conf.py"
     regexp: "^bind = "
     line: bind = '{{ paperlessng_listen_address }}:{{ paperlessng_listen_port }}'
+  register: gunicorn_configuration
 
 - name: Configure systemd services
   community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/{{ item[0] }}"
     section: Service
-    option: "{{ item[1].option }}"
+    option: "{{ item[1].option  }}"
     value: "{{ item[1].value }}"
   with_nested:
     - [paperless-consumer.service, paperless-scheduler.service, paperless-webserver.service]
@@ -620,7 +621,9 @@
     - paperless-consumer
     - paperless-scheduler
     - paperless-webserver
-  when: paperless_services.changed or configuration.changed
+  when: paperless_services.changed or 
+        configuration.changed or 
+        gunicorn_configuration.changed
 
 - name: Enable paperlessng services
   ansible.builtin.systemd:
