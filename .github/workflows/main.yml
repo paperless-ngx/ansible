@@ -5,8 +5,6 @@ name: CI
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 3 * * *"
 
 defaults:
   run:
