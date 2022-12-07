@@ -529,6 +529,15 @@
     option: ExecStart
     value: "{{ paperlessng_virtualenv }}/bin/celery --app paperless beat --loglevel INFO"
 
+- name: remove redis from paperless-scheduler service if external
+  community.general.ini_file:
+    path: "{{ paperlessng_directory }}/scripts/paperless-scheduler.service"
+    section: Unit
+    option: Requires
+    value: redis.service
+    state: absent
+  when: paperlessng_redis_host != 'localhost' or paperlessng_redis_host != '127.0.0.1'
+
 - name: configure paperless-task-queue service
   community.general.ini_file:
     path: "{{ paperlessng_directory }}/scripts/paperless-task-queue.service"
@@ -536,9 +545,9 @@
     option: ExecStart
     value: "{{ paperlessng_virtualenv }}/bin/celery --app paperless worker --loglevel INFO"
 
-- name: remove redis from paperless-scheduler service if external
+- name: remove redis from paperless-task-queue service if external
   community.general.ini_file:
-    path: "{{ paperlessng_directory }}/scripts/paperless-scheduler.service"
+    path: "{{ paperlessng_directory }}/scripts/paperless-task-queue.service"
     section: Unit
     option: Requires
     value: redis.service
