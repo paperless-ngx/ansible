@@ -16,12 +16,14 @@
       # paperless-ngx
       - python3-pip
       - python3-dev
+      - default-libmysqlclient-dev
       - fonts-liberation
       - imagemagick
       - optipng
       - gnupg
       - libpq-dev
       - libmagic-dev
+      - mariadb-client
       - mime-support
       - libzbar0
       - poppler-utils
@@ -495,7 +497,7 @@
     option: "{{ item[1].option  }}"
     value: "{{ item[1].value }}"
   with_nested:
-    - [paperless-consumer.service, paperless-scheduler.service, paperless-webserver.service]
+    - [paperless-consumer.service, paperless-scheduler.service, paperless-webserver.service, paperless-task-queue.service]
     # https://www.freedesktop.org/software/systemd/man/systemd.exec.html
     -   - { option: User, value: "{{ paperlessng_system_user }}" }
         - { option: Group, value: "{{ paperlessng_system_group }}" }
@@ -525,7 +527,14 @@
     path: "{{ paperlessng_directory }}/scripts/paperless-scheduler.service"
     section: Service
     option: ExecStart
-    value: "{{ paperlessng_virtualenv }}/bin/python3 manage.py qcluster"
+    value: "{{ paperlessng_virtualenv }}/bin/celery --app paperless beat --loglevel INFO"
+
+- name: configure paperless-task-queue service
+  community.general.ini_file:
+    path: "{{ paperlessng_directory }}/scripts/paperless-task-queue.service"
+    section: Service
+    option: ExecStart
+    value: "{{ paperlessng_virtualenv }}/bin/celery --app paperless worker --loglevel INFO"
 
 - name: remove redis from paperless-scheduler service if external
   community.general.ini_file:
@@ -605,8 +614,9 @@
     dest: /etc/systemd/system/{{ item }}
   with_items:
     - paperless-consumer.service
-    - paperless-scheduler.service
     - paperless-webserver.service
+    - paperless-scheduler.service
+    - paperless-task-queue.service
   register: paperless_services
 
 - name: reload systemd daemon
@@ -618,6 +628,7 @@
     - paperless-consumer
     - paperless-scheduler
     - paperless-webserver
+    - paperless-task-queue
   when: paperless_services.changed or configuration.changed
 
 - name: enable paperlessng services
@@ -630,3 +641,4 @@
     - paperless-consumer
     - paperless-scheduler
     - paperless-webserver
+    - paperless-task-queue
