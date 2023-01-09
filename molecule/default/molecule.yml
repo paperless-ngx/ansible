@@ -18,6 +18,8 @@ platforms:
     override_command: false
 provisioner:
   name: ansible
+  options:
+    extra-vars: "{'molecule_role_inclusion_name': \"{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}\" }"
 verifier:
   name: ansible
 scenario:
