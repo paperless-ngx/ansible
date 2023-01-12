@@ -222,7 +222,6 @@
     - name: change owner and permissions of paperless-ngx
       ansible.builtin.command:
         cmd: "{{ item }}"
-        warn: false
       with_items:
         - chown -R {{ paperlessng_system_user }}:{{ paperlessng_system_group }} {{ tempdir.path }}
         - find {{ tempdir.path }} -type d -exec chmod 0750 {} ;
