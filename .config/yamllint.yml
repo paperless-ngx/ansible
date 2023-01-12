@@ -1,0 +1,14 @@
+---
+extends: default
+
+rules:
+  # ToDo: Change severity of rules back to error with a later PR
+  braces:
+    level: warning
+  hyphens:
+    level: warning
+  line-length:
+    level: warning
+    max: 180
+  new-line-at-end-of-file:
+    level: warning

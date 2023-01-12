@@ -93,3 +93,7 @@ Example Playbook
         paperlessng_listen_address: 0.0.0.0
         paperlessng_listen_port: 8000
 ```
+
+## Contributing
+We encourage you to contribute to this role! Please check out the
+[contributing guide](CONTRIBUTING.md) for guidelines about how to proceed.
