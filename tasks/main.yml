@@ -68,7 +68,7 @@
       register: jbig2enc_version_installed
 
     - name: install jbig2encode from source
-      include_tasks: install-jbig2enc.yml
+      ansible.builtin.include_tasks: install-jbig2enc.yml
       when: jbig2enc_version_installed.changed
   when: paperlessng_use_jbig2enc
 
@@ -198,11 +198,11 @@
       when: tempdir_state.matched == 0
 
     - name: install paperless-ngx from source
-      include_tasks: install-source.yml
+      ansible.builtin.include_tasks: install-source.yml
       when: paperlessng_install_method == "source"
 
     - name: install paperless-ngx from release archive
-      include_tasks: install-release.yml
+      ansible.builtin.include_tasks: install-release.yml
       when: paperlessng_install_method == "precompiledrelease"
 
     - name: Find all files created
