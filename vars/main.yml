@@ -1,0 +1,35 @@
+---
+# Vars that shouldn't be altered by the user
+## Vars without reference to the paperless-ngx docs
+ansible_version_minimum: "4.0.0"
+github_public_repo_token: "{{ lookup('env', 'GH_TOKEN') | default(omit) }}"
+paperless_ngx_config_path: /etc/paperless.d
+paperless_ngx_config_file: "/etc/paperless.conf"
+paperless_ngx_config_file_template: "{{ paperless_ngx_dir_installation }}/paperless.conf.template"
+paperless_ngx_dir_force_permission_include:
+  - "{{ paperless_ngx_dir_installation }}"
+  - "{{ paperless_ngx_dir_runtime_data }}"
+  - "{{ paperless_ngx_conf_consumption_dir }}"
+  - "{{ paperless_ngx_conf_data_dir }}"
+  - "{{ paperless_ngx_conf_trash_dir }}"
+  - "{{ paperless_ngx_conf_media_root }}"
+  - "{{ paperless_ngx_conf_logging_dir }}"
+paperless_ngx_dir_tmp: /tmp/paperless-ngx
+paperless_ngx_services_list:
+  - name: paperless-consumer.service
+    enabled: true
+  - name: paperless-scheduler.service
+    enabled: true
+  - name: paperless-webserver.service
+    enabled: true
+  - name: paperless-task-queue.service
+    enabled: true
+  - name: paperless-flower.service
+    enabled: "{{ paperless_ngx_conf_enable_flower }}"
+
+paperless_ngx_version_minimum: '1.10.0'
+
+## Vars with reference to the paperless-ngx docs
+paperless_ngx_conf_dbengine:  # Not used by the role
+paperless_ngx_conf_redis: redis://{{ paperless_ngx_redis_host }}:{{ paperless_ngx_redis_port }}
+paperless_ngx_conf_staticdir: ../static

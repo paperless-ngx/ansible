@@ -1,0 +1,18 @@
+---
+repos:
+  - repo: local
+    hooks:
+      - id: yamllint
+        name: yamllint
+        entry: |
+          yamllint -c=.yamllint.yml .
+        language: system
+        types: [yaml]
+        pass_filenames: false
+      - id: ansible-lint
+        name: ansible-lint
+        entry: |
+          ansible-lint -c .ansible-lint
+        language: system
+        types: [yaml]
+        pass_filenames: false

@@ -1,0 +1,3 @@
+---
+skip_list:
+  - experimental  # all rules tagged as experimental

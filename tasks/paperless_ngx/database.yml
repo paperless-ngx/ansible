@@ -1,0 +1,20 @@
+---
+# Needs configuration first so that dirs etc. are known to pngx
+- name: Migrate database schema
+  become: true
+  become_user: "{{ paperless_ngx_system_user }}"
+  ansible.builtin.command: "{{ paperless_ngx_dir_virtualenv }}/bin/python3 {{ paperless_ngx_dir_installation }}/src/manage.py migrate"
+  register: _database_schema_migration
+  changed_when: '"No migrations to apply." not in _database_schema_migration.stdout'
+
+- name: Configure paperless superuser
+  become: true
+  become_user: "{{ paperless_ngx_system_user }}"
+  ansible.builtin.command: "{{ paperless_ngx_dir_virtualenv }}/bin/python3 {{ paperless_ngx_dir_installation }}/src/manage.py manage_superuser"
+  environment:
+    PAPERLESS_ADMIN_USER: "{{ paperless_ngx_conf_admin_user }}"
+    PAPERLESS_ADMIN_MAIL: "{{ paperless_ngx_conf_admin_mail }}"
+    PAPERLESS_ADMIN_PASSWORD: "{{ paperless_ngx_conf_admin_password }}"
+  register: _superuser_created
+  changed_when: '"Created superuser" in _superuser_created.stdout'
+  no_log: true

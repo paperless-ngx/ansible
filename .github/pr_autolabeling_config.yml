@@ -1,0 +1,44 @@
+---
+template: "!!! Not needed but mandatory by release drafter action"
+autolabeler:
+  # - label: breaking
+  - label: bug
+    title:
+      - "/^fix/i"
+  - label: build
+    title:
+      - "/^build/i"
+  - label: ci
+    title:
+      - "/^ci/i"
+  # - label: dependencies
+  - label: documentation
+    title:
+      - "/^docs/i"
+  # - label: duplicate
+  - label: enhancement
+    title:
+      - "/^feat/i"
+  # - label: good first issue
+  # - label: help wanted
+  # - label: invalid
+  - label: performance
+    title:
+      - "/^perf/i"
+  # - label: question
+  - label: refactoring
+    title:
+      - "/^refactor/i"
+  # - label: removal
+  - label: style
+    title:
+      - "/^style/i"
+  # - label: security
+  - label: testing
+    title:
+      - "/^test/i"
+  # - label: wontfix
+  - label: skip-changelog
+    title:
+      - "/^chore/i"
+      - "/^revert/i"

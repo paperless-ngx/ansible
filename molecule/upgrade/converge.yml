@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  any_errors_fatal: true
+  vars:
+    paperless_ngx_version: latest
+  tasks:
+    - name: "Install latest version of pngx"
+      ansible.builtin.include_role:
+        name: "stevenengland.paperless_ngx"

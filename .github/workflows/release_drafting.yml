@@ -1,0 +1,20 @@
+---
+name: Release Drafting
+
+"on":
+  push:
+    branches:
+      - master
+
+jobs:
+  update_release_draft:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v5.22.0
+        with:
+          config-name: release_drafting_config.yml
+          disable-autolabeler: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

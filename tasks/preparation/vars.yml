@@ -1,0 +1,13 @@
+---
+- name: Check that installation dir and data dir do not overlap
+  ansible.builtin.assert:
+    that:
+      - 'not paperless_ngx_dir_installation in paperless_ngx_dir_runtime_data'
+      - 'not paperless_ngx_dir_installation in paperless_ngx_conf_consumption_dir'
+      - 'not paperless_ngx_dir_installation in paperless_ngx_conf_data_dir'
+      - 'not paperless_ngx_dir_installation in paperless_ngx_conf_trash_dir'
+      - 'not paperless_ngx_dir_installation in paperless_ngx_conf_media_root'
+      - 'not paperless_ngx_dir_installation in paperless_ngx_conf_logging_dir'
+    msg:
+      - "Do not set a directory for runtime data as subdirectory of the installation folder."
+      - "This will keep us from overcomplicating the role development and you from unwanted deletions during upgrades etc."

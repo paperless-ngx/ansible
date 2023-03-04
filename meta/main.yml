@@ -1,0 +1,30 @@
+---
+galaxy_info:
+  author: stevenengland
+  role_name: paperless_ngx
+  description: Ansible role to install paperless-ngx
+
+  # If the issue tracker for your role is not on github, uncomment the
+  # next line and provide a value
+  # issue_tracker_url: http://example.com/issue/tracker
+
+  license: MIT
+
+  min_ansible_version: "4.0.0"
+
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+
+  galaxy_tags:
+    - paperless
+    - ngx
+    - dms
+
+dependencies: []

@@ -1,0 +1,46 @@
+---
+- name: Prepare
+  hosts: all
+  any_errors_fatal: true
+  vars_files:
+    - ../../defaults/main.yml
+    - ../../vars/main.yml
+
+  tasks:
+    - name: Prepare the installation with default preparation
+      ansible.builtin.include_tasks:
+        file: ../default_preparation.yml
+
+    - name: Install dependencies
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - "python{{ (ansible_python.version.major == 3) | ternary('3', '') }}-psycopg2"
+          - gnupg
+          - acl
+
+    - name: Install postgresql
+      ansible.builtin.include_role:
+        name: galaxyproject.postgresql
+        apply:
+          become: true
+      vars:
+        postgresql_flavor: pgdg
+        postgresql_version: 15
+        postgresql_conf:
+          - port: "{{ paperless_ngx_conf_dbport }}"
+          - listen_addresses: "'{{ paperless_ngx_conf_dbhost }}'"
+
+    - name: Create postgresql user and db
+      ansible.builtin.include_role:
+        name: galaxyproject.postgresql_objects
+        apply:
+          become: true
+          become_user: postgres
+      vars:
+        postgresql_objects_users:
+          - name: "{{ paperless_ngx_conf_dbuser }}"
+            password: "{{ paperless_ngx_conf_dbpass }}"
+        postgresql_objects_databases:
+          - name: "{{ paperless_ngx_conf_dbname }}"
+            owner: "{{ paperless_ngx_conf_dbuser }}"

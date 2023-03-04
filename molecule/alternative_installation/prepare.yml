@@ -1,0 +1,8 @@
+---
+- name: Prepare
+  hosts: all
+  any_errors_fatal: true
+  tasks:
+    - name: Prepare the installation with default preparation
+      ansible.builtin.include_tasks:
+        file: ../default_preparation.yml

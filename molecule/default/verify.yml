@@ -1,0 +1,8 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Test the installation with default verifier
+      ansible.builtin.include_tasks:
+        file: ../default_verification.yml

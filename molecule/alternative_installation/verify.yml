@@ -1,0 +1,12 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+  vars_files:
+    - ../../defaults/main.yml
+    - ../../vars/main.yml
+
+  tasks:
+    - name: "Include test_alternative_installation"
+      ansible.builtin.import_role:
+        name: "test_alternative_installation"

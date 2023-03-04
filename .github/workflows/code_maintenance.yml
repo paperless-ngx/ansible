@@ -1,0 +1,35 @@
+---
+name: Code Maintenance
+
+"on":
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  run_maintenance_tasks:
+    name: Run check scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Load environment vars
+        id: dotenv
+        uses: falti/dotenv-action@v1.0.2
+        with:
+          path: .github/workflows/env_vars.txt
+          log-variables: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ steps.dotenv.outputs.PYTHON_SETUP_VERSION }}
+
+      - name: Upgrade pip
+        run: |
+          python3 -m pip install --constraint=.github/workflows/constraints.txt pip colorama
+          python3 -m pip --version
+
+      - run: |
+          python3 maintenance/run_checks.py

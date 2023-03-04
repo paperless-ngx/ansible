@@ -1,0 +1,2 @@
+# Directory permission check
+This role will enforce permission sets for most of the directories that are affected by this installation. However, there might be situations in which this is not wanted. For example if your consumption dir resides behind a rclone fuse mount which is connected via a technical user that is different from your paperless-ngx system user. etc. ... Therefore you can add directories to the var `paperless_ngx_dir_force_permission_exclude` that shall be exluded from the permission check/setting.

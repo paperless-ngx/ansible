@@ -1,0 +1,14 @@
+---
+- name: Prepare
+  hosts: all
+  any_errors_fatal: true
+  vars:
+    paperless_ngx_version: latest
+  tasks:
+    - name: Prepare the installation with default preparation
+      ansible.builtin.include_tasks:
+        file: ../default_preparation.yml
+
+    - name: "Install latest version of pngx (reconfigure)"
+      ansible.builtin.include_role:
+        name: "stevenengland.paperless_ngx"

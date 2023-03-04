@@ -1,0 +1,41 @@
+---
+name: Code Linting
+
+"on":
+  pull_request:
+    branches:
+      - master
+  workflow_call:
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Load environment vars
+        id: dotenv
+        uses: falti/dotenv-action@v1.0.2
+        with:
+          path: .github/workflows/env_vars.txt
+          log-variables: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ steps.dotenv.outputs.PYTHON_SETUP_VERSION }}
+
+      - name: Upgrade pip
+        run: |
+          python3 -m pip install --constraint=.github/workflows/constraints.txt pip
+          python3 -m pip --version
+
+      - name: Install test dependencies
+        run: |
+          python3 -m pip install -r .github/workflows/requirements.txt -c .github/workflows/constraints.txt
+
+      - name: Run linter
+        run: |
+          yamllint --list-files .
+          yamllint -c=.yamllint.yml .
+          ansible-lint -c .ansible-lint
