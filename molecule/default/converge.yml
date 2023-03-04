@@ -3,9 +3,9 @@
   hosts: all
   any_errors_fatal: true
   tasks:
-    - name: "Include stevenengland.paperless_ngx"
+    - name: "Include paperless_ngx.paperless_ngx"
       ansible.builtin.include_role:
-        name: "stevenengland.paperless_ngx"
+        name: "paperless_ngx.paperless_ngx"
       tags:
         - preparation
         - base_dependencies

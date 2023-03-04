@@ -7,7 +7,7 @@
       block:
         - name: "Arrange&Act"
           ansible.builtin.include_role:
-            name: "stevenengland.paperless_ngx"
+            name: "paperless_ngx.paperless_ngx"
           tags:
             - check_paperless_version
           vars:
@@ -26,7 +26,7 @@
       block:
         - name: "Arrange&Act"
           ansible.builtin.include_role:
-            name: "stevenengland.paperless_ngx"
+            name: "paperless_ngx.paperless_ngx"
           tags:
             - check_paperless_version
           vars:
