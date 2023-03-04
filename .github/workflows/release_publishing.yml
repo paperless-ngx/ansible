@@ -4,7 +4,7 @@ name: Release Publishing
 "on":
   push:
     branches:
-      - master
+      - main
       # paths:
       #   - "current-version.txt"
 

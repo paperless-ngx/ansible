@@ -4,7 +4,7 @@ name: Code Maintenance
 "on":
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   run_maintenance_tasks:

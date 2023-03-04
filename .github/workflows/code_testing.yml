@@ -4,7 +4,7 @@ name: Code Testing
 "on":
   pull_request:
     branches:
-      - master
+      - main
     paths-ignore:
       - "*.md"
       - "*version.txt"
