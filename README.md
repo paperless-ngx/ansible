@@ -1,21 +1,23 @@
-> **ATTENTION:** :construction_worker_woman: This project will be assimilated into the official [paperless-ngx repo](https://github.com/paperless-ngx/ansible) very soon. 
-
 | Status | Event |
 |---|---|
-| [![Code Testing](https://github.com/stevenengland/paperless_ngx_ansible_role/actions/workflows/code_testing.yml/badge.svg?event=schedule)](https://github.com/stevenengland/paperless_ngx_ansible_role/actions/workflows/code_testing.yml) | Weekly schedule |
-| [![Code Testing](https://github.com/stevenengland/paperless_ngx_ansible_role/actions/workflows/code_testing.yml/badge.svg?event=pull_request)](https://github.com/stevenengland/paperless_ngx_ansible_role/actions/workflows/code_testing.yml) | Last PR |
+| [![Code Testing](https://github.com/paperless-ngx/ansible/actions/workflows/code_testing.yml/badge.svg?event=schedule)](https://github.com/paperless-ngx/ansible/actions/workflows/code_testing.yml) | Weekly schedule |
+| [![Code Testing](https://github.com/paperless-ngx/ansible/actions/workflows/code_testing.yml/badge.svg?event=pull_request)](https://github.com/paperless-ngx/ansible/actions/workflows/code_testing.yml) | Last PR |
 
-Ansible Role: paperless-ngx
+Ansible Role: paperless_ngx
 =========
 
-Installs and configures paperless-ngx EDMS on Debian/Ubuntu systems.
-
-**NOTE:** This role is based on the role made by the devs of paperless-ngx itself [paperless-ngx/ansible](https://github.com/paperless-ngx/ansible). Because the role seems to be stale and I wanted to dive deeper into ansible as well as paperless-ngx I devided to recreate the role.
+Installs and configures paperless-ngx EDMS.
 
 Requirements
 ------------
+### Ansible
 
-No special system requirements. `ansible_version_minimum: "4.0.0"` or newer is required.
+`ansible_version_minimum: "4.0.0"` or newer is required.
+
+### Supported operating systems
+
+* Debian (>=11)
+* Ubuntu (>=focal)
 
 Role Variables
 --------------
