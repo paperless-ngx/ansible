@@ -1,7 +1,0 @@
-skip_list:  # or 'skip_list' to silence them completely
-  - experimental  # all rules tagged as experimental
-  - meta-no-tags  # Tags must contain lowercase letters and digits only.
-  - yaml  # Violations reported by yamllint.
-  - no-handler
-  - no-changed-when
-  - package-latest
