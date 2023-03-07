@@ -1,0 +1,41 @@
+---
+- name: Does not converge
+  hosts: all
+  tasks:
+    #  ----------------------------------
+    - name: Should fail when target paperless-ngx version is < minimum version
+      block:
+        - name: "Arrange&Act"
+          ansible.builtin.include_role:
+            name: "paperless_ngx.paperless_ngx"
+          tags:
+            - check_paperless_version
+          vars:
+            paperless_ngx_version: '99.10.0'
+            paperless_ngx_version_minimum: '99.11.0'
+      rescue:
+        - name: Assert
+          ansible.builtin.assert:
+            that:
+              - "'Unsupported version detected' in _exception.msg"
+        - name: Dummy
+          ansible.builtin.debug:
+            var: _exception
+    #  ----------------------------------
+    - name: Should fail when target ansible version is < installed version
+      block:
+        - name: "Arrange&Act"
+          ansible.builtin.include_role:
+            name: "paperless_ngx.paperless_ngx"
+          tags:
+            - check_paperless_version
+          vars:
+            _paperless_ngx_installed_version: '99.99.99'
+      rescue:
+        - name: Assert
+          ansible.builtin.assert:
+            that:
+              - "'Downgrade' in _exception.msg"
+        - name: Dummy
+          ansible.builtin.debug:
+            var: _exception

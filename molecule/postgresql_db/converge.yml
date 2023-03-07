@@ -10,3 +10,5 @@
         - preparation
         - base_dependencies
         - paperless_ngx
+      vars:
+        paperless_ngx_db_type: postgresql

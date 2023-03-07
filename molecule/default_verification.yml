@@ -1,0 +1,100 @@
+---
+- name: Include needed vars
+  ansible.builtin.include_vars:
+    file: ../defaults/main.yml
+
+- name: Check if webserver is up
+  ansible.builtin.uri:
+    url: http://localhost:{{ paperless_ngx_conf_port }}
+    status_code: [200, 302]
+    return_content: true
+  register: _landingpage
+  failed_when: "'Sign in</button>' not in _landingpage.content"
+
+- name: Generate random name and content
+  ansible.builtin.set_fact:
+    content: "{{ lookup('password', '/dev/null length=65536 chars=ascii_letters') }}"
+    filename: "{{ lookup('password', '/dev/null length=8 chars=ascii_letters') }}"
+
+- name: Check if document posting works
+  ansible.builtin.uri:
+    url: http://localhost:{{ paperless_ngx_conf_port }}/api/documents/post_document/
+    method: POST
+    body_format: form-multipart
+    body:
+      document:
+        content: "{{ content }}"
+        filename: "{{ filename }}.txt"
+    headers:
+      Authorization: Basic {{ (paperless_ngx_conf_admin_user + ":" + paperless_ngx_conf_admin_password) | b64encode }}
+      Content-Type: text/plain
+    return_content: true
+  register: _post_document
+  failed_when: "'OK' not in _post_document.msg"
+
+- name: Output post register  # noqa: run-once[task]
+  ansible.builtin.debug:
+    var: _post_document
+  run_once: true
+
+- name: Verify uploaded document has been accepted
+  ansible.builtin.uri:
+    url: http://localhost:{{ paperless_ngx_conf_port }}/api/logs/paperless/
+    headers:
+      Authorization: Basic {{ (paperless_ngx_conf_admin_user + ":" + paperless_ngx_conf_admin_password) | b64encode }}
+    return_content: true
+  register: _logs
+  failed_when: ('Consuming ' + filename + '.txt') not in _logs.content
+
+- name: Output _logs register  # noqa: run-once[task]
+  ansible.builtin.debug:
+    var: _logs
+  run_once: true
+
+- name: Sleep till consumption finished
+  ansible.builtin.pause:
+    seconds: 30
+
+- name: Verify uploaded document has been consumed
+  ansible.builtin.uri:
+    url: http://localhost:{{ paperless_ngx_conf_port }}/api/logs/paperless/
+    headers:
+      Authorization: Basic {{ (paperless_ngx_conf_admin_user + ":" + paperless_ngx_conf_admin_password) | b64encode }}
+    return_content: true
+  register: _logs
+  failed_when: filename + ' consumption finished' not in _logs.content
+
+- name: Get documents
+  ansible.builtin.uri:
+    url: http://localhost:{{ paperless_ngx_conf_port }}/api/documents/
+    headers:
+      Authorization: Basic {{ (paperless_ngx_conf_admin_user + ":" + paperless_ngx_conf_admin_password) | b64encode }}
+    return_content: true
+  register: _documents
+
+- name: Set document index
+  ansible.builtin.set_fact:
+    index: "{{ _documents.json['results'][0]['id'] }}"
+
+- name: Verify uploaded document is avaiable
+  ansible.builtin.uri:
+    url: http://localhost:{{ paperless_ngx_conf_port }}/api/documents/{{ index }}/
+    headers:
+      Authorization: Basic {{ (paperless_ngx_conf_admin_user + ":" + paperless_ngx_conf_admin_password) | b64encode }}
+    return_content: true
+  register: _document
+  failed_when: "'Not found.' in _document.content or content not in _document.json['content']"
+
+- name: Check if deleting uploaded document works
+  ansible.builtin.uri:
+    url: http://localhost:{{ paperless_ngx_conf_port }}/api/documents/bulk_edit/
+    method: POST
+    body_format: json
+    body:
+      documents: ["{{ index }}"]
+      method: delete
+      parameters: {}
+    headers:
+      Authorization: Basic {{ (paperless_ngx_conf_admin_user + ":" + paperless_ngx_conf_admin_password) | b64encode }}
+  register: _delete_document
+  failed_when: "'OK' not in _delete_document.json['result']"

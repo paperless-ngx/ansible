@@ -1,0 +1,164 @@
+---
+- name: Remove current paperless release directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ paperless_ngx_dir_installation }}/"
+    state: absent
+
+- name: Create paperless-ngx conf directory and set permissions
+  become: true
+  ansible.builtin.file:
+    path: "{{ paperless_ngx_config_path }}"
+    state: directory
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: "0744"
+
+- name: Create paperless-ngx app directories and set permissions
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: "750"
+  loop: "{{ paperless_ngx_dir_force_permission_include | difference(paperless_ngx_dir_force_permission_exclude) }}"
+
+- name: Check if tempdir exists
+  ansible.builtin.find:
+    paths: "{{ paperless_ngx_dir_tmp }}/"
+    patterns: "*tempgit_pngx*"
+    file_type: directory
+  register: _install_tempdir_state
+
+- name: Create temporary directory if not exists
+  when: _install_tempdir_state.matched == 0
+  block:
+    - name: Create temporary directorys root path
+      become: true
+      ansible.builtin.file:
+        path: "{{ paperless_ngx_dir_tmp }}"
+        state: directory
+        owner: "{{ paperless_ngx_system_user }}"
+        group: "{{ paperless_ngx_system_group }}"
+        mode: "750"
+
+    - name: Create target temporary directory
+      become: true
+      ansible.builtin.tempfile:
+        state: directory
+        path: "{{ paperless_ngx_dir_tmp }}/"
+        suffix: tempgit_pngx
+      register: _install_tempdir_created
+
+- name: Determine temporary directory to use  # noqa jinja[spacing]
+  ansible.builtin.set_fact:
+    _install_tempdir: >-
+      {%- if _install_tempdir_created.path is defined -%}
+      {{ _install_tempdir_created.path }}
+      {%- else -%}
+      {{ _install_tempdir_state.files[0].path }}
+      {%- endif -%}
+
+- name: Download and extract paperless-ngx
+  become: true
+  ansible.builtin.unarchive:
+    src: "{{ _release__download_url }}"
+    remote_src: true
+    dest: "{{ _install_tempdir }}"
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+  register: _download_and_unarchive_pngx
+  until:
+    - "not 'urlopen error' in _download_and_unarchive_pngx.msg | default('')"
+    - "not 'The read operation timed out' in _download_and_unarchive_pngx.msg | default('')"
+  retries: 3
+  delay: 60
+
+- name: Set all file & directory permissions
+  become: true
+  ansible.builtin.command:
+    cmd: "{{ item }}"
+  with_items:
+    - find {{ _install_tempdir }} -type d -exec chmod -c 0750 {} ;
+    - find {{ _install_tempdir }} -type f -exec chmod -c 0640 {} ;
+  register: _set_temp_install_permissions
+  changed_when:
+    - 'not _set_temp_install_permissions.stdout == ""'
+
+- name: Copy file with owner and permissions
+  become: true
+  ansible.builtin.copy:
+    src: "{{ _install_tempdir }}/paperless-ngx/"
+    remote_src: true
+    dest: "{{ paperless_ngx_dir_installation }}/"
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: preserve
+    directory_mode: preserve
+
+- name: Create paperless config file if it does not exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ paperless_ngx_dir_installation }}/paperless.conf"
+    state: touch
+    mode: 0640
+    modification_time: preserve
+    access_time: preserve
+
+- name: Make the config file the template file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ paperless_ngx_dir_installation }}/paperless.conf"
+    remote_src: true
+    dest: "{{ paperless_ngx_config_file_template }}"
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: 0640
+
+- name: Delete paperless-ngx configuration from installation dir
+  become: true
+  ansible.builtin.file:
+    path: "{{ paperless_ngx_dir_installation }}/paperless.conf"
+    state: absent
+
+- name: Copy gunicorn configuration file to {{ paperless_ngx_config_path }}
+  become: true
+  ansible.builtin.copy:
+    src: "{{ paperless_ngx_dir_installation }}/gunicorn.conf.py"
+    remote_src: true
+    dest: "{{ paperless_ngx_config_path }}/gunicorn.conf.py"
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: 0640
+
+- name: Check if flower configuration file already exists
+  become: true
+  ansible.builtin.stat:
+    path: "{{ paperless_ngx_config_path }}/flowerconfig.py"
+  register: _flower_config_exists
+
+- name: Copy flower configuration file to {{ paperless_ngx_config_path }}
+  become: true
+  ansible.builtin.template:
+    src: "flowerconfig.py.j2"
+    dest: "{{ paperless_ngx_config_path }}/flowerconfig.py"
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: 0640
+  when: not _flower_config_exists.stat.exists
+
+- name: Copy flower systemd service file apps scripts folder
+  become: true
+  ansible.builtin.template:
+    src: "paperless-flower.service.j2"
+    dest: "{{ paperless_ngx_dir_installation }}/scripts/paperless-flower.service"
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: 0640
+
+- name: Remove temporary directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ _install_tempdir }}"
+    state: absent

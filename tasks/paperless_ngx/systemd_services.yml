@@ -1,0 +1,73 @@
+---
+- name: Configure systemd services (common values)
+  become: true
+  community.general.ini_file:
+    path: "{{ paperless_ngx_dir_installation }}/scripts/{{ item[0].name }}"
+    create: false
+    section: Service
+    option: "{{ item[1].option }}"
+    value: "{{ item[1].value }}"
+    no_extra_spaces: true
+  with_nested:
+    - "{{ paperless_ngx_services_list }}"
+    - - { option: User, value: "{{ paperless_ngx_system_user }}" }
+      - { option: Group, value: "{{ paperless_ngx_system_group }}" }
+      - { option: WorkingDirectory, value: "{{ paperless_ngx_dir_installation }}/src" }
+      - { option: ProtectSystem, value: full }
+      - { option: NoNewPrivileges, value: "true" }
+      - { option: PrivateUsers, value: "true" }
+      - { option: PrivateDevices, value: "true" }
+      - { option: EnvironmentFile, value: "{{ paperless_ngx_config_file }}"}
+
+- name: Configure systemd services (exec start)
+  become: true
+  community.general.ini_file:
+    path: "{{ paperless_ngx_dir_installation }}/scripts/{{ item.service_name }}"
+    create: false
+    section: Service
+    option: ExecStart
+    value: "{{ item.exec_start }}"
+    no_extra_spaces: true
+  loop:
+    - { service_name: paperless-consumer.service,
+        exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/python3 manage.py document_consumer" }
+    - { service_name: paperless-scheduler.service,
+        exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/celery --app paperless beat --loglevel INFO" }
+    - { service_name: paperless-task-queue.service,
+        exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/celery --app paperless worker --loglevel INFO" }
+    - { service_name: paperless-webserver.service,
+        exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/gunicorn -c {{ paperless_ngx_config_path }}/gunicorn.conf.py paperless.asgi:application" }
+    - { service_name: paperless-flower.service,
+        exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/celery --app paperless flower --conf={{ paperless_ngx_config_path }}/flowerconfig.py" }
+
+- name: Remove redis from service units if external
+  become: true
+  community.general.ini_file:
+    path: "{{ paperless_ngx_dir_installation }}/scripts/{{ item.name }}"
+    create: false
+    section: Unit
+    option: Requires
+    value: redis.service
+    state: absent
+  loop: "{{ paperless_ngx_services_list }}"
+  when: paperless_ngx_redis_host != 'localhost' and paperless_ngx_redis_host != '127.0.0.1'
+
+- name: Copy systemd services
+  become: true
+  ansible.builtin.copy:
+    src: "{{ paperless_ngx_dir_installation }}/scripts/{{ item.name }}"
+    remote_src: true
+    dest: /etc/systemd/system/{{ item.name }}
+    mode: 0640
+  loop: "{{ paperless_ngx_services_list }}"
+  notify: Restart paperless completely
+
+- name: Enable pngx services
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ item.name }}"
+    enabled: true
+    masked: false
+    state: started
+  loop: "{{ paperless_ngx_services_list }}"
+  when: item.enabled

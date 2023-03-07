@@ -1,0 +1,76 @@
+---
+name: PR Labeling
+
+"on":
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+      - unlabeled
+
+jobs:
+  # Check that conventional commit messages are used in the title of the PR
+  pr_title_check:
+    name: Check the PR title to be compliant with conventional commits
+    permissions:
+      statuses: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aslafy-z/conventional-pr-title-action@v3
+        with:
+          preset: conventional-changelog-conventionalcommits@5.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Autogenerate labels based on the PR title
+  pr_auto_labeling:  # ToDo: Needs refactoring as far as v6 is released. See https://github.com/release-drafter/release-drafter/issues/1216
+    name: Automatically label the PR
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    needs:
+      - pr_title_check
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        with:
+          disable-releaser: true
+          config-name: pr_autolabeling_config.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  pr_label_check:
+    name: Check that the PR is labled.
+    permissions:
+      pull-requests: read
+      checks: write
+    runs-on: ubuntu-latest
+    needs:
+      - pr_auto_labeling
+    steps:
+      - uses: danielchabr/pr-labels-checker@v3.1
+        with:
+          hasSome: "\
+            breaking,\
+            bug,\
+            build,\
+            ci,\
+            dependencies,\
+            documentation,\
+            duplicate,\
+            enhancement,\
+            good first issue,\
+            help wanted,\
+            invalid,\
+            performance,\
+            question,\
+            refactoring,\
+            removal,\
+            style,\
+            security,\
+            testing,\
+            wontfix,\
+            skip-changelog,\
+            "
+          githubToken: ${{ secrets.GITHUB_TOKEN }}

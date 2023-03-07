@@ -1,0 +1,27 @@
+---
+- name: Verify operating system
+  ansible.builtin.assert:
+    that: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+    fail_msg: Sorry, only Debian and Ubuntu supported at the moment.
+    success_msg: "Found distribution: {{ ansible_distribution }}"
+
+- name: Assert usage of systemd as an init system
+  ansible.builtin.assert:
+    that: ansible_service_mgr == 'systemd'
+    fail_msg: "This role only works with systemd"
+    success_msg: "systemd found"
+
+- name: Verify Ansible meets version requirements
+  block:
+    - name: Check version of ansible package on the controller node
+      ansible.builtin.shell: python3 -m pip show ansible | grep Version | cut -d ' ' -f 2
+      changed_when: false
+      register: _ansible_installed_version
+      delegate_to: localhost
+      run_once: true
+
+    - name: Compare versions of installed ansible and required ansible
+      ansible.builtin.assert:
+        that: "_ansible_installed_version.stdout is version_compare(ansible_version_minimum, '>=')"
+        msg: >
+          "You must update Ansible to at least {{ ansible_version_minimum }} to use this role."

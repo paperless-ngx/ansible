@@ -1,0 +1,229 @@
+---
+- name: Write the paperless-ngx config file
+  become: true
+  ansible.builtin.lineinfile:
+    path: "{{ paperless_ngx_config_file_template }}"
+    regexp: ^#?{{ item.pngx_var }}=
+    line: "{{ item.pngx_var }}={{ item.role_var }}"
+  loop:
+    # Hosting & Security
+    - pngx_var: PAPERLESS_SECRET_KEY
+      role_var: "{{ paperless_ngx_conf_secret_key }}"
+      log: false
+    - pngx_var: PAPERLESS_ALLOWED_HOSTS
+      role_var: "{{ paperless_ngx_conf_allowed_hosts }}"
+    - pngx_var: PAPERLESS_CORS_ALLOWED_HOSTS
+      role_var: "{{ paperless_ngx_conf_cors_allowed_hosts }}"
+    - pngx_var: PAPERLESS_FORCE_SCRIPT_NAME
+      role_var: "{{ paperless_ngx_conf_force_script_name }}"
+    - pngx_var: PAPERLESS_STATIC_URL
+      role_var: "{{ paperless_ngx_conf_static_url }}"
+    - pngx_var: PAPERLESS_AUTO_LOGIN_USERNAME
+      role_var: "{{ paperless_ngx_conf_auto_login_username }}"
+    - pngx_var: PAPERLESS_COOKIE_PREFIX
+      role_var: "{{ paperless_ngx_conf_cookie_prefix }}"
+    - pngx_var: PAPERLESS_ENABLE_HTTP_REMOTE_USER
+      role_var: "{{ paperless_ngx_conf_enable_http_remote_user }}"
+    - pngx_var: PAPERLESS_URL
+      role_var: "{{ paperless_ngx_conf_url }}"
+    - pngx_var: PAPERLESS_CSRF_TRUSTED_ORIGINS
+      role_var: "{{ paperless_ngx_conf_csrf_trusted_origins }}"
+    - pngx_var: PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME
+      role_var: "{{ paperless_ngx_conf_http_remote_user_header_name }}"
+    - pngx_var: PAPERLESS_LOGOUT_REDIRECT_URL
+      role_var: "{{ paperless_ngx_conf_logout_redirect_url }}"
+    # Logging
+    - pngx_var: PAPERLESS_LOGROTATE_MAX_SIZE
+      role_var: "{{ paperless_ngx_conf_logrotate_max_size }}"
+    - pngx_var: PAPERLESS_LOGROTATE_MAX_BACKUPS
+      role_var: "{{ paperless_ngx_conf_logrotate_max_backups }}"
+    # Required services
+    - pngx_var: PAPERLESS_REDIS
+      role_var: "{{ paperless_ngx_conf_redis }}"
+    - pngx_var: PAPERLESS_DBHOST
+      role_var: "{{ paperless_ngx_conf_dbhost }}"
+      condition: "{{ paperless_ngx_db_type == 'postgresql' }}"
+    - pngx_var: PAPERLESS_DBPORT
+      role_var: "{{ paperless_ngx_conf_dbport }}"
+      condition: "{{ paperless_ngx_db_type == 'postgresql' }}"
+    - pngx_var: PAPERLESS_DBNAME
+      role_var: "{{ paperless_ngx_conf_dbname }}"
+      condition: "{{ paperless_ngx_db_type == 'postgresql' }}"
+    - pngx_var: PAPERLESS_DBUSER
+      role_var: "{{ paperless_ngx_conf_dbuser }}"
+      condition: "{{ paperless_ngx_db_type == 'postgresql' }}"
+    - pngx_var: PAPERLESS_DBPASS
+      role_var: "{{ paperless_ngx_conf_dbpass }}"
+      condition: "{{ paperless_ngx_db_type == 'postgresql' }}"
+      log: false
+    - pngx_var: PAPERLESS_DBSSLMODE
+      role_var: "{{ paperless_ngx_conf_dbsslmode }}"
+      condition: "{{ paperless_ngx_db_type == 'postgresql' }}"
+    - pngx_var: PAPERLESS_DB_TIMEOUT
+      role_var: "{{ paperless_ngx_conf_db_timeout }}"
+    # Paths and folders
+    - pngx_var: PAPERLESS_CONSUMPTION_DIR
+      role_var: "{{ paperless_ngx_conf_consumption_dir }}"
+    - pngx_var: PAPERLESS_DATA_DIR
+      role_var: "{{ paperless_ngx_conf_data_dir }}"
+    - pngx_var: PAPERLESS_TRASH_DIR
+      role_var: "{{ paperless_ngx_conf_trash_dir }}"
+    - pngx_var: PAPERLESS_MEDIA_ROOT
+      role_var: "{{ paperless_ngx_conf_media_root }}"
+    - pngx_var: PAPERLESS_STATICDIR
+      role_var: "{{ paperless_ngx_conf_staticdir }}"
+    - pngx_var: PAPERLESS_FILENAME_FORMAT
+      role_var: "{{ paperless_ngx_conf_filename_format }}"
+    - pngx_var: PAPERLESS_FILENAME_FORMAT_REMOVE_NONE
+      role_var: "{{ paperless_ngx_conf_filename_format_remove_none }}"
+    - pngx_var: PAPERLESS_LOGGING_DIR
+      role_var: "{{ paperless_ngx_conf_logging_dir }}"
+    - pngx_var: PAPERLESS_NLTK_DIR
+      role_var: "{{ paperless_ngx_conf_nltk_dir }}"
+      since_version: '1.11.0'
+    # OCR settings
+    - pngx_var: PAPERLESS_OCR_LANGUAGE
+      role_var: "{{ paperless_ngx_conf_ocr_language }}"
+    - pngx_var: PAPERLESS_OCR_MODE
+      role_var: "{{ paperless_ngx_conf_ocr_mode }}"
+    - pngx_var: PAPERLESS_OCR_CLEAN
+      role_var: "{{ paperless_ngx_conf_ocr_clean }}"
+    - pngx_var: PAPERLESS_OCR_DESKEW
+      role_var: "{{ paperless_ngx_conf_ocr_deskew }}"
+    - pngx_var: PAPERLESS_OCR_ROTATE_PAGES
+      role_var: "{{ paperless_ngx_conf_ocr_rotate_pages }}"
+    - pngx_var: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
+      role_var: "{{ paperless_ngx_conf_ocr_rotate_pages_threshold }}"
+    - pngx_var: PAPERLESS_OCR_OUTPUT_TYPE
+      role_var: "{{ paperless_ngx_conf_ocr_output_type }}"
+    - pngx_var: PAPERLESS_OCR_PAGES
+      role_var: "{{ paperless_ngx_conf_ocr_pages }}"
+    - pngx_var: PAPERLESS_OCR_IMAGE_DPI
+      role_var: "{{ paperless_ngx_conf_ocr_image_dpi }}"
+    - pngx_var: PAPERLESS_OCR_MAX_IMAGE_PIXELS
+      role_var: "{{ paperless_ngx_conf_ocr_max_image_pixels }}"
+    - pngx_var: PAPERLESS_OCR_USER_ARGS
+      role_var: "{{ paperless_ngx_conf_ocr_user_args | combine({'jbig2_lossy': true} if paperless_ngx_jbig2enc_lossy else {}) | to_json }}"
+    # Tika settings
+    - pngx_var: PAPERLESS_TIKA_ENABLED
+      role_var: "{{ paperless_ngx_conf_tika_enabled }}"
+    - pngx_var: PAPERLESS_TIKA_ENDPOINT
+      role_var: "{{ paperless_ngx_conf_tika_endpoint }}"
+    - pngx_var: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
+      role_var: "{{ paperless_ngx_conf_tika_gotenberg_endpoint }}"
+    # Software tweaks
+    - pngx_var: PAPERLESS_TASK_WORKERS
+      role_var: "{{ paperless_ngx_conf_task_workers }}"
+    - pngx_var: PAPERLESS_THREADS_PER_WORKER
+      role_var: "{{ paperless_ngx_conf_threads_per_worker }}"
+    - pngx_var: PAPERLESS_WORKER_TIMEOUT
+      role_var: "{{ paperless_ngx_conf_worker_timeout }}"
+    - pngx_var: PAPERLESS_TIME_ZONE
+      role_var: "{{ paperless_ngx_conf_time_zone }}"
+    - pngx_var: PAPERLESS_ENABLE_NLTK
+      role_var: "{{ paperless_ngx_conf_enable_nltk }}"
+      since_version: '1.11.0'
+    - pngx_var: PAPERLESS_EMAIL_TASK_CRON
+      role_var: "{{ paperless_ngx_conf_email_task_cron }}"
+      since_version: '1.12.0'
+    - pngx_var: PAPERLESS_TRAIN_TASK_CRON
+      role_var: "{{ paperless_ngx_conf_train_task_cron }}"
+      since_version: '1.12.0'
+    - pngx_var: PAPERLESS_INDEX_TASK_CRON
+      role_var: "{{ paperless_ngx_conf_index_task_cron }}"
+      since_version: '1.12.0'
+    - pngx_var: PAPERLESS_SANITY_TASK_CRON
+      role_var: "{{ paperless_ngx_conf_sanity_task_cron }}"
+      since_version: '1.12.0'
+    - pngx_var: PAPERLESS_ENABLE_COMPRESSION
+      role_var: "{{ paperless_ngx_conf_enable_compression }}"
+      since_version: '1.13.0'
+    # Polling
+    - pngx_var: PAPERLESS_CONSUMER_POLLING
+      role_var: "{{ paperless_ngx_conf_consumer_polling }}"
+    - pngx_var: PAPERLESS_CONSUMER_POLLING_RETRY_COUNT
+      role_var: "{{ paperless_ngx_conf_consumer_polling_retry_count }}"
+    - pngx_var: PAPERLESS_CONSUMER_POLLING_DELAY
+      role_var: "{{ paperless_ngx_conf_consumer_polling_delay }}"
+    # iNotify
+    - pngx_var: PAPERLESS_CONSUMER_INOTIFY_DELAY
+      role_var: "{{ paperless_ngx_conf_consumer_inotify_delay }}"
+    - pngx_var: PAPERLESS_CONSUMER_DELETE_DUPLICATES
+      role_var: "{{ paperless_ngx_conf_consumer_delete_duplicates }}"
+    - pngx_var: PAPERLESS_CONSUMER_RECURSIVE
+      role_var: "{{ paperless_ngx_conf_consumer_recursive }}"
+    - pngx_var: PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS
+      role_var: "{{ paperless_ngx_conf_consumer_subdirs_as_tags }}"
+    - pngx_var: PAPERLESS_CONSUMER_ENABLE_BARCODES
+      role_var: "{{ paperless_ngx_conf_consumer_enable_barcodes }}"
+    - pngx_var: PAPERLESS_CONSUMER_BARCODE_TIFF_SUPPORT
+      role_var: "{{ paperless_ngx_conf_consumer_barcode_tiff_support }}"
+    - pngx_var: PAPERLESS_CONSUMER_BARCODE_STRING
+      role_var: "{{ paperless_ngx_conf_consumer_barcode_string }}"
+    - pngx_var: PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE
+      role_var: "{{ paperless_ngx_conf_consumer_enable_asn_barcode }}"
+      since_version: '1.12.0'
+    - pngx_var: PAPERLESS_CONSUMER_ASN_BARCODE_PREFIX
+      role_var: "{{ paperless_ngx_conf_consumer_asn_barcode_prefix }}"
+      since_version: '1.12.0'
+    - pngx_var: PAPERLESS_CONVERT_MEMORY_LIMIT
+      role_var: "{{ paperless_ngx_conf_convert_memory_limit }}"
+    - pngx_var: PAPERLESS_CONVERT_TMPDIR
+      role_var: "{{ paperless_ngx_conf_convert_tmpdir }}"
+    - pngx_var: PAPERLESS_POST_CONSUME_SCRIPT
+      role_var: "{{ paperless_ngx_conf_post_consume_script }}"
+    - pngx_var: PAPERLESS_FILENAME_DATE_ORDER
+      role_var: "{{ paperless_ngx_conf_filename_date_order }}"
+    - pngx_var: PAPERLESS_NUMBER_OF_SUGGESTED_DATES
+      role_var: "{{ paperless_ngx_conf_number_of_suggested_dates }}"
+    - pngx_var: PAPERLESS_THUMBNAIL_FONT_NAME
+      role_var: "{{ paperless_ngx_conf_thumbnail_font_name }}"
+    - pngx_var: PAPERLESS_IGNORE_DATES
+      role_var: "{{ paperless_ngx_conf_ignore_dates }}"
+    - pngx_var: PAPERLESS_DATE_ORDER
+      role_var: "{{ paperless_ngx_conf_date_order }}"
+    - pngx_var: PAPERLESS_CONSUMER_IGNORE_PATTERNS
+      role_var: "{{ paperless_ngx_conf_consumer_ignore_patterns | to_json }}"
+    # Binary
+    - pngx_var: PAPERLESS_CONVERT_BINARY
+      role_var: "{{ paperless_ngx_conf_convert_binary }}"
+    - pngx_var: PAPERLESS_GS_BINARY
+      role_var: "{{ paperless_ngx_conf_gs_binary }}"
+    # Docker specific options
+    - pngx_var: PAPERLESS_WEBSERVER_WORKERS
+      role_var: "{{ paperless_ngx_conf_webserver_workers }}"
+    - pngx_var: PAPERLESS_BIND_ADDR
+      role_var: "{{ paperless_ngx_conf_bind_addr }}"
+    - pngx_var: PAPERLESS_PORT
+      role_var: "{{ paperless_ngx_conf_port }}"
+    # Update checking
+    - pngx_var: PAPERLESS_ENABLE_UPDATE_CHECK
+      role_var: "{{ paperless_ngx_conf_enable_update_check }}"
+  no_log: "{{ not item.log | default(omit) }}"
+  when:
+    - item.role_var is defined and item.role_var not in (None, omit)
+    - item.condition | default(true)
+    - (item.since_version | default('0.0.1')) is ansible.builtin.version(paperless_ngx_version, '<=', version_type='semver')
+  tags: pngx_conf
+
+- name: Deploy paperless-ngx configuration file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ paperless_ngx_config_file_template }}"
+    remote_src: true
+    dest: "{{ paperless_ngx_config_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+  tags: pngx_conf
+  notify: Restart paperless completely
+
+- name: Configure ghostscript for PDF
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ImageMagick-6/policy.xml
+    regexp: (\s+)<policy domain="coder" rights=".*" pattern="PDF" />
+    line: \1<policy domain="coder" rights="read|write" pattern="PDF" />
+    backrefs: true
+  tags: pngx_conf_gs
+  notify: Restart paperless completely

@@ -1,0 +1,80 @@
+---
+- name: Check if jbig2enc is already installed with correct version
+  ansible.builtin.command:
+    cmd: jbig2 --version
+  register: _jbig2enc_version_installed_response
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+
+- name: Setting host facts using complex arguments  # noqa jinja[spacing]
+  ansible.builtin.set_fact:
+    _jbig2enc_wanted_version_installed: >-
+      {%- if _jbig2enc_version_installed_response.rc != 0 or (_jbig2enc_version_installed_response.stderr.split(' ')[-1] != paperless_ngx_jbig2enc_version | string) -%}
+      false
+      {%- else -%}
+      true
+      {%- endif -%}
+
+- name: Install jbi2enc if not already installed in the proper version
+  become: true
+  when: not _jbig2enc_wanted_version_installed
+  block:
+    - name: Install dev dependencies
+      ansible.builtin.package:
+        name: "{{ item }}"
+        update_cache: true
+      with_items:
+        - autotools-dev
+        - automake
+        - libtool
+        - libleptonica-dev
+
+    - name: Install Debian specific libs
+      ansible.builtin.package:
+        name: "{{ item }}"
+        update_cache: true
+      with_items:
+        - zlib1g-dev
+      when: ansible_os_family == "Debian"
+
+    - name: Create temporary git directory
+      ansible.builtin.tempfile:
+        state: directory
+        path: "{{ paperless_ngx_jbig2enc_tmp_dir }}"
+      register: _jbig2enc_gitdir
+
+    - name: Pull jbig2enc
+      ansible.builtin.git:
+        repo: https://github.com/agl/jbig2enc.git
+        dest: "{{ _jbig2enc_gitdir.path }}"
+        version: "{{ paperless_ngx_jbig2enc_version }}"
+        recursive: true
+      register: _jbig2enc_source
+      until: _jbig2enc_source is succeeded
+      retries: 3
+      delay: 10
+
+    - name: Apply patch to fix reported version
+      ansible.posix.patch:
+        basedir: "{{ _jbig2enc_gitdir.path }}"
+        src: jbig2enc-0.29-fix-reported-version.patch
+        strip: 1
+        state: present
+
+    - name: Run autogen for jbig2enc
+      ansible.builtin.command: ./autogen.sh
+      args:
+        chdir: "{{ _jbig2enc_gitdir.path }}"
+      changed_when: true
+
+    - name: Run configure for jbig2enc
+      ansible.builtin.command: ./configure
+      args:
+        chdir: "{{ _jbig2enc_gitdir.path }}"
+      changed_when: true
+
+    - name: Run 'make and make install' target
+      community.general.make:
+        chdir: "{{ _jbig2enc_gitdir.path }}"
+        target: install

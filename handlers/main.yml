@@ -1,0 +1,18 @@
+---
+- name: Restart paperless completely
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: "{{ item.name }}"
+    state: restarted
+  loop: "{{ paperless_ngx_services_list }}"
+  when: item.enabled
+
+- name: Restart webserver
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - paperless-webserver.service

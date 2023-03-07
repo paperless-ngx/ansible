@@ -1,0 +1,6 @@
+ansible
+ansible-lint
+colorama
+docker
+molecule[docker]
+yamllint

@@ -1,0 +1,20 @@
+---
+- name: Converge
+  hosts: all
+  any_errors_fatal: true
+  tasks:
+    - name: "Include paperless_ngx.paperless_ngx"
+      ansible.builtin.include_role:
+        name: "paperless_ngx.paperless_ngx"
+      tags:
+        - preparation
+        - base_dependencies
+        - paperless_ngx
+      vars:
+        paperless_ngx_conf_usermap_uid: 1001
+        paperless_ngx_conf_usermap_gid: 1001
+        paperless_ngx_conf_ocr_languages: [tur, ces]
+        paperless_ngx_conf_enable_flower: true
+        paperless_ngx_conf_port: 8001
+        paperless_ngx_system_user_additional_groups:
+          - root

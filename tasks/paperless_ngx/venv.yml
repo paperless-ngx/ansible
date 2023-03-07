@@ -1,0 +1,32 @@
+---
+- name: Install latest pip
+  become: true
+  become_user: "{{ paperless_ngx_system_user }}"
+  ansible.builtin.pip:
+    name: pip
+    virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
+    virtualenv_python: python3
+    extra_args: --upgrade
+
+- name: Install paperless-ngx python requirements
+  become: true
+  become_user: "{{ paperless_ngx_system_user }}"
+  ansible.builtin.pip:
+    requirements: "{{ paperless_ngx_dir_installation }}/requirements.txt"
+    virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
+    virtualenv_python: python3
+    extra_args: --upgrade
+  register: _install_python_requirements
+  until: 'not "ReadTimeoutError" in _install_python_requirements.msg | default("")'
+  retries: 3
+  delay: 60
+
+- name: Set ownership and permissions on pngx venv
+  become: true
+  ansible.builtin.file:
+    path: "{{ paperless_ngx_dir_virtualenv }}"
+    state: directory
+    recurse: true
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: g-w,o-rwx

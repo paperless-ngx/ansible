@@ -4,40 +4,47 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: "ansible-paperless-ngx-${image:-systemd-ubuntu}-${tag:-20.04}"
-    image: "${namespace:-jrei}/${image:-systemd-ubuntu}:${tag:-20.04}"
-    privileged: true
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
-      - /run/lock
-    published_ports:
-      - 8000:8000
+  - name: debian11
+    image: "geerlingguy/docker-debian11-ansible:latest"
+    cgroupns_mode: host
     override_command: false
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    privileged: true
+    pre_build_image: false
+  - name: ubuntu2004
+    image: "geerlingguy/docker-ubuntu2004-ansible:latest"
+    cgroupns_mode: host
+    override_command: false
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    privileged: true
+    pre_build_image: false
+    # https://github.com/geerlingguy/docker-ubuntu2204-ansible/issues/6
+    # - name: ubuntu2204
+    #   image: "geerlingguy/docker-ubuntu2204-ansible:latest"
+    #   cgroupns_mode: host
+    #   override_command: false
+    #   volumes:
+    #     - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    #   privileged: true
+    #   pre_build_image: false
 provisioner:
   name: ansible
+  inventory:
+    group_vars:
+      # setting for the platform instance named 'instance'
+      all:
+        ansible_user: ansible
 verifier:
   name: ansible
-scenario:
-  converge_sequence:
-    - create
-    - prepare
-    - converge
-    - destroy
-  test_sequence:
-    - create
-    - prepare
-    - verify
-    - syntax
-    - converge
-    - verify
-    - cleanup
-    - destroy
-  idempotence_sequence:
-    - create
-    - prepare
-    - converge
-    - idempotence
-    - destroy
+lint: |
+  set -e
+  if [ -z "${TEST_MOLECULE_LINT}" ] || [ "${TEST_MOLECULE_LINT}" = true  ]
+  then
+    echo "Molecule linting requested: true"
+    yamllint -c=.yamllint.yml .
+    ansible-lint -c .ansible-lint
+  else
+    echo "Molecule linting requested: false"
+  fi

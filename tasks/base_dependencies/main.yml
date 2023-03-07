@@ -1,0 +1,15 @@
+---
+- name: Setup repo packages
+  ansible.builtin.include_tasks:
+    file: repo_packages.yml
+    apply:
+      tags: repo_packages
+  tags: repo_packages
+
+- name: Setup jbig2enc
+  ansible.builtin.include_tasks:
+    file: jbig2enc.yml
+    apply:
+      tags: jbig2enc
+  tags: jbig2enc
+  when: paperless_ngx_jbig2enc_enabled
