@@ -58,7 +58,7 @@
     src: "{{ paperless_ngx_dir_installation }}/scripts/{{ item.name }}"
     remote_src: true
     dest: /etc/systemd/system/{{ item.name }}
-    mode: 0640
+    mode: 0644
   loop: "{{ paperless_ngx_services_list }}"
   notify: Restart paperless completely
 
