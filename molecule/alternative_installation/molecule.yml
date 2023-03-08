@@ -4,8 +4,9 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: debian11
-    image: "geerlingguy/docker-debian11-ansible:latest"
+  - name: instance
+    image: "geerlingguy/docker-${TEST_MOLECULE_DISTRO:-debian11}-ansible:latest"
+    platform: "${TEST_MOLECULE_ARCH:-amd64}"  # ToDo: If GH Actions somewhen supports ARM this can be utilized
     cgroupns_mode: host
     override_command: false
     dockerfile: ../Dockerfile.j2
