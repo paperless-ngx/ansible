@@ -21,7 +21,7 @@ jobs:
 
       - name: Load environment vars
         id: dotenv
-        uses: falti/dotenv-action@v1.0.2
+        uses: falti/dotenv-action@v1.0.4
         with:
           path: .github/workflows/env_vars.txt
           log-variables: true
