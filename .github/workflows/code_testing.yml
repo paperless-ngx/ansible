@@ -23,6 +23,11 @@ jobs:
   molecule_test:
     strategy:
       matrix:
+        distro:
+          - debian11
+          # https://github.com/geerlingguy/docker-ubuntu2204-ansible/issues/6
+          # - ubuntu2204
+          - ubuntu2004
         molecule_scenario: [
           alternative_installation,
           check_fails,
@@ -78,4 +83,5 @@ jobs:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           TEST_MOLECULE_LINT: false
+          TEST_MOLECULE_DISTRO: ${{ matrix.distro }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}

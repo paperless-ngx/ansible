@@ -1,6 +1,5 @@
 ansible
 ansible-lint
 colorama
-docker
-molecule[docker]
+molecule-plugins[docker]
 yamllint
