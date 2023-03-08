@@ -5,7 +5,15 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    commit-message:
+      prefix: "fix"
+      prefix-development: "chore"
+      include: "scope"
   - package-ecosystem: pip
     directory: "/.github/workflows"
     schedule:
       interval: daily
+    commit-message:
+      prefix: "fix"
+      prefix-development: "chore"
+      include: "scope"
