@@ -1,58 +1,20 @@
 ---
-- name: Test NTLK
+- name: Test NLTK
   ansible.builtin.include_tasks:
     file: test_nltk.yml
 
-- name: Check the activated settings
-  block:
-    - name: Read the active settings
-      become: true
-      become_user: "{{ paperless_ngx_system_user }}"
-      ansible.builtin.command: "{{ paperless_ngx_dir_virtualenv }}/bin/python3 {{ paperless_ngx_dir_installation }}/src/manage.py diffsettings --output unified"
-      register: _active_settings
-      changed_when: false
+- name: Test settings
+  ansible.builtin.include_tasks:
+    file: test_settings.yml
 
-    - name: Check values
-      ansible.builtin.assert:
-        that: _active_settings.stdout is regex(item.setting_key + ' = ' + item.expected_value)
-        success_msg: "{{ item.setting_key }} found."
-        fail_msg:
-          - "The setting"
-          - "{{ item.setting_key }}"
-          - "and its expected value"
-          - "{{ item.expected_value }}"
-          - "was not found in"
-          - "{{ _active_settings.stdout }}"
-      loop:
-        - setting_key: CONSUMER_IGNORE_PATTERNS
-          expected_value: '\[.*?\]'
+- name: Test OCR
+  ansible.builtin.include_tasks:
+    file: test_ocr.yml
 
-- name: "Check if additional OCR language is installed"
-  block:
-    - name: Get package facts
-      ansible.builtin.package_facts:
-        manager: "auto"
+- name: Test flower
+  ansible.builtin.include_tasks:
+    file: test_flower.yml
 
-    - name: "Check language is inside ansible_facts.packages"
-      ansible.builtin.assert:
-        that:
-          - "'tesseract-ocr-tur' in ansible_facts.packages"
-          - "'tesseract-ocr-ces' in ansible_facts.packages"
-        success_msg: "All OCR languages installed."
-        fail_msg: "At least one OCR language is not installed."
-
-- name: Check Flower state
-  block:
-    - name: Is Flower listening for incoming connections?
-      ansible.builtin.uri:
-        url: http://localhost:5555
-        status_code: [200, 302]
-        return_content: true
-
-- name: Check webserver
-  block:
-    - name: Is webserver listening for incoming connections?
-      ansible.builtin.uri:
-        url: http://localhost:8001
-        status_code: [200, 302]
-        return_content: true
+- name: Test webserver
+  ansible.builtin.include_tasks:
+    file: test_webserver.yml
