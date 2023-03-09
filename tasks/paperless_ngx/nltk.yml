@@ -1,0 +1,21 @@
+---
+- name: Create NLTK dir
+  become: true
+  ansible.builtin.file:
+    path: "{{ paperless_ngx_conf_nltk_dir }}"
+    state: directory
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: "750"
+
+- name: Download NLTK data to NLTK dir
+  become: true
+  become_user: "{{ paperless_ngx_system_user }}"
+  ansible.builtin.shell: |
+    {{ paperless_ngx_dir_virtualenv }}/bin/python3 -W ignore::RuntimeWarning -m nltk.downloader -d "{{ paperless_ngx_conf_nltk_dir }}" {{ item }}
+  register: _nltk_download
+  changed_when: '"already up-to-date" not in _nltk_download.stderr'
+  loop:
+    - snowball_data
+    - stopwords
+    - punkt

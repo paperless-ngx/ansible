@@ -18,3 +18,4 @@
         paperless_ngx_conf_port: 8001
         paperless_ngx_system_user_additional_groups:
           - root
+        paperless_ngx_conf_enable_nltk: 1
