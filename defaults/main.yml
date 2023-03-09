@@ -1,6 +1,5 @@
 ---
 # Role specific variables
-paperless_ngx_backup_on_upgrade: true
 ## Data db
 paperless_ngx_db_type: sqlite  # or postgresql
 ## Directories
