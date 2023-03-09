@@ -1,0 +1,8 @@
+---
+- name: Check Flower state
+  block:
+    - name: Is Flower listening for incoming connections?
+      ansible.builtin.uri:
+        url: http://localhost:5555
+        status_code: [200, 302]
+        return_content: true

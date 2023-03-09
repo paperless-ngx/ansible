@@ -1,0 +1,14 @@
+---
+- name: "Check if additional OCR language is installed"
+  block:
+    - name: Get package facts
+      ansible.builtin.package_facts:
+        manager: "auto"
+
+    - name: "Check language is inside ansible_facts.packages"
+      ansible.builtin.assert:
+        that:
+          - "'tesseract-ocr-tur' in ansible_facts.packages"
+          - "'tesseract-ocr-ces' in ansible_facts.packages"
+        success_msg: "All OCR languages installed."
+        fail_msg: "At least one OCR language is not installed."
