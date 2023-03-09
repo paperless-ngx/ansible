@@ -34,6 +34,13 @@
           tags: venv
       tags: venv
 
+    - name: Prepare NLTK environment
+      ansible.builtin.include_tasks:
+        file: nltk.yml
+        apply:
+          tags: nltk
+      tags: nltk
+
 - name: Configure paperless-ngx and dependencies
   ansible.builtin.include_tasks:
     file: configuration.yml
