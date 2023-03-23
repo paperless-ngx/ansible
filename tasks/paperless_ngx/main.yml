@@ -6,14 +6,6 @@
       tags: system_user
   tags: system_user
 
-- name: Backup existing installation
-  ansible.builtin.include_tasks:
-    file: backup.yml
-    apply:
-      tags: backup
-  tags: backup
-  when: _paperless_ngx_installation_strategy_upgrade
-
 - name: Pre configuration
   when: >-
     _paperless_ngx_installation_strategy_upgrade
