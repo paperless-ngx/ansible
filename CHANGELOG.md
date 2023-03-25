@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.1.0 - 2023-03-25
+
+### paperless-ngx ansible role 1.1.0
+
+#### Features
+
+- feat(vars): add PAPERLESS_PRE_CONSUME_SCRIPT @stevenengland ([#46](https://github.com/paperless-ngx/ansible/pull/46))
+
+#### Bug Fixes
+
+- fix(deps): bump yamllint from 1.29.0 to 1.30.0 in /.github/workflows @dependabot ([#45](https://github.com/paperless-ngx/ansible/pull/45))
+
+#### Documentation
+
+- docs(readme): add paragraphs for backup, postgresql, updates @stevenengland ([#47](https://github.com/paperless-ngx/ansible/pull/47))
+
+#### Maintenance
+
+- refactor(backup): remove incomplete backup feature @stevenengland ([#42](https://github.com/paperless-ngx/ansible/pull/42))
+
+#### Dependencies
+
+- fix(deps): bump yamllint from 1.29.0 to 1.30.0 in /.github/workflows @dependabot ([#45](https://github.com/paperless-ngx/ansible/pull/45))
+
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.0.2...1.1.0
+
 ## 1.0.2 - 2023-03-09
 
 ### paperless-ngx ansible role 1.0.2
