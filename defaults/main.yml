@@ -84,7 +84,6 @@ paperless_ngx_conf_worker_timeout: 1800
 paperless_ngx_conf_time_zone: Europe/London
 paperless_ngx_conf_enable_nltk: 1
 # paperless_ngx_conf_optimize_thumbnails: true # option seems to not exist
-# paperless_ngx_conf_pre_consume_script: # option seems to not exist
 paperless_ngx_conf_email_task_cron: "*/10 * * * *"
 paperless_ngx_conf_train_task_cron: "5 */1 * * *"
 paperless_ngx_conf_index_task_cron: "0 0 * * *"
@@ -106,6 +105,7 @@ paperless_ngx_conf_consumer_enable_asn_barcode: false
 paperless_ngx_conf_consumer_asn_barcode_prefix: ASN
 paperless_ngx_conf_convert_memory_limit: 0
 paperless_ngx_conf_convert_tmpdir:
+paperless_ngx_conf_pre_consume_script:
 paperless_ngx_conf_post_consume_script:
 paperless_ngx_conf_filename_date_order:
 paperless_ngx_conf_number_of_suggested_dates: 3

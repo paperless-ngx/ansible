@@ -178,6 +178,7 @@ To save reading space a few abbreviations are used in the tables down below:
 | `paperless_ngx_conf_consumer_asn_barcode_prefix` | ASN | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_convert_memory_limit` | 0 | Y | Y |   |   |
 | `paperless_ngx_conf_convert_tmpdir` | "" | Y | Y |   |   |
+| `paperless_ngx_conf_pre_consume_script` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_post_consume_script` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_filename_date_order` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_number_of_suggested_dates` | 3 | Y | Y |   |   |
