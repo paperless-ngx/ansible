@@ -170,6 +170,8 @@
       role_var: "{{ paperless_ngx_conf_convert_memory_limit }}"
     - pngx_var: PAPERLESS_CONVERT_TMPDIR
       role_var: "{{ paperless_ngx_conf_convert_tmpdir }}"
+    - pngx_var: PAPERLESS_PRE_CONSUME_SCRIPT
+      role_var: "{{ paperless_ngx_conf_pre_consume_script }}"
     - pngx_var: PAPERLESS_POST_CONSUME_SCRIPT
       role_var: "{{ paperless_ngx_conf_post_consume_script }}"
     - pngx_var: PAPERLESS_FILENAME_DATE_ORDER
