@@ -36,7 +36,11 @@ Installs and configures paperless-ngx EDMS.
 
 ###  1.1. <a name='Ansible'></a>Ansible
 
-`ansible_version_minimum: "4.0.0"` or newer is required.
+`ansible_version_minimum: "2.9"` or newer is required.
+
+The following Ansible collections need to be installed (via `ansible-galaxy collection install`)
+* community.general
+* ansible.posix
 
 ###  1.2. <a name='Supportedoperatingsystems'></a>Supported operating systems
 
@@ -212,7 +216,7 @@ If you want to use Paperless-ngx together with PostgreSQL a running instance of 
 
 ##  4. <a name='Dependencies'></a>Dependencies
 
-There is a dependency on `jmespath`. This is included as part of the community.general collection within ansible. Please follow this link for more information - https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#selecting-json-data-json-queries
+No dependencies
 
 ##  5. <a name='ExamplePlaybooks'></a>Example Playbooks
 

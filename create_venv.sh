@@ -9,4 +9,5 @@ fi
 rm -rf .venv
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r ./.github/workflows/requirements.txt -c ./.github/workflows/constraints.txt
+python3 -m pip install -r ./.github/workflows/requirements.txt -c ./.github/workflows/constraints.txt
+ansible-galaxy install --timeout 120 --verbose -r requirements.yml

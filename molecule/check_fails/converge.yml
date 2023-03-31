@@ -3,13 +3,52 @@
   hosts: all
   tasks:
     #  ----------------------------------
+    - name: Should fail when Ansible version (core) is lower than supported
+      block:
+        - name: "Arrange&Act"
+          ansible.builtin.include_role:
+            name: "paperless_ngx.paperless_ngx"
+          tags:
+            - check_ansible_version
+          vars:
+            ansible_version_minimum: "99.99"
+      rescue:
+        - name: Dummy
+          ansible.builtin.debug:
+            var: _exception
+
+        - name: Assert
+          ansible.builtin.assert:
+            that:
+              - "'must update' in _exception.msg"
+    #  ----------------------------------
+    - name: Should fail when host does not have all Ansible collections installed
+      block:
+        - name: "Arrange&Act"
+          ansible.builtin.include_role:
+            name: "paperless_ngx.paperless_ngx"
+          tags:
+            - check_ansible_collections
+          vars:
+            ansible_required_collections:
+              - test.notfound
+      rescue:
+        - name: Dummy
+          ansible.builtin.debug:
+            var: _exception
+
+        - name: Assert
+          ansible.builtin.assert:
+            that:
+              - "'Missing' in _exception.results[0].msg"
+    #  ----------------------------------
     - name: Should fail when target paperless-ngx version is < minimum version
       block:
         - name: "Arrange&Act"
           ansible.builtin.include_role:
             name: "paperless_ngx.paperless_ngx"
           tags:
-            - check_paperless_version
+            - check_paperless_version_min
           vars:
             paperless_ngx_version: '99.10.0'
             paperless_ngx_version_minimum: '99.11.0'
@@ -22,13 +61,13 @@
           ansible.builtin.debug:
             var: _exception
     #  ----------------------------------
-    - name: Should fail when target ansible version is < installed version
+    - name: Should fail when target paperless version is < installed version
       block:
         - name: "Arrange&Act"
           ansible.builtin.include_role:
             name: "paperless_ngx.paperless_ngx"
           tags:
-            - check_paperless_version
+            - check_paperless_version_downgrade
           vars:
             _paperless_ngx_installed_version: '99.99.99'
       rescue:

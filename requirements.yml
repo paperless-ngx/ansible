@@ -1,8 +1,8 @@
 ---
 roles:
   - name: galaxyproject.postgresql
-    version: 1.1.1
   - name: galaxyproject.postgresql_objects
-    version: 1.2.0
 
-collections: []
+collections:
+  - name: community.general
+  - name: ansible.posix

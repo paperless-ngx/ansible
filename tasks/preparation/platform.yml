@@ -11,17 +11,30 @@
     fail_msg: "This role only works with systemd"
     success_msg: "systemd found"
 
-- name: Verify Ansible meets version requirements
+- name: Compare versions of installed ansible and required ansible
+  ansible.builtin.assert:
+    that: "ansible_version.full is version_compare(ansible_version_minimum, '>=')"
+    msg: >
+      "You must update Ansible to at least {{ ansible_version_minimum }} to use this role."
+  delegate_to: localhost
+  run_once: true
+  register: _exception
+
+- name: Check that all dependent Ansible collections are installed
   block:
-    - name: Check version of ansible package on the controller node
-      ansible.builtin.shell: python3 -m pip show ansible | grep Version | cut -d ' ' -f 2
+    - name: Get all collections as fact
+      ansible.builtin.command: ansible-galaxy collection list
       changed_when: false
-      register: _ansible_installed_version
+      register: _ansible_installed_collections
       delegate_to: localhost
       run_once: true
 
-    - name: Compare versions of installed ansible and required ansible
-      ansible.builtin.assert:
-        that: "_ansible_installed_version.stdout is version_compare(ansible_version_minimum, '>=')"
+    - name: Loop through all dependencies
+      ansible.builtin.fail:
         msg: >
-          "You must update Ansible to at least {{ ansible_version_minimum }} to use this role."
+          "Not all required Ansible collections are installed. Missing: {{ item }}"
+      when: "item not in _ansible_installed_collections.stdout"
+      delegate_to: localhost
+      run_once: true
+      loop: "{{ ansible_required_collections }}"
+      register: _exception
