@@ -66,7 +66,8 @@ jobs:
       - name: Install test dependencies
         uses: nick-fields/retry@v2
         with:
-          timeout_seconds: 20
+          timeout_minutes: 10
+          retry_wait_seconds: 20
           max_attempts: 3
           command: |
             if [ -z "${{ matrix.ansible_version_minimum }}" ]
