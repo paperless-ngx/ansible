@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.1 - 2023-04-01
+
+### paperless-ngx ansible role 1.1.1
+
+#### Maintenance
+
+- refactor: rewrite checks for ansible hosts ansible version @stevenengland ([#53](https://github.com/paperless-ngx/ansible/pull/53))
+
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.1.0...1.1.1
+
 ## 1.1.0 - 2023-03-25
 
 ### paperless-ngx ansible role 1.1.0
