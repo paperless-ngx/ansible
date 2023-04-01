@@ -75,7 +75,8 @@ jobs:
             then
               python3 -m pip install -r .github/workflows/requirements.txt -c .github/workflows/constraints.txt
             else
-              python3 -m pip install ansible-core==${{ matrix.ansible_version_minimum }} ansible==${{ ansible_package_version_minimum }} -r .github/workflows/requirements.txt
+              python3 -m pip install ansible-core==${{ matrix.ansible_version_minimum }} ansible==${{ matrix.ansible_package_version_minimum }} \
+              -r .github/workflows/requirements.txt
             fi
 
             molecule --version
