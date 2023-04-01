@@ -1,7 +1,12 @@
 ---
 # Vars that shouldn't be altered by the user
 ## Vars without reference to the paperless-ngx docs
-ansible_version_minimum: "4.0.0"
+ansible_version_minimum: "2.12"
+ansible_required_collections:
+  # [a-z_]+\.[a-z_]+(\.[a-z_]+)?:
+  - community.general
+  - ansible.posix
+
 github_public_repo_token: "{{ lookup('env', 'GH_TOKEN') | default(omit) }}"
 paperless_ngx_config_path: /etc/paperless.d
 paperless_ngx_config_file: "/etc/paperless.conf"

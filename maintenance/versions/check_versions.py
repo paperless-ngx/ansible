@@ -16,7 +16,7 @@ for type in types:
     files.extend(glob.glob(os.path.dirname(__file__) + "/../../.**/" + type, recursive=True))
     #files.extend(glob.iglob(os.path.dirname(__file__) + type, recursive=True, include_hidden = True)) # ToDo: python 11 feature
 
-files = [x for x in files if not ".venv" in x]
+files = [x for x in files if not ".venv" in x and not "molecule" in x]
 
 ansible_versions = []
 ansible_versions_files = []

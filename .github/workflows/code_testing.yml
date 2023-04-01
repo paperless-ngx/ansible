@@ -38,7 +38,8 @@ jobs:
         ]
         include:
           - molecule_scenario: default
-            ansible_version_minimum: "4.0.0"
+            ansible_version_minimum: "2.12"
+            ansible_package_version_minimum: "5.0.1"
 
     name: Molecule Test
     runs-on: ubuntu-latest
@@ -64,18 +65,24 @@ jobs:
           python3 -m pip --version
 
       - name: Install test dependencies
-        run: |
-          python3 -m pip install -r .github/workflows/requirements.txt -c .github/workflows/constraints.txt
-          molecule --version
-          docker --version
-          ansible-galaxy install --timeout 120 --verbose -r requirements.yml
-          ansible-galaxy collection list
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          retry_wait_seconds: 20
+          max_attempts: 3
+          command: |
+            if [ -z "${{ matrix.ansible_version_minimum }}" ]
+            then
+              python3 -m pip install -r .github/workflows/requirements.txt -c .github/workflows/constraints.txt
+            else
+              python3 -m pip install ansible-core==${{ matrix.ansible_version_minimum }}.* ansible==${{ matrix.ansible_package_version_minimum }} \
+              -r .github/workflows/requirements.txt
+            fi
 
-      - if: ${{ matrix.ansible_version_minimum }}
-        run: |
-          python3 -m pip install --force-reinstall ansible==${{ matrix.ansible_version_minimum }}
-          molecule --version
-          ansible-galaxy collection list
+            molecule --version
+            docker --version
+            ansible-galaxy install --verbose -r requirements.yml
+            ansible-galaxy collection list
 
       - name: Run Molecule tests
         run: molecule test --scenario-name ${{ matrix.molecule_scenario }}
