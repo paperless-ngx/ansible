@@ -36,7 +36,7 @@ Installs and configures paperless-ngx EDMS.
 
 ###  1.1. <a name='Ansible'></a>Ansible
 
-`ansible_version_minimum: "2.11"` or newer is required.
+`ansible_version_minimum: "2.12"` or newer is required.
 
 The following Ansible collections need to be installed (via `ansible-galaxy collection install`)
 * community.general

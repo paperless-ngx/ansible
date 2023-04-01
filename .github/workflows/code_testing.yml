@@ -38,8 +38,8 @@ jobs:
         ]
         include:
           - molecule_scenario: default
-            ansible_version_minimum: "2.11"
-            ansible_package_version_minimum: "4.10.0"
+            ansible_version_minimum: "2.12"
+            ansible_package_version_minimum: "5.0.1"
 
     name: Molecule Test
     runs-on: ubuntu-latest
@@ -75,7 +75,7 @@ jobs:
             then
               python3 -m pip install -r .github/workflows/requirements.txt -c .github/workflows/constraints.txt
             else
-              python3 -m pip install ansible-core==${{ matrix.ansible_version_minimum }} ansible==${{ matrix.ansible_package_version_minimum }} \
+              python3 -m pip install ansible-core==${{ matrix.ansible_version_minimum }}.* ansible==${{ matrix.ansible_package_version_minimum }} \
               -r .github/workflows/requirements.txt
             fi
 
