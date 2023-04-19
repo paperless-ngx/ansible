@@ -44,6 +44,7 @@
       - python3-venv
       - python3-jmespath
       - sudo
+      - virtualenv
   register: _install_base_deps_result
   until:
     - "not 'Connection timed out' in _install_base_deps_result.stderr|default('')"
