@@ -23,7 +23,18 @@ paperless_ngx_system_user_additional_groups: []
 paperless_ngx_version: latest
 
 # paperless-ngx configuration variables
-## Required services
+## already alphabetical sorted
+paperless_ngx_conf_consumer_barcode_scanner: "PYZBAR"
+paperless_ngx_conf_dbsslcert:
+paperless_ngx_conf_dbsslkey:
+paperless_ngx_conf_dbsslrootcert:
+paperless_ngx_conf_ocr_skip_archive_file: "never"
+paperless_ngx_conf_proxy_ssl_header:
+paperless_ngx_conf_trusted_proxies: ""
+paperless_ngx_conf_use_x_forward_host: false
+paperless_ngx_conf_use_x_forward_port: false
+
+## not yet sorted (former try to keep up with official docs ordering)
 paperless_ngx_conf_dbhost: localhost
 paperless_ngx_conf_dbport: 5432
 paperless_ngx_conf_dbname: paperlessngx
@@ -31,7 +42,6 @@ paperless_ngx_conf_dbuser: paperlessngx
 paperless_ngx_conf_dbpass: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_db_pass.secret') }}"
 paperless_ngx_conf_dbsslmode: prefer
 paperless_ngx_conf_db_timeout:
-## Paths and folders
 paperless_ngx_conf_consumption_dir: "{{ paperless_ngx_dir_runtime_data }}/consumption"
 paperless_ngx_conf_data_dir: "{{ paperless_ngx_dir_runtime_data }}/data"
 paperless_ngx_conf_trash_dir: "{{ paperless_ngx_dir_runtime_data }}/trash"
@@ -40,10 +50,8 @@ paperless_ngx_conf_filename_format:
 paperless_ngx_conf_filename_format_remove_none: false
 paperless_ngx_conf_logging_dir: "{{ paperless_ngx_dir_runtime_data }}/log"
 paperless_ngx_conf_nltk_dir: /usr/share/nltk_data
-## Logging
 paperless_ngx_conf_logrotate_max_size: 1048576
 paperless_ngx_conf_logrotate_max_backups: 20
-## Hosting & Security
 paperless_ngx_conf_url: http://localhost:8000
 paperless_ngx_conf_secret_key: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_secret_key.secret') }}"
 paperless_ngx_conf_csrf_trusted_origins:
@@ -59,7 +67,6 @@ paperless_ngx_conf_cookie_prefix: ""
 paperless_ngx_conf_enable_http_remote_user: false
 paperless_ngx_conf_http_remote_user_header_name: HTTP_REMOTE_USER
 paperless_ngx_conf_logout_redirect_url:
-## OCR
 paperless_ngx_conf_ocr_language: eng
 paperless_ngx_conf_ocr_mode: skip
 paperless_ngx_conf_ocr_clean: clean
@@ -73,27 +80,22 @@ paperless_ngx_conf_ocr_max_image_pixels:
 # see https://ocrmypdf.readthedocs.io/en/latest/api.html#ocrmypdf.ocr
 paperless_ngx_conf_ocr_user_args:
   - optimize: 1
-## Tika settings
 paperless_ngx_conf_tika_enabled: false
 paperless_ngx_conf_tika_endpoint: http://localhost:9998
 paperless_ngx_conf_tika_gotenberg_endpoint: http://localhost:3000
-## Software tweaks
 paperless_ngx_conf_task_workers: 1
 paperless_ngx_conf_threads_per_worker: "{{ paperless_ngx_conf_task_workers }}"
 paperless_ngx_conf_worker_timeout: 1800
 paperless_ngx_conf_time_zone: Europe/London
 paperless_ngx_conf_enable_nltk: 1
-# paperless_ngx_conf_optimize_thumbnails: true # option seems to not exist
 paperless_ngx_conf_email_task_cron: "*/10 * * * *"
 paperless_ngx_conf_train_task_cron: "5 */1 * * *"
 paperless_ngx_conf_index_task_cron: "0 0 * * *"
 paperless_ngx_conf_sanity_task_cron: "30 0 * * sun"
 paperless_ngx_conf_enable_compression: true
-## Polling
 paperless_ngx_conf_consumer_polling: 0
 paperless_ngx_conf_consumer_polling_retry_count: 5
 paperless_ngx_conf_consumer_polling_delay: 5
-## iNotify
 paperless_ngx_conf_consumer_inotify_delay: 0.5
 paperless_ngx_conf_consumer_delete_duplicates: false
 paperless_ngx_conf_consumer_recursive: false
@@ -119,10 +121,8 @@ paperless_ngx_conf_consumer_ignore_patterns:
   - ".stversions/*"
   - ".localized/*"
   - "desktop.ini"
-## Binaries
 paperless_ngx_conf_convert_binary: "convert"
 paperless_ngx_conf_gs_binary: "gs"
-## Docker (bare metal) specific options
 paperless_ngx_conf_webserver_workers: 1
 paperless_ngx_conf_bind_addr: "[::]"
 paperless_ngx_conf_port: 8000
@@ -135,5 +135,4 @@ paperless_ngx_conf_ocr_languages:
   - ita
   - spa
 paperless_ngx_conf_enable_flower: false
-## Update checking
 paperless_ngx_conf_enable_update_check: enable
