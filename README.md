@@ -98,6 +98,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_auto_login_username` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_bind_addr` | "[::]" | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_asn_barcode_prefix` | ASN | Y | Y |   | 1.12 |
+| `paperless_ngx_conf_consumer_barcode_scanner` | "PYZBAR" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_consumer_barcode_string` | 'PATCHT' | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_barcode_tiff_support` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_delete_duplicates` | false | Y | Y |   |   |
@@ -125,7 +126,10 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_dbname` | paperlessngx | Y | Y | |   |
 | `paperless_ngx_conf_dbpass` | "" | Y | Y | The db password. If not defined by the user, a random password will be generated -> see section below about passwords. |   |
 | `paperless_ngx_conf_dbport` |5432| Y | Y | |   |
+| `paperless_ngx_conf_dbsslcert` | None | Y | Y | | 1.14 |
+| `paperless_ngx_conf_dbsslkey` | None | Y | Y | | 1.14 |
 | `paperless_ngx_conf_dbsslmode` | prefer | Y | Y | |   |
+| `paperless_ngx_conf_dbsslrootcert` | None | Y | Y | | 1.14 |
 | `paperless_ngx_conf_dbuser` | paperlessngx | Y | Y | |   |
 | `paperless_ngx_conf_email_task_cron` | "*/10 * * * *" | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_enable_compression` | true | Y | Y |   | 1.13 |
@@ -159,10 +163,12 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_ocr_pages` |0| Y | Y |   |   |
 | `paperless_ngx_conf_ocr_rotate_pages_threshold` |12| Y | Y |   |   |
 | `paperless_ngx_conf_ocr_rotate_pages` | true | Y | Y |   |   |
+| `paperless_ngx_conf_ocr_skip_archive_file` | "never" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_ocr_user_args` | [optimize=1] | Y | Y |   |   |
 | `paperless_ngx_conf_port` |8000| Y | Y |   |   |
 | `paperless_ngx_conf_post_consume_script` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_pre_consume_script` | "" | Y | Y |   |   |
+| `paperless_ngx_conf_proxy_ssl_header` | None | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_redis` | redis://{{ paperless_ngx_redis_host }}:{{ paperless_ngx_redis_port }} | Y | N |  |   |
 | `paperless_ngx_conf_sanity_task_cron` | "30 0 * * sun" | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_secret_key` | "" | Y | Y | If not defined by the user, a random password will be generated -> see section below about passwords. |   |
@@ -177,7 +183,10 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_time_zone` | Europe/London | Y | Y |   |   |
 | `paperless_ngx_conf_train_task_cron` | "5 */1 * * *" | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_trash_dir` | "{{ paperless_ngx_dir_runtime_data }}/trash" | Y | Y |   |   |
+| `paperless_ngx_conf_trusted_proxies` | "" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_url` | http://localhost:8000 | Y | Y |   |   |
+| `paperless_ngx_conf_use_x_forward_host` | False | Y | Y |   | 1.14 |
+| `paperless_ngx_conf_use_x_forward_port` | False | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_usermap_gid` |  | Y | Y | System users gid |   |
 | `paperless_ngx_conf_usermap_uid` |  | Y | Y | System users id |   |
 | `paperless_ngx_conf_webserver_workers` |1| Y | Y |   |   |

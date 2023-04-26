@@ -6,6 +6,35 @@
     regexp: ^#?{{ item.pngx_var }}=
     line: "{{ item.pngx_var }}={{ item.role_var }}"
   loop:
+    # already alphabetical sorted
+    - pngx_var: PAPERLESS_CONSUMER_BARCODE_SCANNER
+      role_var: "{{ paperless_ngx_conf_consumer_barcode_scanner }}"
+      since_version: '1.14.0'
+    - pngx_var: PAPERLESS_DBSSLCERT
+      role_var: "{{ paperless_ngx_conf_dbsslcert }}"
+      since_version: '1.14.0'
+    - pngx_var: PAPERLESS_DBSSLKEY
+      role_var: "{{ paperless_ngx_conf_dbsslkey }}"
+      since_version: '1.14.0'
+    - pngx_var: PAPERLESS_DBSSLROOTCERT
+      role_var: "{{ paperless_ngx_conf_dbsslrootcert }}"
+      since_version: '1.14.0'
+    - pngx_var: PAPERLESS_OCR_SKIP_ARCHIVE_FILE
+      role_var: "{{ paperless_ngx_conf_ocr_skip_archive_file }}"
+      since_version: '1.14.0'
+    - pngx_var: PAPERLESS_PROXY_SSL_HEADER
+      role_var: "{{ paperless_ngx_conf_proxy_ssl_header }}"
+      since_version: '1.14.0'
+    - pngx_var: PAPERLESS_TRUSTED_PROXIES
+      role_var: "{{ paperless_ngx_conf_trusted_proxies }}"
+      since_version: '1.14.0'
+    - pngx_var: PAPERLESS_USE_X_FORWARD_HOST
+      role_var: "{{ paperless_ngx_conf_use_x_forward_host }}"
+      since_version: '1.14.0'
+    - pngx_var: PAPERLESS_USE_X_FORWARD_PORT
+      role_var: "{{ paperless_ngx_conf_use_x_forward_port }}"
+      since_version: '1.14.0'
+    # not yet sorted (former try to keep up with official docs ordering)
     # Hosting & Security
     - pngx_var: PAPERLESS_SECRET_KEY
       role_var: "{{ paperless_ngx_conf_secret_key }}"
