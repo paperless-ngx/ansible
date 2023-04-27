@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.2.0 - 2023-04-26
+
+### paperless-ngx ansible role 1.2.0
+
+#### Features
+
+- feat: add 1.14 support @stevenengland ([#66](https://github.com/paperless-ngx/ansible/pull/66))
+
+#### Bug Fixes
+
+- fix(deps): bump ansible-lint from 6.14.3 to 6.15.0 in /.github/workflows @dependabot ([#62](https://github.com/paperless-ngx/ansible/pull/62))
+- fix(deps): bump pip from 23.0.1 to 23.1 in /.github/workflows @dependabot ([#59](https://github.com/paperless-ngx/ansible/pull/59))
+- fix(deps): bump peter-evans/create-pull-request from 4 to 5 @dependabot ([#57](https://github.com/paperless-ngx/ansible/pull/57))
+- fix(deps): bump ansible-lint from 6.14.2 to 6.14.3 in /.github/workflows @dependabot ([#50](https://github.com/paperless-ngx/ansible/pull/50))
+- fix(deps): bump ansible from 7.3.0 to 7.4.0 in /.github/workflows @dependabot ([#52](https://github.com/paperless-ngx/ansible/pull/52))
+
+#### Maintenance
+
+- test: remove unsused tests coming from role init @stevenengland ([#63](https://github.com/paperless-ngx/ansible/pull/63))
+
+#### Dependencies
+
+<details>
+<summary>5 changes</summary>
+- fix(deps): bump ansible-lint from 6.14.3 to 6.15.0 in /.github/workflows @dependabot ([#62](https://github.com/paperless-ngx/ansible/pull/62))
+- fix(deps): bump pip from 23.0.1 to 23.1 in /.github/workflows @dependabot ([#59](https://github.com/paperless-ngx/ansible/pull/59))
+- fix(deps): bump peter-evans/create-pull-request from 4 to 5 @dependabot ([#57](https://github.com/paperless-ngx/ansible/pull/57))
+- fix(deps): bump ansible-lint from 6.14.2 to 6.14.3 in /.github/workflows @dependabot ([#50](https://github.com/paperless-ngx/ansible/pull/50))
+- fix(deps): bump ansible from 7.3.0 to 7.4.0 in /.github/workflows @dependabot ([#52](https://github.com/paperless-ngx/ansible/pull/52))
+
+</details>
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.1.1...1.2.0
+
 ## 1.1.1 - 2023-04-01
 
 ### paperless-ngx ansible role 1.1.1
