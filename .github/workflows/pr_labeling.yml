@@ -49,7 +49,7 @@ jobs:
     needs:
       - pr_auto_labeling
     steps:
-      - uses: danielchabr/pr-labels-checker@v3.1
+      - uses: danielchabr/pr-labels-checker@v3.2
         with:
           hasSome: "\
             breaking,\
