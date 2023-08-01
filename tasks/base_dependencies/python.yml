@@ -1,0 +1,89 @@
+---
+- name: Check if python is already installed with correct version (unspecific)
+  ansible.builtin.command:
+    cmd: python3 --version
+  register: python_unspecific_version_installed_response
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+
+- name: Check if python is already installed with correct version (specific)
+  ansible.builtin.command:
+    cmd: python{{ paperless_ngx_python_version_short }} --version
+  register: python_specific_version_installed_response
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+
+- name: Setting python version (unspecific)  # noqa jinja[spacing]
+  ansible.builtin.set_fact:
+    _python_wanted_version_unspecific_installed: >-
+      {%- if python_unspecific_version_installed_response.rc != 0 or
+        (python_unspecific_version_installed_response.stdout.split(' ')[-1] != paperless_ngx_python_version_full | string) -%}
+      false
+      {%- else -%}
+      true
+      {%- endif -%}
+
+- name: Setting python version (specific)  # noqa jinja[spacing]
+  ansible.builtin.set_fact:
+    _python_wanted_version_specific_installed: >-
+      {%- if python_specific_version_installed_response.rc != 0 or
+        (python_specific_version_installed_response.stdout.split(' ')[-1] != paperless_ngx_python_version_full | string) -%}
+      false
+      {%- else -%}
+      true
+      {%- endif -%}
+
+- name: Install python if not already installed in the proper version
+  become: true
+  when: not _python_wanted_version_unspecific_installed and not _python_wanted_version_specific_installed
+  block:
+    - name: Install dev dependencies
+      ansible.builtin.package:
+        name: "{{ item }}"
+        update_cache: true
+      with_items:
+        - build-essential
+        - libreadline-dev
+        - libncursesw5-dev
+        - libssl-dev
+        - libsqlite3-dev
+        - libgdbm-dev
+        - libc6-dev
+        - libbz2-dev
+        - libffi-dev
+        - tk-dev
+        - zlib1g-dev
+
+    - name: Create temporary directory
+      ansible.builtin.tempfile:
+        state: directory
+        path: "{{ paperless_ngx_dependency_install_tmp_dir }}"
+      register: _python_archive_dir
+
+    - name: Download and extract python sources
+      become: true
+      ansible.builtin.unarchive:
+        src: "{{ paperless_ngx_python_release_url }}"
+        remote_src: true
+        dest: "{{ _python_archive_dir.path }}"
+        extra_opts: [--strip-components=1]
+      register: _download_and_unarchive_python
+      until:
+        - "not 'urlopen error' in _download_and_unarchive_python.msg | default('')"
+        - "not 'The read operation timed out' in _download_and_unarchive_python.msg | default('')"
+      retries: 3
+      delay: 60
+
+    - name: Run configure for python
+      ansible.builtin.command: ./configure --prefix=/usr --enable-optimizations --with-ensurepip=install
+      args:
+        chdir: "{{ _python_archive_dir.path }}"
+      changed_when: true
+
+    - name: Run 'make and make altinstall' target
+      become: true
+      community.general.make:
+        chdir: "{{ _python_archive_dir.path }}"
+        target: altinstall

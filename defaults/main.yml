@@ -10,7 +10,7 @@ paperless_ngx_dir_virtualenv: "{{ paperless_ngx_dir_installation }}/.venv"
 ## jbig2encode
 paperless_ngx_jbig2enc_enabled: true
 paperless_ngx_jbig2enc_lossy: false
-paperless_ngx_jbig2enc_tmp_dir: "/tmp/"
+paperless_ngx_dependency_install_tmp_dir: "/tmp/"
 paperless_ngx_jbig2enc_version: 0.29
 ## Redis db
 paperless_ngx_redis_host: localhost
