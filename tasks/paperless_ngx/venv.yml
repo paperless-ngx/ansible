@@ -16,7 +16,7 @@
     name: pip
     virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
     virtualenv_python: "{{ paperless_ngx_dir_python}}/bin/python{{ paperless_ngx_python_version_short }}"
-    virtualenv_command: python{{ paperless_ngx_python_version_short }} -m virtualenv
+    virtualenv_command: "{{ paperless_ngx_dir_python}}/bin/python{{ paperless_ngx_python_version_short }} -m virtualenv"
     extra_args: --upgrade
 
 - name: Install paperless-ngx python requirements
