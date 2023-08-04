@@ -77,7 +77,7 @@
       delay: 60
 
     - name: Run configure for python
-      ansible.builtin.command: ./configure --prefix=/usr --enable-optimizations --with-ensurepip=install
+      ansible.builtin.command: ./configure --prefix={{ paperless_ngx_dir_python }} --enable-optimizations --with-ensurepip=install
       args:
         chdir: "{{ _python_archive_dir.path }}"
       changed_when: true

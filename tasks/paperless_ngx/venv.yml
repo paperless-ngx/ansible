@@ -7,7 +7,7 @@
   ansible.builtin.pip:
     name: virtualenv
     extra_args: --upgrade --user
-    executable: /usr/bin/pip{{ paperless_ngx_python_version_short }}
+    executable: "{{ paperless_ngx_dir_python}}/bin/pip{{ paperless_ngx_python_version_short }}"
 
 - name: Install latest pip
   become: true
@@ -15,7 +15,7 @@
   ansible.builtin.pip:
     name: pip
     virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
-    virtualenv_python: /usr/bin/python{{ paperless_ngx_python_version_short }}
+    virtualenv_python: "{{ paperless_ngx_dir_python}}/bin/python{{ paperless_ngx_python_version_short }}"
     virtualenv_command: python{{ paperless_ngx_python_version_short }} -m virtualenv
     extra_args: --upgrade
 
@@ -25,7 +25,7 @@
   ansible.builtin.pip:
     requirements: "{{ paperless_ngx_dir_installation }}/requirements.txt"
     virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
-    virtualenv_python: /usr/bin/python{{ paperless_ngx_python_version_short }}
+    virtualenv_python: "{{ paperless_ngx_dir_python}}/bin/python{{ paperless_ngx_python_version_short }}"
     extra_args: --upgrade
   register: _install_python_requirements
   until: 'not "ReadTimeoutError" in _install_python_requirements.msg | default("")'
