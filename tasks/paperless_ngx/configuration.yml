@@ -7,9 +7,24 @@
     line: "{{ item.pngx_var }}={{ item.role_var }}"
   loop:
     # already alphabetical sorted
+    - pngx_var: PAPERLESS_CONSUMER_BARCODE_DPI
+      role_var: "{{ paperless_ngx_conf_consumer_barcode_dpi }}"
+      since_version: '1.16.0'
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_SCANNER
       role_var: "{{ paperless_ngx_conf_consumer_barcode_scanner }}"
       since_version: '1.14.0'
+    - pngx_var: PAPERLESS_CONSUMER_BARCODE_UPSCALE
+      role_var: "{{ paperless_ngx_conf_consumer_barcode_upscale }}"
+      since_version: '1.16.0'
+    - pngx_var: PAPERLESS_CONSUMER_COLLATE_DOUBLE_SIDED_SUBDIR_NAME
+      role_var: "{{ paperless_ngx_conf_consumer_collate_double_sided_subdir_name }}"
+      since_version: '1.17.0'
+    - pngx_var: PAPERLESS_CONSUMER_COLLATE_DOUBLE_SIDED_TIFF_SUPPORT
+      role_var: "{{ paperless_ngx_conf_consumer_collate_double_sided_tiff_support }}"
+      since_version: '1.17.0'
+    - pngx_var: PAPERLESS_CONSUMER_ENABLE_COLLATE_DOUBLE_SIDED
+      role_var: "{{ paperless_ngx_conf_consumer_enable_collate_double_sided }}"
+      since_version: '1.17.0'
     - pngx_var: PAPERLESS_DBSSLCERT
       role_var: "{{ paperless_ngx_conf_dbsslcert }}"
       since_version: '1.14.0'

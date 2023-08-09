@@ -99,12 +99,17 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_auto_login_username` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_bind_addr` | "[::]" | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_asn_barcode_prefix` | ASN | Y | Y |   | 1.12 |
+| `paperless_ngx_conf_consumer_collate_double_sided_subdir_name` | "double-sided" | Y | Y |   | 1.17 |
+| `paperless_ngx_conf_consumer_collate_double_sided_tiff_support`| false | Y | Y |   | 1.17 |
+| `paperless_ngx_conf_consumer_barcode_dpi` | 300 | Y | Y |   | 1.16 |
 | `paperless_ngx_conf_consumer_barcode_scanner` | "PYZBAR" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_consumer_barcode_string` | 'PATCHT' | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_barcode_tiff_support` | false | Y | Y |   |   |
+| `paperless_ngx_conf_consumer_barcode_upscale` | 0.0 | Y | Y |   | 1.16 |
 | `paperless_ngx_conf_consumer_delete_duplicates` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_enable_asn_barcode` | false | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_consumer_enable_barcodes` | false | Y | Y |   |   |
+| `paperless_ngx_conf_consumer_enable_collate_double_sided` | false | Y | Y |   | 1.17 |
 | `paperless_ngx_conf_consumer_ignore_patterns` | [".DS_STORE/*", "._*", ".stfolder/*", ".stversions/*", ".localized/*", "desktop.ini"] | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_inotify_delay` | 0.5 | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_polling_delay` |5| Y | Y |   |   |
