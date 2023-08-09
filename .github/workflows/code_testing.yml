@@ -25,6 +25,7 @@ jobs:
       matrix:
         distro:
           - debian11
+          - debian12
           # https://github.com/geerlingguy/docker-ubuntu2204-ansible/issues/6
           # - ubuntu2204
           - ubuntu2004

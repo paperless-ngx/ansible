@@ -41,7 +41,7 @@
     - name: Create temporary git directory
       ansible.builtin.tempfile:
         state: directory
-        path: "{{ paperless_ngx_jbig2enc_tmp_dir }}"
+        path: "{{ paperless_ngx_dependency_install_tmp_dir }}"
       register: _jbig2enc_gitdir
 
     - name: Pull jbig2enc

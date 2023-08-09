@@ -13,8 +13,6 @@
     update_cache: true
     pkg:
       # paperless-ngx
-      - python3-pip
-      - python3-dev
       - default-libmysqlclient-dev
       - fonts-liberation
       - imagemagick
@@ -37,12 +35,7 @@
       - zlib1g
       - tesseract-ocr
       # Dev
-      - build-essential
       - git
-      - python3-setuptools
-      - python3-wheel
-      - python3-venv
-      - python3-jmespath
       - sudo
   register: _install_base_deps_result
   until:
@@ -70,11 +63,3 @@
     masked: false
     state: started
   when: paperless_ngx_redis_host == 'localhost' or paperless_ngx_redis_host == '127.0.0.1'
-
-# upstream virtualenv in Ubuntu 20.04 is broken
-# https://github.com/pypa/virtualenv/issues/1873
-- name: Install python virtualenv
-  become: true
-  ansible.builtin.pip:
-    name: virtualenv
-    extra_args: --upgrade
