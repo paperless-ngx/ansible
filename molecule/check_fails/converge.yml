@@ -11,7 +11,7 @@
           tags:
             - check_ansible_version
           vars:
-            ansible_version_minimum: "99.99"
+            ansible_version_minimum: "99.99"  # noqa: var-naming[no-role-prefix]
       rescue:
         - name: Dummy
           ansible.builtin.debug:
@@ -30,7 +30,7 @@
           tags:
             - check_ansible_collections
           vars:
-            ansible_required_collections:
+            ansible_required_collections:  # noqa: var-naming[no-role-prefix]
               - test.notfound
       rescue:
         - name: Dummy
@@ -69,7 +69,7 @@
           tags:
             - check_paperless_version_downgrade
           vars:
-            _paperless_ngx_installed_version: '99.99.99'
+            _paperless_ngx_installed_version: '99.99.99'  # noqa: var-naming[no-role-prefix]
       rescue:
         - name: Assert
           ansible.builtin.assert:
