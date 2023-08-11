@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.3.0 - 2023-08-11
+
+### paperless-ngx ansible role 1.3.0
+
+#### Features
+
+- feat: add support for v1.16 and 1.17 @stevenengland ([#90](https://github.com/paperless-ngx/ansible/pull/90))
+- feat: add support for debian 12 @stevenengland ([#89](https://github.com/paperless-ngx/ansible/pull/89))
+
+#### Bug Fixes
+
+- fix(deps): bump requests from 2.28.1 to 2.31.0 in /.github/workflows @dependabot ([#92](https://github.com/paperless-ngx/ansible/pull/92))
+- fix(deps): bump pip from 23.1.2 to 23.2.1 in /.github/workflows @dependabot ([#88](https://github.com/paperless-ngx/ansible/pull/88))
+- fix(deps): bump yamllint from 1.31.0 to 1.32.0 in /.github/workflows @dependabot ([#76](https://github.com/paperless-ngx/ansible/pull/76))
+- fix(deps): bump danielchabr/pr-labels-checker from 3.1 to 3.3 @dependabot ([#73](https://github.com/paperless-ngx/ansible/pull/73))
+- fix(deps): bump pip from 23.1 to 23.1.2 in /.github/workflows @dependabot ([#69](https://github.com/paperless-ngx/ansible/pull/69))
+- fix(deps): bump yamllint from 1.30.0 to 1.31.0 in /.github/workflows @dependabot ([#64](https://github.com/paperless-ngx/ansible/pull/64))
+- fix(deps): bump ansible from 7.4.0 to 7.5.0 in /.github/workflows @dependabot ([#70](https://github.com/paperless-ngx/ansible/pull/70))
+
+#### Maintenance
+
+- build: remove requests dependency @stevenengland ([#93](https://github.com/paperless-ngx/ansible/pull/93))
+- style(ansible lint): make compliant with newest version @stevenengland ([#91](https://github.com/paperless-ngx/ansible/pull/91))
+- test(molecule): change molecule version to use >5.0.0 @stevenengland ([#80](https://github.com/paperless-ngx/ansible/pull/80))
+
+#### Dependencies
+
+<details>
+<summary>7 changes</summary>
+- fix(deps): bump requests from 2.28.1 to 2.31.0 in /.github/workflows @dependabot ([#92](https://github.com/paperless-ngx/ansible/pull/92))
+- fix(deps): bump pip from 23.1.2 to 23.2.1 in /.github/workflows @dependabot ([#88](https://github.com/paperless-ngx/ansible/pull/88))
+- fix(deps): bump yamllint from 1.31.0 to 1.32.0 in /.github/workflows @dependabot ([#76](https://github.com/paperless-ngx/ansible/pull/76))
+- fix(deps): bump danielchabr/pr-labels-checker from 3.1 to 3.3 @dependabot ([#73](https://github.com/paperless-ngx/ansible/pull/73))
+- fix(deps): bump pip from 23.1 to 23.1.2 in /.github/workflows @dependabot ([#69](https://github.com/paperless-ngx/ansible/pull/69))
+- fix(deps): bump yamllint from 1.30.0 to 1.31.0 in /.github/workflows @dependabot ([#64](https://github.com/paperless-ngx/ansible/pull/64))
+- fix(deps): bump ansible from 7.4.0 to 7.5.0 in /.github/workflows @dependabot ([#70](https://github.com/paperless-ngx/ansible/pull/70))
+
+</details>
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.2.0...1.3.0
+
 ## 1.2.0 - 2023-04-26
 
 ### paperless-ngx ansible role 1.2.0
@@ -29,10 +69,8 @@
 - fix(deps): bump peter-evans/create-pull-request from 4 to 5 @dependabot ([#57](https://github.com/paperless-ngx/ansible/pull/57))
 - fix(deps): bump ansible-lint from 6.14.2 to 6.14.3 in /.github/workflows @dependabot ([#50](https://github.com/paperless-ngx/ansible/pull/50))
 - fix(deps): bump ansible from 7.3.0 to 7.4.0 in /.github/workflows @dependabot ([#52](https://github.com/paperless-ngx/ansible/pull/52))
-
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.1.1...1.2.0
-
 ## 1.1.1 - 2023-04-01
 
 ### paperless-ngx ansible role 1.1.1
