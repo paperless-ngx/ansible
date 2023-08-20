@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.1 - 2023-08-20
+
+### paperless-ngx ansible role 1.3.1
+
+#### Bug Fixes
+
+- fix(deps): add pkg-config @GamerBene19 ([#98](https://github.com/paperless-ngx/ansible/pull/98))
+- fix: https://github.com/ansible/molecule/issues/4017 @stevenengland ([#99](https://github.com/paperless-ngx/ansible/pull/99))
+
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.3.0...1.3.1
+
 ## 1.3.0 - 2023-08-11
 
 ### paperless-ngx ansible role 1.3.0
@@ -36,10 +47,8 @@
 - fix(deps): bump pip from 23.1 to 23.1.2 in /.github/workflows @dependabot ([#69](https://github.com/paperless-ngx/ansible/pull/69))
 - fix(deps): bump yamllint from 1.30.0 to 1.31.0 in /.github/workflows @dependabot ([#64](https://github.com/paperless-ngx/ansible/pull/64))
 - fix(deps): bump ansible from 7.4.0 to 7.5.0 in /.github/workflows @dependabot ([#70](https://github.com/paperless-ngx/ansible/pull/70))
-
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.2.0...1.3.0
-
 ## 1.2.0 - 2023-04-26
 
 ### paperless-ngx ansible role 1.2.0
@@ -72,7 +81,6 @@
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.1.1...1.2.0
 ## 1.1.1 - 2023-04-01
-
 ### paperless-ngx ansible role 1.1.1
 
 #### Maintenance
