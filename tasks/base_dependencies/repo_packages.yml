@@ -24,6 +24,7 @@
       - mime-support
       - libzbar0
       - poppler-utils
+      - pkg-config
       # OCRmyPDF
       - unpaper
       - ghostscript
