@@ -28,6 +28,7 @@
       register: _ansible_installed_collections
       delegate_to: localhost
       run_once: true
+      become: false
 
     - name: Loop through all dependencies
       ansible.builtin.fail:
@@ -38,3 +39,4 @@
       run_once: true
       loop: "{{ ansible_required_collections }}"
       register: _exception
+      become: false
