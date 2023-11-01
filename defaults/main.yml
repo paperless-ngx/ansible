@@ -34,8 +34,10 @@ paperless_ngx_conf_consumer_enable_collate_double_sided: false
 paperless_ngx_conf_dbsslcert:
 paperless_ngx_conf_dbsslkey:
 paperless_ngx_conf_dbsslrootcert:
+paperless_ngx_conf_email_certificate_file:
 paperless_ngx_conf_ocr_skip_archive_file: "never"
 paperless_ngx_conf_proxy_ssl_header:
+paperless_ngx_conf_redis_prefix: ""
 paperless_ngx_conf_trusted_proxies: ""
 paperless_ngx_conf_use_x_forward_host: false
 paperless_ngx_conf_use_x_forward_port: false

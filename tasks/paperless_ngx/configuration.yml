@@ -22,6 +22,9 @@
     - pngx_var: PAPERLESS_CONSUMER_COLLATE_DOUBLE_SIDED_TIFF_SUPPORT
       role_var: "{{ paperless_ngx_conf_consumer_collate_double_sided_tiff_support }}"
       since_version: '1.17.0'
+    - pngx_var: PAPERLESS_EMAIL_CERTIFICATE_FILE
+      role_var: "{{ paperless_ngx_conf_email_certificate_file }}"
+      since_version: '1.17.0'
     - pngx_var: PAPERLESS_CONSUMER_ENABLE_COLLATE_DOUBLE_SIDED
       role_var: "{{ paperless_ngx_conf_consumer_enable_collate_double_sided }}"
       since_version: '1.17.0'
@@ -40,6 +43,9 @@
     - pngx_var: PAPERLESS_PROXY_SSL_HEADER
       role_var: "{{ paperless_ngx_conf_proxy_ssl_header }}"
       since_version: '1.14.0'
+    - pngx_var: PAPERLESS_REDIS_PREFIX
+      role_var: "{{ paperless_ngx_conf_redis_prefix }}"
+      since_version: '1.17.0'
     - pngx_var: PAPERLESS_TRUSTED_PROXIES
       role_var: "{{ paperless_ngx_conf_trusted_proxies }}"
       since_version: '1.14.0'
