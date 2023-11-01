@@ -19,7 +19,7 @@ no_conf_var_list = [
 #############################################
 def readme_vs_docs():
     # Get vars to compare in a format without prefix
-    vars_docs_all = get_pngx_docs_configuration_vars(r'^\`(?:PAPERLESS_)?(.*?)=.*\`$')
+    vars_docs_all = get_pngx_docs_configuration_vars(r'\[\`(?:PAPERLESS_)?(.*?)=')
     vars_readme_conf = get_role_readme_configuration_vars(r'\|\s*\`paperless_ngx_conf_(.*?)\`\s*\|')
     in_docs_but_not_in_readme = ['PAPERLESS_' + item for item in in_a_but_not_in_b(vars_docs_all, vars_readme_conf, False)]
     in_readme_but_not_in_docs = ['paperless_ngx_conf_' + item for item in in_a_but_not_in_b(vars_readme_conf, vars_docs_all, False)]
