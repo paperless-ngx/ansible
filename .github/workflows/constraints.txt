@@ -1,5 +1,5 @@
 ansible==8.5.0
-ansible-core==2.15.5 # https://github.com/ansible/molecule/issues/4017
+ansible-core==2.16.0 # https://github.com/ansible/molecule/issues/4017
 ansible-lint==6.22.0
 pip==23.3.1
 # urllib3==1.26.16 # <- periodically needed in some environments but not in github pipeline. Will leave it here for local builds: #https://github.com/docker/docker-py/issues/3113
