@@ -7,6 +7,9 @@
     line: "{{ item.pngx_var }}={{ item.role_var }}"
   loop:
     # already alphabetical sorted
+    - pngx_var: PAPERLESS_AUDIT_LOG_ENABLED
+      role_var: "{{ paperless_ngx_conf_audit_log_enabled }}"
+      since_version: '2.0.0'
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_DPI
       role_var: "{{ paperless_ngx_conf_consumer_barcode_dpi }}"
       since_version: '1.16.0'
@@ -22,9 +25,6 @@
     - pngx_var: PAPERLESS_CONSUMER_COLLATE_DOUBLE_SIDED_TIFF_SUPPORT
       role_var: "{{ paperless_ngx_conf_consumer_collate_double_sided_tiff_support }}"
       since_version: '1.17.0'
-    - pngx_var: PAPERLESS_EMAIL_CERTIFICATE_FILE
-      role_var: "{{ paperless_ngx_conf_email_certificate_file }}"
-      since_version: '1.17.0'
     - pngx_var: PAPERLESS_CONSUMER_ENABLE_COLLATE_DOUBLE_SIDED
       role_var: "{{ paperless_ngx_conf_consumer_enable_collate_double_sided }}"
       since_version: '1.17.0'
@@ -37,6 +37,33 @@
     - pngx_var: PAPERLESS_DBSSLROOTCERT
       role_var: "{{ paperless_ngx_conf_dbsslrootcert }}"
       since_version: '1.14.0'
+    - pngx_var: PAPERLESS_EMAIL_CERTIFICATE_LOCATION
+      role_var: "{{ paperless_ngx_conf_email_certificate_location }}"
+      since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_FROM
+      role_var: "{{ paperless_ngx_conf_email_from }}"
+      since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_HOST
+      role_var: "{{ paperless_ngx_conf_email_host }}"
+      since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_HOST_USER
+      role_var: "{{ paperless_ngx_conf_email_host_user }}"
+      since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_HOST_PASSWORD
+      role_var: "{{ paperless_ngx_conf_email_host_password }}"
+      since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_PORT
+      role_var: "{{ paperless_ngx_conf_email_port }}"
+      since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_USE_SSL
+      role_var: "{{ paperless_ngx_conf_email_use_ssl }}"
+      since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_USE_TLS
+      role_var: "{{ paperless_ngx_conf_email_use_tls }}"
+      since_version: '2.0.0'
+    - pngx_var: PAPERLESS_OCR_COLOR_CONVERSION_STRATEGY
+      role_var: "{{ paperless_ngx_conf_ocr_color_conversion_strategy }}"
+      since_version: '2.1.0'
     - pngx_var: PAPERLESS_OCR_SKIP_ARCHIVE_FILE
       role_var: "{{ paperless_ngx_conf_ocr_skip_archive_file }}"
       since_version: '1.14.0'

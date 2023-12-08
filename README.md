@@ -77,7 +77,7 @@ The following sections are devided into:
 | `paperless_ngx_system_group` | paperlessngx | The group to which the system user belongs. |
 | `paperless_ngx_system_user` | paperlessngx | The user that will execute the services and own the data. |
 | `paperless_ngx_system_user_additional_groups` | [] | Optionally add the system user to more groups. For example to read TLS certificates that can be read by the group `ssl-cert`. |
-| `paperless_ngx_version` | latest | Sofware version to install. Use `latest` or any specific version in the format `'1.10.0'`. Only `paperless_ngx_version_minimum: '1.10.0'` and higher supported. |
+| `paperless_ngx_version` | latest | Sofware version to install. Use `latest` or any specific version in the format `'2.0.0'`. Only `paperless_ngx_version_minimum: '2.0.0'` and higher supported. |
 | `` |  |  |
 
 ###  2.2. <a name='Paperless-ngxconfigurationvariables'></a>Paperless-ngx configuration variables
@@ -96,6 +96,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_admin_password` |  | Y | Y | The superuser password. If not defined by the user, a random password will be generated -> see section below about passwords. |   |
 | `paperless_ngx_conf_admin_user` | admin | Y | Y |   |   |
 | `paperless_ngx_conf_allowed_hosts` | "*" | Y | Y |   |   |
+| `paperless_ngx_conf_audit_log_enabled` | false | Y | Y |   | 2.0  |
 | `paperless_ngx_conf_auto_login_username` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_bind_addr` | "[::]" | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_asn_barcode_prefix` | ASN | Y | Y |   | 1.12 |
@@ -137,8 +138,15 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_dbsslmode` | prefer | Y | Y | |   |
 | `paperless_ngx_conf_dbsslrootcert` | None | Y | Y | | 1.14 |
 | `paperless_ngx_conf_dbuser` | paperlessngx | Y | Y | |   |
-| `paperless_ngx_conf_email_certificate_file` | None | Y | Y |   | 1.17 |
+| `paperless_ngx_conf_email_certificate_location` | None | Y | Y |   | 1.17 |
+| `paperless_ngx_conf_email_from` | {{ paperless_ngx_conf_email_host_user }} | Y | Y |   | 2.0 |
+| `paperless_ngx_conf_email_host` | "localhost" | Y | Y |   | 2.0 |
+| `paperless_ngx_conf_email_host_user` | "" | Y | Y |   | 2.0 |
+| `paperless_ngx_conf_email_host_password` | "" | Y | Y |   | 2.0 |
+| `paperless_ngx_conf_email_port` | 25 | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_task_cron` | "*/10 * * * *" | Y | Y |   | 1.12 |
+| `paperless_ngx_conf_email_use_ssl` | false | Y | Y |   | 2.0 |
+| `paperless_ngx_conf_email_use_tls` | false | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_enable_compression` | true | Y | Y |   | 1.13 |
 | `paperless_ngx_conf_enable_flower` | false | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
 | `paperless_ngx_conf_enable_http_remote_user` | "" | Y | Y |   |   |
@@ -160,6 +168,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_nltk_dir` | /usr/share/nltk_data | Y | Y |   | 1.11 |
 | `paperless_ngx_conf_number_of_suggested_dates` |3| Y | Y |   |   |
 | `paperless_ngx_conf_ocr_clean` | clean | Y | Y |   |   |
+| `paperless_ngx_conf_ocr_color_conversion_strategy` | "RGB" | Y | Y |   | 2.1 |
 | `paperless_ngx_conf_ocr_deskew` | true | Y | Y |   |   |
 | `paperless_ngx_conf_ocr_image_dpi` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_ocr_language` | eng | Y | Y |   |   |
