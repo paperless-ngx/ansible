@@ -47,7 +47,7 @@
       role_var: "{{ paperless_ngx_conf_consumer_enable_tag_barcode }}"
       since_version: '2.5.0'
     - pngx_var: PAPERLESS_CONSUMER_TAG_BARCODE_MAPPING
-      role_var: "{{ paperless_ngx_conf_consumer_tag_barcode_mapping }}"
+      role_var: "{{ paperless_ngx_conf_consumer_tag_barcode_mapping | to_json }}"
       since_version: '2.5.0'
     - pngx_var: PAPERLESS_DBSSLCERT
       role_var: "{{ paperless_ngx_conf_dbsslcert }}"

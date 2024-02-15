@@ -124,7 +124,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_consumer_polling` |0| Y | Y |   |   |
 | `paperless_ngx_conf_consumer_recursive` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_subdirs_as_tags` | false | Y | Y |   |   |
-| `paperless_ngx_conf_consumer_tag_barcode_mapping` | '{"TAG:(.*)": "\\\\\\\\g<1>"}' | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_consumer_tag_barcode_mapping` | '{"TAG:(.*)": "\\\\g<1>"}' | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_consumption_dir` | "{{ paperless_ngx_dir_runtime_data }}/consumption" | Y | Y |   |   |
 | `paperless_ngx_conf_convert_binary` | convert | Y | Y |   |   |
 | `paperless_ngx_conf_convert_memory_limit` |0| Y | Y |   |   |

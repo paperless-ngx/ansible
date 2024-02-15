@@ -38,7 +38,7 @@ paperless_ngx_conf_consumer_collate_double_sided_subdir_name: "double-sided"
 paperless_ngx_conf_consumer_collate_double_sided_tiff_support: false
 paperless_ngx_conf_consumer_enable_collate_double_sided: false
 paperless_ngx_conf_consumer_enable_tag_barcode: false
-paperless_ngx_conf_consumer_tag_barcode_mapping: '{"TAG:(.*)": "\\\\g<1>"}'
+paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"}
 paperless_ngx_conf_dbsslcert:
 paperless_ngx_conf_dbsslkey:
 paperless_ngx_conf_dbsslrootcert:
