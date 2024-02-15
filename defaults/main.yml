@@ -25,6 +25,11 @@ paperless_ngx_version: latest
 
 # paperless-ngx configuration variables
 ## already alphabetical sorted
+paperless_ngx_conf_account_allow_signups: false
+paperless_ngx_conf_account_default_http_protocol: https
+paperless_ngx_conf_app_logo:
+paperless_ngx_conf_app_title:
+paperless_ngx_conf_apps:
 paperless_ngx_conf_audit_log_enabled: false
 paperless_ngx_conf_consumer_barcode_dpi: 300
 paperless_ngx_conf_consumer_barcode_scanner: "PYZBAR"
@@ -32,6 +37,8 @@ paperless_ngx_conf_consumer_barcode_upscale: 0.0
 paperless_ngx_conf_consumer_collate_double_sided_subdir_name: "double-sided"
 paperless_ngx_conf_consumer_collate_double_sided_tiff_support: false
 paperless_ngx_conf_consumer_enable_collate_double_sided: false
+paperless_ngx_conf_consumer_enable_tag_barcode: false
+paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"}
 paperless_ngx_conf_dbsslcert:
 paperless_ngx_conf_dbsslkey:
 paperless_ngx_conf_dbsslrootcert:
@@ -43,10 +50,15 @@ paperless_ngx_conf_email_host_password: ""
 paperless_ngx_conf_email_port: 25
 paperless_ngx_conf_email_use_tls: false
 paperless_ngx_conf_email_use_ssl: false
-paperless_ngx_conf_ocr_color_conversion_strategy: "RBG"
+paperless_ngx_conf_enable_http_remote_user_api: false
+paperless_ngx_conf_ocr_color_conversion_strategy: "RGB"
 paperless_ngx_conf_ocr_skip_archive_file: "never"
 paperless_ngx_conf_proxy_ssl_header:
 paperless_ngx_conf_redis_prefix: ""
+paperless_ngx_conf_social_auto_signup: false
+paperless_ngx_conf_socialaccount_allow_signups: true
+paperless_ngx_conf_socialaccount_providers: "{}"
+paperless_ngx_conf_supervisord_working_dir:
 paperless_ngx_conf_trusted_proxies: ""
 paperless_ngx_conf_use_x_forward_host: false
 paperless_ngx_conf_use_x_forward_port: false

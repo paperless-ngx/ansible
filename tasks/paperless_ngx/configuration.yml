@@ -7,6 +7,21 @@
     line: "{{ item.pngx_var }}={{ item.role_var }}"
   loop:
     # already alphabetical sorted
+    - pngx_var: PAPERLESS_ACCOUNT_ALLOW_SIGNUPS
+      role_var: "{{ paperless_ngx_conf_account_allow_signups }}"
+      since_version: '2.5.0'
+    - pngx_var: PAPERLESS_ACCOUNT_DEFAULT_HTTP_PROTOCOL
+      role_var: "{{ paperless_ngx_conf_account_default_http_protocol }}"
+      since_version: '2.5.0'
+    - pngx_var: PAPERLESS_APP_LOGO
+      role_var: "{{ paperless_ngx_conf_app_logo }}"
+      since_version: '2.4.0'
+    - pngx_var: PAPERLESS_APP_TITLE
+      role_var: "{{ paperless_ngx_conf_app_title }}"
+      since_version: '2.4.0'
+    - pngx_var: PAPERLESS_APPS
+      role_var: "{{ paperless_ngx_conf_apps }}"
+      since_version: '2.5.0'
     - pngx_var: PAPERLESS_AUDIT_LOG_ENABLED
       role_var: "{{ paperless_ngx_conf_audit_log_enabled }}"
       since_version: '2.0.0'
@@ -28,6 +43,12 @@
     - pngx_var: PAPERLESS_CONSUMER_ENABLE_COLLATE_DOUBLE_SIDED
       role_var: "{{ paperless_ngx_conf_consumer_enable_collate_double_sided }}"
       since_version: '1.17.0'
+    - pngx_var: PAPERLESS_CONSUMER_ENABLE_TAG_BARCODE
+      role_var: "{{ paperless_ngx_conf_consumer_enable_tag_barcode }}"
+      since_version: '2.5.0'
+    - pngx_var: PAPERLESS_CONSUMER_TAG_BARCODE_MAPPING
+      role_var: "{{ paperless_ngx_conf_consumer_tag_barcode_mapping | to_json }}"
+      since_version: '2.5.0'
     - pngx_var: PAPERLESS_DBSSLCERT
       role_var: "{{ paperless_ngx_conf_dbsslcert }}"
       since_version: '1.14.0'
@@ -61,6 +82,9 @@
     - pngx_var: PAPERLESS_EMAIL_USE_TLS
       role_var: "{{ paperless_ngx_conf_email_use_tls }}"
       since_version: '2.0.0'
+    - pngx_var: PAPERLESS_ENABLE_HTTP_REMOTE_USER_API
+      role_var: "{{ paperless_ngx_conf_enable_http_remote_user_api }}"
+      since_version: '2.5.0'
     - pngx_var: PAPERLESS_OCR_COLOR_CONVERSION_STRATEGY
       role_var: "{{ paperless_ngx_conf_ocr_color_conversion_strategy }}"
       since_version: '2.1.0'
@@ -73,6 +97,18 @@
     - pngx_var: PAPERLESS_REDIS_PREFIX
       role_var: "{{ paperless_ngx_conf_redis_prefix }}"
       since_version: '1.17.0'
+    - pngx_var: PAPERLESS_SOCIAL_AUTO_SIGNUP
+      role_var: "{{ paperless_ngx_conf_social_auto_signup }}"
+      since_version: '2.5.0'
+    - pngx_var: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
+      role_var: "{{ paperless_ngx_conf_socialaccount_allow_signups }}"
+      since_version: '2.5.0'
+    - pngx_var: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+      role_var: "{{ paperless_ngx_conf_socialaccount_providers }}"
+      since_version: '2.5.0'
+    - pngx_var: PAPERLESS_SUPERVISORD_WORKING_DIR
+      role_var: "{{ paperless_ngx_conf_supervisord_working_dir }}"
+      since_version: '2.5.0'
     - pngx_var: PAPERLESS_TRUSTED_PROXIES
       role_var: "{{ paperless_ngx_conf_trusted_proxies }}"
       since_version: '1.14.0'

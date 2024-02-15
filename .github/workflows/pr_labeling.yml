@@ -33,7 +33,7 @@ jobs:
     needs:
       - pr_title_check
     steps:
-      - uses: release-drafter/release-drafter@v5
+      - uses: release-drafter/release-drafter@v6
         with:
           disable-releaser: true
           config-name: pr_autolabeling_config.yml
