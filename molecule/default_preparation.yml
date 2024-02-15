@@ -5,3 +5,8 @@
     upgrade: dist
     state: latest
     update_cache: true
+
+- name: Install a few additional packages
+  ansible.builtin.apt:
+    pkg:
+      - rsyslog
