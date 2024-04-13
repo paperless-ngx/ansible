@@ -94,6 +94,8 @@ To save reading space a few abbreviations are used in the table down below:
 | -------------- | ------------- |---|---|---|---|
 | `paperless_ngx_conf_account_allow_signups` | false | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_account_default_http_protocol` | https | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_account_email_verification` | optional | Y | Y |   | 2.6 |
+| `paperless_ngx_conf_account_session_remember` | false | Y | Y |   | 2.7 |
 | `paperless_ngx_conf_admin_mail` | root@localhost | Y | Y |   |   |
 | `paperless_ngx_conf_admin_password` |  | Y | Y | The superuser password. If not defined by the user, a random password will be generated -> see section below about passwords. |   |
 | `paperless_ngx_conf_admin_user` | admin | Y | Y |   |   |
@@ -145,6 +147,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_dbsslmode` | prefer | Y | Y | |   |
 | `paperless_ngx_conf_dbsslrootcert` | None | Y | Y | | 1.14 |
 | `paperless_ngx_conf_dbuser` | paperlessngx | Y | Y | |   |
+| `paperless_ngx_conf_disable_regular_login` | false | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_email_certificate_location` | None | Y | Y |   | 1.17 |
 | `paperless_ngx_conf_email_from` | {{ paperless_ngx_conf_email_host_user }} | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_host` | "localhost" | Y | Y |   | 2.0 |
@@ -172,6 +175,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_logout_redirect_url` |  | Y | Y |   |   |
 | `paperless_ngx_conf_logrotate_max_backups` |20| Y | Y |   |   |
 | `paperless_ngx_conf_logrotate_max_size` | 1024 * 1024 | Y | Y |   |   |
+| `paperless_ngx_conf_max_image_pixels` | None | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_media_root` | "{{ paperless_ngx_dir_runtime_data }}/media" | Y | Y |   |   |
 | `paperless_ngx_conf_nltk_dir` | /usr/share/nltk_data | Y | Y |   | 1.11 |
 | `paperless_ngx_conf_number_of_suggested_dates` |3| Y | Y |   |   |
