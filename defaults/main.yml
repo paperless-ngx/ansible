@@ -27,6 +27,8 @@ paperless_ngx_version: latest
 ## already alphabetical sorted
 paperless_ngx_conf_account_allow_signups: false
 paperless_ngx_conf_account_default_http_protocol: https
+paperless_ngx_conf_account_email_verification: optional
+paperless_ngx_conf_account_session_remember: false
 paperless_ngx_conf_app_logo:
 paperless_ngx_conf_app_title:
 paperless_ngx_conf_apps:
@@ -42,6 +44,7 @@ paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"
 paperless_ngx_conf_dbsslcert:
 paperless_ngx_conf_dbsslkey:
 paperless_ngx_conf_dbsslrootcert:
+paperless_ngx_conf_disable_regular_login: false
 paperless_ngx_conf_email_certificate_location:
 paperless_ngx_conf_email_from: "{{ paperless_ngx_conf_email_host_user }}"
 paperless_ngx_conf_email_host: "localhost"
@@ -51,6 +54,7 @@ paperless_ngx_conf_email_port: 25
 paperless_ngx_conf_email_use_tls: false
 paperless_ngx_conf_email_use_ssl: false
 paperless_ngx_conf_enable_http_remote_user_api: false
+paperless_ngx_conf_max_image_pixels:
 paperless_ngx_conf_ocr_color_conversion_strategy: "RGB"
 paperless_ngx_conf_ocr_skip_archive_file: "never"
 paperless_ngx_conf_proxy_ssl_header:
