@@ -92,10 +92,17 @@ To save reading space a few abbreviations are used in the table down below:
 
 | Name           | Default Value | I | O | H | V |
 | -------------- | ------------- |---|---|---|---|
+| `paperless_ngx_conf_account_allow_signups` | false | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_account_default_http_protocol` | https | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_account_email_verification` | optional | Y | Y |   | 2.6 |
+| `paperless_ngx_conf_account_session_remember` | false | Y | Y |   | 2.7 |
 | `paperless_ngx_conf_admin_mail` | root@localhost | Y | Y |   |   |
 | `paperless_ngx_conf_admin_password` |  | Y | Y | The superuser password. If not defined by the user, a random password will be generated -> see section below about passwords. |   |
 | `paperless_ngx_conf_admin_user` | admin | Y | Y |   |   |
 | `paperless_ngx_conf_allowed_hosts` | "*" | Y | Y |   |   |
+| `paperless_ngx_conf_app_logo` | None | Y | Y |   | 2.4 |
+| `paperless_ngx_conf_app_title` | None | Y | Y |   | 2.4 |
+| `paperless_ngx_conf_apps` | None | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_audit_log_enabled` | false | Y | Y |   | 2.0  |
 | `paperless_ngx_conf_auto_login_username` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_bind_addr` | "[::]" | Y | Y |   |   |
@@ -111,6 +118,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_consumer_enable_asn_barcode` | false | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_consumer_enable_barcodes` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_enable_collate_double_sided` | false | Y | Y |   | 1.17 |
+| `paperless_ngx_conf_consumer_enable_tag_barcode` | false | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_consumer_ignore_patterns` | [".DS_STORE/*", "._*", ".stfolder/*", ".stversions/*", ".localized/*", "desktop.ini"] | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_inotify_delay` | 0.5 | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_polling_delay` |5| Y | Y |   |   |
@@ -118,6 +126,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_consumer_polling` |0| Y | Y |   |   |
 | `paperless_ngx_conf_consumer_recursive` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_subdirs_as_tags` | false | Y | Y |   |   |
+| `paperless_ngx_conf_consumer_tag_barcode_mapping` | '{"TAG:(.*)": "\\\\g<1>"}' | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_consumption_dir` | "{{ paperless_ngx_dir_runtime_data }}/consumption" | Y | Y |   |   |
 | `paperless_ngx_conf_convert_binary` | convert | Y | Y |   |   |
 | `paperless_ngx_conf_convert_memory_limit` |0| Y | Y |   |   |
@@ -138,6 +147,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_dbsslmode` | prefer | Y | Y | |   |
 | `paperless_ngx_conf_dbsslrootcert` | None | Y | Y | | 1.14 |
 | `paperless_ngx_conf_dbuser` | paperlessngx | Y | Y | |   |
+| `paperless_ngx_conf_disable_regular_login` | false | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_email_certificate_location` | None | Y | Y |   | 1.17 |
 | `paperless_ngx_conf_email_from` | {{ paperless_ngx_conf_email_host_user }} | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_host` | "localhost" | Y | Y |   | 2.0 |
@@ -149,7 +159,8 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_email_use_tls` | false | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_enable_compression` | true | Y | Y |   | 1.13 |
 | `paperless_ngx_conf_enable_flower` | false | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
-| `paperless_ngx_conf_enable_http_remote_user` | "" | Y | Y |   |   |
+| `paperless_ngx_conf_enable_http_remote_user` | false | Y | Y |   |   |
+| `paperless_ngx_conf_enable_http_remote_user_api` | false | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_enable_nltk` |1| Y | Y |   | 1.11 |
 | `paperless_ngx_conf_enable_update_check` |  | Y | Y | Will be removed in the future |   |
 | `paperless_ngx_conf_filename_date_order` | "" | Y | Y |   |   |
@@ -164,6 +175,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_logout_redirect_url` |  | Y | Y |   |   |
 | `paperless_ngx_conf_logrotate_max_backups` |20| Y | Y |   |   |
 | `paperless_ngx_conf_logrotate_max_size` | 1024 * 1024 | Y | Y |   |   |
+| `paperless_ngx_conf_max_image_pixels` | None | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_media_root` | "{{ paperless_ngx_dir_runtime_data }}/media" | Y | Y |   |   |
 | `paperless_ngx_conf_nltk_dir` | /usr/share/nltk_data | Y | Y |   | 1.11 |
 | `paperless_ngx_conf_number_of_suggested_dates` |3| Y | Y |   |   |
@@ -189,8 +201,12 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_redis_prefix` | "" | Y | Y |  | 1.17 |
 | `paperless_ngx_conf_sanity_task_cron` | "30 0 * * sun" | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_secret_key` | "" | Y | Y | If not defined by the user, a random password will be generated -> see section below about passwords. |   |
+| `paperless_ngx_conf_social_auto_signup` | false | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_socialaccount_allow_signups` | true | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_socialaccount_providers` | "{}" | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_static_url` | /static/ | Y | Y |   |   |
 | `paperless_ngx_conf_staticdir` | ../static | Y | N |   |   |
+| `paperless_ngx_conf_supervisord_working_dir` | None | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_task_workers` |1| Y | Y |   |   |
 | `paperless_ngx_conf_threads_per_worker` | paperless_ngx_conf_task_workers | Y | Y |  |   |
 | `paperless_ngx_conf_thumbnail_font_name` | /usr/share/fonts/liberation/LiberationSerif-Regular.ttf | Y | Y |   |   |

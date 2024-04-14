@@ -17,9 +17,9 @@ no_conf_var_list = [
 # - What:   Do not miss a new feature or deprecated variable. Every var in DOCS should be present in README (_conf_) and vice versa.
 # - How:    Compare DOCS complete var set with roles README conf vars that correspond with DOCS.
 #############################################
-def readme_vs_docs():
+def readme_vs_docs(version:str = 'latest'):
     # Get vars to compare in a format without prefix
-    vars_docs_all = get_pngx_docs_configuration_vars(r'\[\`(?:PAPERLESS_)?(.*?)=')
+    vars_docs_all = get_pngx_docs_configuration_vars(r'\[\`(?:PAPERLESS_)?(.*?)=', version=version)
     vars_readme_conf = get_role_readme_configuration_vars(r'\|\s*\`paperless_ngx_conf_(.*?)\`\s*\|')
     in_docs_but_not_in_readme = ['PAPERLESS_' + item for item in in_a_but_not_in_b(vars_docs_all, vars_readme_conf, False)]
     in_readme_but_not_in_docs = ['paperless_ngx_conf_' + item for item in in_a_but_not_in_b(vars_readme_conf, vars_docs_all, False)]

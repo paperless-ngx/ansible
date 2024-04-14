@@ -12,7 +12,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: release-drafter/release-drafter@v5.22.0
+      - uses: release-drafter/release-drafter@v6
         with:
           config-name: release_drafting_config.yml
           disable-autolabeler: true
