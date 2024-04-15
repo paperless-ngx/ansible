@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.2.0 - 2024-04-15
+
+### paperless-ngx ansible role 2.2.0
+
+#### Features
+
+- feat: add v2.7 support @stevenengland ([#161](https://github.com/paperless-ngx/ansible/pull/161))
+
+#### Bug Fixes
+
+- fix(deps): bump ansible from 9.2.0 to 9.3.0 in /.github/workflows @dependabot ([#155](https://github.com/paperless-ngx/ansible/pull/155))
+- fix(deps): bump yamllint from 1.35.0 to 1.35.1 in /.github/workflows @dependabot ([#154](https://github.com/paperless-ngx/ansible/pull/154))
+
+#### Dependencies
+
+- fix(deps): bump ansible from 9.2.0 to 9.3.0 in /.github/workflows @dependabot ([#155](https://github.com/paperless-ngx/ansible/pull/155))
+- fix(deps): bump yamllint from 1.35.0 to 1.35.1 in /.github/workflows @dependabot ([#154](https://github.com/paperless-ngx/ansible/pull/154))
+
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/2.1.0...2.2.0
+
 ## 2.1.0 - 2024-02-15
 
 ### paperless-ngx ansible role 2.1.0
@@ -36,10 +56,8 @@
 - fix(deps): bump pip from 23.3.1 to 23.3.2 in /.github/workflows @dependabot ([#139](https://github.com/paperless-ngx/ansible/pull/139))
 - fix(deps): bump ansible-lint from 6.22.0 to 6.22.1 in /.github/workflows @dependabot ([#132](https://github.com/paperless-ngx/ansible/pull/132))
 - fix(deps): bump actions/setup-python from 4 to 5 @dependabot ([#135](https://github.com/paperless-ngx/ansible/pull/135))
-
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/2.0.0...2.1.0
-
 ## 2.0.0 - 2023-12-12
 
 ### paperless-ngx ansible role 2.0.0
@@ -90,7 +108,6 @@
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.3.1...2.0.0
 ## 1.3.1 - 2023-08-20
-
 ### paperless-ngx ansible role 1.3.1
 
 #### Bug Fixes
@@ -141,7 +158,6 @@
 ## 1.2.0 - 2023-04-26
 ### paperless-ngx ansible role 1.2.0
 #### Features
-
 - feat: add 1.14 support @stevenengland ([#66](https://github.com/paperless-ngx/ansible/pull/66))
 
 #### Bug Fixes
@@ -171,7 +187,6 @@
 ### paperless-ngx ansible role 1.1.1
 #### Maintenance
 - refactor: rewrite checks for ansible hosts ansible version @stevenengland ([#53](https://github.com/paperless-ngx/ansible/pull/53))
-
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.1.0...1.1.1
 
 ## 1.1.0 - 2023-03-25
