@@ -16,7 +16,7 @@ paperless_ngx_dir_force_permission_include:
   - "{{ paperless_ngx_dir_runtime_data }}"
   - "{{ paperless_ngx_conf_consumption_dir }}"
   - "{{ paperless_ngx_conf_data_dir }}"
-  - "{{ paperless_ngx_conf_trash_dir }}"
+  - "{{ paperless_ngx_conf_empty_trash_dir }}"
   - "{{ paperless_ngx_conf_media_root }}"
   - "{{ paperless_ngx_conf_logging_dir }}"
 paperless_ngx_dir_tmp: /tmp/paperless-ngx
