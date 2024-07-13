@@ -177,6 +177,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_logrotate_max_size` | 1024 * 1024 | Y | Y |   |   |
 | `paperless_ngx_conf_max_image_pixels` | None | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_media_root` | "{{ paperless_ngx_dir_runtime_data }}/media" | Y | Y |   |   |
+| `paperless_ngx_conf_model_file` | "{{ paperless_ngx_conf_data_dir }}/classification_model.pickle" | Y | Y |   | 2.9 |
 | `paperless_ngx_conf_nltk_dir` | /usr/share/nltk_data | Y | Y |   | 1.11 |
 | `paperless_ngx_conf_number_of_suggested_dates` |3| Y | Y |   |   |
 | `paperless_ngx_conf_ocr_clean` | clean | Y | Y |   |   |

@@ -5,14 +5,14 @@ repos:
       - id: yamllint
         name: yamllint
         entry: |
-          yamllint -c=.yamllint.yml .
+          .venv/bin/yamllint -c=.yamllint.yml .
         language: system
         types: [yaml]
         pass_filenames: false
       - id: ansible-lint
         name: ansible-lint
         entry: |
-          ansible-lint -c .ansible-lint
+          .venv/bin/ansible-lint -c .ansible-lint
         language: system
         types: [yaml]
         pass_filenames: false

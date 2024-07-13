@@ -55,6 +55,7 @@ paperless_ngx_conf_email_use_tls: false
 paperless_ngx_conf_email_use_ssl: false
 paperless_ngx_conf_enable_http_remote_user_api: false
 paperless_ngx_conf_max_image_pixels:
+paperless_ngx_conf_model_file: "{{ paperless_ngx_conf_data_dir }}/classification_model.pickle"
 paperless_ngx_conf_ocr_color_conversion_strategy: "RGB"
 paperless_ngx_conf_ocr_skip_archive_file: "never"
 paperless_ngx_conf_proxy_ssl_header:
