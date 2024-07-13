@@ -157,6 +157,9 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_email_task_cron` | "*/10 * * * *" | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_email_use_ssl` | false | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_use_tls` | false | Y | Y |   | 2.0 |
+| `paperless_ngx_conf_empty_trash_delay` | 30 | Y | Y |   | 2.10 |
+| `paperless_ngx_conf_empty_trash_dir` | "{{ paperless_ngx_dir_runtime_data }}/trash" | Y | Y |   | 2.10 |
+| `paperless_ngx_conf_empty_trash_task_cron` | "0 1 * * *" | Y | Y |   | 2.10 |
 | `paperless_ngx_conf_enable_compression` | true | Y | Y |   | 1.13 |
 | `paperless_ngx_conf_enable_flower` | false | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
 | `paperless_ngx_conf_enable_http_remote_user` | false | Y | Y |   |   |
@@ -177,6 +180,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_logrotate_max_size` | 1024 * 1024 | Y | Y |   |   |
 | `paperless_ngx_conf_max_image_pixels` | None | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_media_root` | "{{ paperless_ngx_dir_runtime_data }}/media" | Y | Y |   |   |
+| `paperless_ngx_conf_model_file` | "{{ paperless_ngx_conf_data_dir }}/classification_model.pickle" | Y | Y |   | 2.9 |
 | `paperless_ngx_conf_nltk_dir` | /usr/share/nltk_data | Y | Y |   | 1.11 |
 | `paperless_ngx_conf_number_of_suggested_dates` |3| Y | Y |   |   |
 | `paperless_ngx_conf_ocr_clean` | clean | Y | Y |   |   |
@@ -215,7 +219,6 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_tika_gotenberg_endpoint` | http://localhost:3000 | Y | Y |   |   |
 | `paperless_ngx_conf_time_zone` | Europe/London | Y | Y |   |   |
 | `paperless_ngx_conf_train_task_cron` | "5 */1 * * *" | Y | Y |   | 1.12 |
-| `paperless_ngx_conf_trash_dir` | "{{ paperless_ngx_dir_runtime_data }}/trash" | Y | Y |   |   |
 | `paperless_ngx_conf_trusted_proxies` | "" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_url` | http://localhost:8000 | Y | Y |   |   |
 | `paperless_ngx_conf_use_x_forward_host` | False | Y | Y |   | 1.14 |

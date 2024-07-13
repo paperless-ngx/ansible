@@ -53,8 +53,12 @@ paperless_ngx_conf_email_host_password: ""
 paperless_ngx_conf_email_port: 25
 paperless_ngx_conf_email_use_tls: false
 paperless_ngx_conf_email_use_ssl: false
+paperless_ngx_conf_empty_trash_delay: 30
+paperless_ngx_conf_empty_trash_dir: "{{ paperless_ngx_dir_runtime_data }}/trash"
+paperless_ngx_conf_empty_trash_task_cron: "0 1 * * *"
 paperless_ngx_conf_enable_http_remote_user_api: false
 paperless_ngx_conf_max_image_pixels:
+paperless_ngx_conf_model_file: "{{ paperless_ngx_conf_data_dir }}/classification_model.pickle"
 paperless_ngx_conf_ocr_color_conversion_strategy: "RGB"
 paperless_ngx_conf_ocr_skip_archive_file: "never"
 paperless_ngx_conf_proxy_ssl_header:
@@ -77,7 +81,6 @@ paperless_ngx_conf_dbsslmode: prefer
 paperless_ngx_conf_db_timeout:
 paperless_ngx_conf_consumption_dir: "{{ paperless_ngx_dir_runtime_data }}/consumption"
 paperless_ngx_conf_data_dir: "{{ paperless_ngx_dir_runtime_data }}/data"
-paperless_ngx_conf_trash_dir: "{{ paperless_ngx_dir_runtime_data }}/trash"
 paperless_ngx_conf_media_root: "{{ paperless_ngx_dir_runtime_data }}/media"
 paperless_ngx_conf_filename_format:
 paperless_ngx_conf_filename_format_remove_none: false

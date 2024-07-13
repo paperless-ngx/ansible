@@ -91,12 +91,24 @@
     - pngx_var: PAPERLESS_EMAIL_USE_TLS
       role_var: "{{ paperless_ngx_conf_email_use_tls }}"
       since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMPTY_TRASH_DELAY
+      role_var: "{{ paperless_ngx_conf_empty_trash_delay }}"
+      since_version: '2.10.0'
+    - pngx_var: PAPERLESS_EMPTY_TRASH_DIR
+      role_var: "{{ paperless_ngx_conf_empty_trash_dir }}"
+      since_version: '2.10.0'
+    - pngx_var: PAPERLESS_EMPTY_TRASH_TASK_CRON
+      role_var: "{{ paperless_ngx_conf_empty_trash_task_cron }}"
+      since_version: '2.10.0'
     - pngx_var: PAPERLESS_ENABLE_HTTP_REMOTE_USER_API
       role_var: "{{ paperless_ngx_conf_enable_http_remote_user_api }}"
       since_version: '2.5.0'
     - pngx_var: PAPERLESS_MAX_IMAGE_PIXELS
       role_var: "{{ paperless_ngx_conf_max_image_pixels }}"
       since_version: '2.6.0'
+    - pngx_var: PAPERLESS_MODEL_FILE
+      role_var: "{{ paperless_ngx_conf_model_file }}"
+      since_version: '2.9.0'
     - pngx_var: PAPERLESS_OCR_COLOR_CONVERSION_STRATEGY
       role_var: "{{ paperless_ngx_conf_ocr_color_conversion_strategy }}"
       since_version: '2.1.0'
@@ -191,8 +203,6 @@
       role_var: "{{ paperless_ngx_conf_consumption_dir }}"
     - pngx_var: PAPERLESS_DATA_DIR
       role_var: "{{ paperless_ngx_conf_data_dir }}"
-    - pngx_var: PAPERLESS_TRASH_DIR
-      role_var: "{{ paperless_ngx_conf_trash_dir }}"
     - pngx_var: PAPERLESS_MEDIA_ROOT
       role_var: "{{ paperless_ngx_conf_media_root }}"
     - pngx_var: PAPERLESS_STATICDIR
