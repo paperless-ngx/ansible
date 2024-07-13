@@ -158,7 +158,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_email_use_ssl` | false | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_use_tls` | false | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_empty_trash_delay` | 30 | Y | Y |   | 2.10 |
-| `paperless_ngx_conf_empty_trash_dir` | None | Y | Y |   | 2.10 |
+| `paperless_ngx_conf_empty_trash_dir` | "{{ paperless_ngx_dir_runtime_data }}/trash" | Y | Y |   | 2.10 |
 | `paperless_ngx_conf_empty_trash_task_cron` | "0 1 * * *" | Y | Y |   | 2.10 |
 | `paperless_ngx_conf_enable_compression` | true | Y | Y |   | 1.13 |
 | `paperless_ngx_conf_enable_flower` | false | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
