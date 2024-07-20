@@ -1,4 +1,4 @@
-ansible==10.1.0
+ansible==10.2.0
 # ansible-core==2.15.5 # https://github.com/ansible/molecule/issues/4017
 ansible-lint==24.2.2
 pip==24.1.2
