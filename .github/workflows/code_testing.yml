@@ -41,7 +41,7 @@ jobs:
         include:
           - molecule_scenario: default
             ansible_version_minimum: "2.15"
-            ansible_package_version_minimum: "5.0.1"
+            ansible_package_version_minimum: "8.0.0"
 
     name: Molecule Test
     runs-on: ubuntu-latest
