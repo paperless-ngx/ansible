@@ -21,7 +21,6 @@
       - libpq-dev
       - libmagic-dev
       - mariadb-client
-      - mime-support
       - libzbar0
       - poppler-utils
       - pkg-config
