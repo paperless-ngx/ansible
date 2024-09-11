@@ -40,7 +40,7 @@ jobs:
         ]
         include:
           - molecule_scenario: default
-            ansible_version_minimum: "2.12"
+            ansible_version_minimum: "2.15"
             ansible_package_version_minimum: "5.0.1"
 
     name: Molecule Test
