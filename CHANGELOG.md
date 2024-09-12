@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.3.0 - 2024-07-13
+
+### paperless-ngx ansible role 2.3.0
+
+#### Features
+
+- feat: add 2.11 support @stevenengland ([#178](https://github.com/paperless-ngx/ansible/pull/178))
+
+#### Bug Fixes
+
+- fix(deps): bump ansible-lint from 24.2.0 to 24.2.2 in /.github/workflows @dependabot ([#159](https://github.com/paperless-ngx/ansible/pull/159))
+- fix(deps): bump falti/dotenv-action from 1.0.4 to 1.1.2 @dependabot ([#160](https://github.com/paperless-ngx/ansible/pull/160))
+- fix(deps): bump ansible from 9.3.0 to 9.4.0 in /.github/workflows @dependabot ([#157](https://github.com/paperless-ngx/ansible/pull/157))
+
+#### Dependencies
+
+- fix(deps): bump ansible-lint from 24.2.0 to 24.2.2 in /.github/workflows @dependabot ([#159](https://github.com/paperless-ngx/ansible/pull/159))
+- fix(deps): bump falti/dotenv-action from 1.0.4 to 1.1.2 @dependabot ([#160](https://github.com/paperless-ngx/ansible/pull/160))
+- fix(deps): bump ansible from 9.3.0 to 9.4.0 in /.github/workflows @dependabot ([#157](https://github.com/paperless-ngx/ansible/pull/157))
+
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/2.2.0...2.3.0
+
 ## 2.2.0 - 2024-04-15
 
 ### paperless-ngx ansible role 2.2.0
@@ -59,7 +81,6 @@
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/2.0.0...2.1.0
 ## 2.0.0 - 2023-12-12
-
 ### paperless-ngx ansible role 2.0.0
 
 #### Features
@@ -109,7 +130,6 @@
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.3.1...2.0.0
 ## 1.3.1 - 2023-08-20
 ### paperless-ngx ansible role 1.3.1
-
 #### Bug Fixes
 
 - fix(deps): add pkg-config @GamerBene19 ([#98](https://github.com/paperless-ngx/ansible/pull/98))
@@ -159,7 +179,6 @@
 ### paperless-ngx ansible role 1.2.0
 #### Features
 - feat: add 1.14 support @stevenengland ([#66](https://github.com/paperless-ngx/ansible/pull/66))
-
 #### Bug Fixes
 
 - fix(deps): bump ansible-lint from 6.14.3 to 6.15.0 in /.github/workflows @dependabot ([#62](https://github.com/paperless-ngx/ansible/pull/62))
@@ -188,7 +207,6 @@
 #### Maintenance
 - refactor: rewrite checks for ansible hosts ansible version @stevenengland ([#53](https://github.com/paperless-ngx/ansible/pull/53))
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.1.0...1.1.1
-
 ## 1.1.0 - 2023-03-25
 
 ### paperless-ngx ansible role 1.1.0

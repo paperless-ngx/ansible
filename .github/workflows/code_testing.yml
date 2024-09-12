@@ -27,8 +27,9 @@ jobs:
           - debian11
           - debian12
           # https://github.com/geerlingguy/docker-ubuntu2204-ansible/issues/6
-          # - ubuntu2204
-          - ubuntu2004
+          - ubuntu2204
+          - ubuntu2404
+          # - ubuntu2004
         molecule_scenario: [
           alternative_installation,
           check_fails,
@@ -39,8 +40,8 @@ jobs:
         ]
         include:
           - molecule_scenario: default
-            ansible_version_minimum: "2.12"
-            ansible_package_version_minimum: "5.0.1"
+            ansible_version_minimum: "2.15"
+            ansible_package_version_minimum: "8.0.0"
 
     name: Molecule Test
     runs-on: ubuntu-latest
@@ -50,7 +51,7 @@ jobs:
 
       - name: Load environment vars
         id: dotenv
-        uses: falti/dotenv-action@v1.1.2
+        uses: falti/dotenv-action@v1.1.4
         with:
           path: .github/workflows/env_vars.txt
           log-variables: true

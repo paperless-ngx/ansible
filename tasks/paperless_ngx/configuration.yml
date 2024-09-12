@@ -34,6 +34,9 @@
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_DPI
       role_var: "{{ paperless_ngx_conf_consumer_barcode_dpi }}"
       since_version: '1.16.0'
+    - pngx_var: PAPERLESS_CONSUMER_BARCODE_MAX_PAGES
+      role_var: "{{ paperless_ngx_conf_consumer_barcode_max_pages }}"
+      since_version: '2.12.0'
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_SCANNER
       role_var: "{{ paperless_ngx_conf_consumer_barcode_scanner }}"
       since_version: '1.14.0'
@@ -73,6 +76,9 @@
     - pngx_var: PAPERLESS_EMAIL_FROM
       role_var: "{{ paperless_ngx_conf_email_from }}"
       since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_GNUPG_HOME
+      role_var: "{{ paperless_ngx_conf_email_gnupg_home }}"
+      since_version: '2.12.0'
     - pngx_var: PAPERLESS_EMAIL_HOST
       role_var: "{{ paperless_ngx_conf_email_host }}"
       since_version: '2.0.0'
@@ -103,6 +109,9 @@
     - pngx_var: PAPERLESS_ENABLE_HTTP_REMOTE_USER_API
       role_var: "{{ paperless_ngx_conf_enable_http_remote_user_api }}"
       since_version: '2.5.0'
+    - pngx_var: PAPERLESS_ENABLE_GPG_DECRYPTOR
+      role_var: "{{ paperless_ngx_conf_enable_gpg_decryptor }}"
+      since_version: '2.12.0'
     - pngx_var: PAPERLESS_MAX_IMAGE_PIXELS
       role_var: "{{ paperless_ngx_conf_max_image_pixels }}"
       since_version: '2.6.0'
@@ -118,6 +127,9 @@
     - pngx_var: PAPERLESS_PROXY_SSL_HEADER
       role_var: "{{ paperless_ngx_conf_proxy_ssl_header }}"
       since_version: '1.14.0'
+    - pngx_var: PAPERLESS_REDIRECT_LOGIN_TO_SSO
+      role_var: "{{ paperless_ngx_conf_redirect_login_to_sso }}"
+      since_version: '2.12.0'
     - pngx_var: PAPERLESS_REDIS_PREFIX
       role_var: "{{ paperless_ngx_conf_redis_prefix }}"
       since_version: '1.17.0'

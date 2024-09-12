@@ -36,7 +36,7 @@ Installs and configures paperless-ngx EDMS.
 
 ###  1.1. <a name='Ansible'></a>Ansible
 
-`ansible_version_minimum: "2.12"` or newer is required.
+`ansible_version_minimum: "2.15"` or newer is required.
 
 The following Ansible collections need to be installed (via `ansible-galaxy collection install`)
 * community.general
@@ -110,6 +110,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_consumer_collate_double_sided_subdir_name` | "double-sided" | Y | Y |   | 1.17 |
 | `paperless_ngx_conf_consumer_collate_double_sided_tiff_support`| false | Y | Y |   | 1.17 |
 | `paperless_ngx_conf_consumer_barcode_dpi` | 300 | Y | Y |   | 1.16 |
+| `paperless_ngx_conf_consumer_barcode_max_pages` | 0 | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_consumer_barcode_scanner` | "PYZBAR" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_consumer_barcode_string` | 'PATCHT' | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_barcode_tiff_support` | false | Y | Y |   |   |
@@ -150,6 +151,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_disable_regular_login` | false | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_email_certificate_location` | None | Y | Y |   | 1.17 |
 | `paperless_ngx_conf_email_from` | {{ paperless_ngx_conf_email_host_user }} | Y | Y |   | 2.0 |
+| `paperless_ngx_conf_email_gnupg_home` | None | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_email_host` | "localhost" | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_host_user` | "" | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_host_password` | "" | Y | Y |   | 2.0 |
@@ -164,6 +166,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_enable_flower` | false | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
 | `paperless_ngx_conf_enable_http_remote_user` | false | Y | Y |   |   |
 | `paperless_ngx_conf_enable_http_remote_user_api` | false | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_enable_gpg_decryptor` | false | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_enable_nltk` |1| Y | Y |   | 1.11 |
 | `paperless_ngx_conf_enable_update_check` |  | Y | Y | Will be removed in the future |   |
 | `paperless_ngx_conf_filename_date_order` | "" | Y | Y |   |   |
@@ -201,6 +204,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_post_consume_script` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_pre_consume_script` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_proxy_ssl_header` | None | Y | Y |   | 1.14 |
+| `paperless_ngx_conf_redirect_login_to_sso` | false | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_redis` | redis://{{ paperless_ngx_redis_host }}:{{ paperless_ngx_redis_port }} | Y | N |  |   |
 | `paperless_ngx_conf_redis_prefix` | "" | Y | Y |  | 1.17 |
 | `paperless_ngx_conf_sanity_task_cron` | "30 0 * * sun" | Y | Y |   | 1.12 |
