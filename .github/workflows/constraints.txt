@@ -1,6 +1,6 @@
 ansible==10.4.0
 # ansible-core==2.15.5 # https://github.com/ansible/molecule/issues/4017
-ansible-lint==24.9.0
+ansible-lint==24.9.2
 pip==24.2
 # urllib3==1.26.16 # <- periodically needed in some environments but not in github pipeline. Will leave it here for local builds: #https://github.com/docker/docker-py/issues/3113
 yamllint==1.35.1
