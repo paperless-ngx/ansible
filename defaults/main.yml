@@ -35,6 +35,7 @@ paperless_ngx_conf_apps:
 paperless_ngx_conf_audit_log_enabled: false
 paperless_ngx_conf_consumer_barcode_dpi: 300
 paperless_ngx_conf_consumer_barcode_max_pages: 0
+paperless_ngx_conf_consumer_barcode_retain_split_pages: false
 paperless_ngx_conf_consumer_barcode_scanner: "PYZBAR"
 paperless_ngx_conf_consumer_barcode_upscale: 0.0
 paperless_ngx_conf_consumer_collate_double_sided_subdir_name: "double-sided"
@@ -42,9 +43,17 @@ paperless_ngx_conf_consumer_collate_double_sided_tiff_support: false
 paperless_ngx_conf_consumer_enable_collate_double_sided: false
 paperless_ngx_conf_consumer_enable_tag_barcode: false
 paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"}
+paperless_ngx_conf_consumption_dir: "{{ paperless_ngx_dir_runtime_data }}/consumption"
+paperless_ngx_conf_dbhost: localhost
+paperless_ngx_conf_dbname: paperlessngx
+paperless_ngx_conf_dbpass: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_db_pass.secret') }}"
+paperless_ngx_conf_dbport: 5432
 paperless_ngx_conf_dbsslcert:
 paperless_ngx_conf_dbsslkey:
+paperless_ngx_conf_dbsslmode: prefer
 paperless_ngx_conf_dbsslrootcert:
+paperless_ngx_conf_dbuser: paperlessngx
+paperless_ngx_conf_db_timeout:
 paperless_ngx_conf_disable_regular_login: false
 paperless_ngx_conf_email_certificate_location:
 paperless_ngx_conf_email_from: "{{ paperless_ngx_conf_email_host_user }}"
@@ -60,13 +69,19 @@ paperless_ngx_conf_empty_trash_dir: "{{ paperless_ngx_dir_runtime_data }}/trash"
 paperless_ngx_conf_empty_trash_task_cron: "0 1 * * *"
 paperless_ngx_conf_enable_http_remote_user_api: false
 paperless_ngx_conf_enable_gpg_decryptor: false
+paperless_ngx_conf_gmail_oauth_client_id:
+paperless_ngx_conf_gmail_oauth_client_secret:
 paperless_ngx_conf_max_image_pixels:
 paperless_ngx_conf_model_file: "{{ paperless_ngx_conf_data_dir }}/classification_model.pickle"
+paperless_ngx_conf_oauth_callback_base_url:
 paperless_ngx_conf_ocr_color_conversion_strategy: "RGB"
 paperless_ngx_conf_ocr_skip_archive_file: "never"
+paperless_ngx_conf_outlook_oauth_client_id:
+paperless_ngx_conf_outlook_oauth_client_secret:
 paperless_ngx_conf_proxy_ssl_header:
 paperless_ngx_conf_redirect_login_to_sso: false
 paperless_ngx_conf_redis_prefix: ""
+paperless_ngx_conf_session_cookie_age: 1209600
 paperless_ngx_conf_social_auto_signup: false
 paperless_ngx_conf_socialaccount_allow_signups: true
 paperless_ngx_conf_socialaccount_providers: "{}"
@@ -76,14 +91,6 @@ paperless_ngx_conf_use_x_forward_host: false
 paperless_ngx_conf_use_x_forward_port: false
 
 ## not yet sorted (former try to keep up with official docs ordering)
-paperless_ngx_conf_dbhost: localhost
-paperless_ngx_conf_dbport: 5432
-paperless_ngx_conf_dbname: paperlessngx
-paperless_ngx_conf_dbuser: paperlessngx
-paperless_ngx_conf_dbpass: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_db_pass.secret') }}"
-paperless_ngx_conf_dbsslmode: prefer
-paperless_ngx_conf_db_timeout:
-paperless_ngx_conf_consumption_dir: "{{ paperless_ngx_dir_runtime_data }}/consumption"
 paperless_ngx_conf_data_dir: "{{ paperless_ngx_dir_runtime_data }}/data"
 paperless_ngx_conf_media_root: "{{ paperless_ngx_dir_runtime_data }}/media"
 paperless_ngx_conf_filename_format:
