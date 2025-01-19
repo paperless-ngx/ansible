@@ -19,6 +19,8 @@
     - pngx_var: PAPERLESS_ACCOUNT_SESSION_REMEMBER
       role_var: "{{ paperless_ngx_conf_account_session_remember }}"
       since_version: '2.7.0'
+    - pngx_var: PAPERLESS_ALLOWED_HOSTS
+      role_var: "{{ paperless_ngx_conf_allowed_hosts }}"
     - pngx_var: PAPERLESS_APP_LOGO
       role_var: "{{ paperless_ngx_conf_app_logo }}"
       since_version: '2.4.0'
@@ -36,6 +38,9 @@
       since_version: '1.16.0'
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_MAX_PAGES
       role_var: "{{ paperless_ngx_conf_consumer_barcode_max_pages }}"
+      since_version: '2.12.0'
+    - pngx_var: PAPERLESS_CONSUMER_BARCODE_RETAIN_SPLIT_PAGES
+      role_var: "{{ paperless_ngx_conf_consumer_barcode_retain_split_pages }}"
       since_version: '2.12.0'
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_SCANNER
       role_var: "{{ paperless_ngx_conf_consumer_barcode_scanner }}"
@@ -112,18 +117,33 @@
     - pngx_var: PAPERLESS_ENABLE_GPG_DECRYPTOR
       role_var: "{{ paperless_ngx_conf_enable_gpg_decryptor }}"
       since_version: '2.12.0'
+    - pngx_var: PAPERLESS_GMAIL_OAUTH_CLIENT_ID
+      role_var: "{{ paperless_ngx_conf_gmail_oauth_client_id }}"
+      since_version: '2.12.0'
+    - pngx_var: PAPERLESS_GMAIL_OAUTH_CLIENT_SECRET
+      role_var: "{{ paperless_ngx_conf_gmail_oauth_client_secret }}"
+      since_version: '2.12.0'
     - pngx_var: PAPERLESS_MAX_IMAGE_PIXELS
       role_var: "{{ paperless_ngx_conf_max_image_pixels }}"
       since_version: '2.6.0'
     - pngx_var: PAPERLESS_MODEL_FILE
       role_var: "{{ paperless_ngx_conf_model_file }}"
       since_version: '2.9.0'
+    - pngx_var: PAPERLESS_OAUTH_CALLBACK_BASE_URL
+      role_var: "{{ paperless_ngx_conf_oauth_callback_base_url }}"
+      since_version: '2.12.0'
     - pngx_var: PAPERLESS_OCR_COLOR_CONVERSION_STRATEGY
       role_var: "{{ paperless_ngx_conf_ocr_color_conversion_strategy }}"
       since_version: '2.1.0'
     - pngx_var: PAPERLESS_OCR_SKIP_ARCHIVE_FILE
       role_var: "{{ paperless_ngx_conf_ocr_skip_archive_file }}"
       since_version: '1.14.0'
+    - pngx_var: PAPERLESS_OUTLOOK_OAUTH_CLIENT_ID
+      role_var: "{{ paperless_ngx_conf_outlook_oauth_client_id }}"
+      since_version: '2.12.0'
+    - pngx_var: PAPERLESS_OUTLOOK_OAUTH_CLIENT_SECRET
+      role_var: "{{ paperless_ngx_conf_outlook_oauth_client_secret }}"
+      since_version: '2.12.0'
     - pngx_var: PAPERLESS_PROXY_SSL_HEADER
       role_var: "{{ paperless_ngx_conf_proxy_ssl_header }}"
       since_version: '1.14.0'
@@ -133,6 +153,12 @@
     - pngx_var: PAPERLESS_REDIS_PREFIX
       role_var: "{{ paperless_ngx_conf_redis_prefix }}"
       since_version: '1.17.0'
+    - pngx_var: PAPERLESS_SECRET_KEY
+      role_var: "{{ paperless_ngx_conf_secret_key }}"
+      log: false
+    - pngx_var: PAPERLESS_SESSION_COOKIE_AGE
+      role_var: "{{ paperless_ngx_conf_session_cookie_age }}"
+      since_version: '2.12.0'
     - pngx_var: PAPERLESS_SOCIAL_AUTO_SIGNUP
       role_var: "{{ paperless_ngx_conf_social_auto_signup }}"
       since_version: '2.5.0'
@@ -156,11 +182,6 @@
       since_version: '1.14.0'
     # not yet sorted (former try to keep up with official docs ordering)
     # Hosting & Security
-    - pngx_var: PAPERLESS_SECRET_KEY
-      role_var: "{{ paperless_ngx_conf_secret_key }}"
-      log: false
-    - pngx_var: PAPERLESS_ALLOWED_HOSTS
-      role_var: "{{ paperless_ngx_conf_allowed_hosts }}"
     - pngx_var: PAPERLESS_CORS_ALLOWED_HOSTS
       role_var: "{{ paperless_ngx_conf_cors_allowed_hosts }}"
     - pngx_var: PAPERLESS_FORCE_SCRIPT_NAME

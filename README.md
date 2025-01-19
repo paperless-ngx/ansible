@@ -111,6 +111,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_consumer_collate_double_sided_tiff_support`| false | Y | Y |   | 1.17 |
 | `paperless_ngx_conf_consumer_barcode_dpi` | 300 | Y | Y |   | 1.16 |
 | `paperless_ngx_conf_consumer_barcode_max_pages` | 0 | Y | Y |   | 2.12 |
+| `paperless_ngx_conf_consumer_barcode_retain_split_pages` | false | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_consumer_barcode_scanner` | "PYZBAR" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_consumer_barcode_string` | 'PATCHT' | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_barcode_tiff_support` | false | Y | Y |   |   |
@@ -173,6 +174,8 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_filename_format_remove_none` | false | Y | Y |   |   |
 | `paperless_ngx_conf_filename_format` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_force_script_name` | "" | Y | Y |   |   |
+| `paperless_ngx_conf_gmail_oauth_client_id` | None | Y | Y |   | 2.12 |
+| `paperless_ngx_conf_gmail_oauth_client_secret` | None | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_gs_binary` | gs | Y | Y |   |   |
 | `paperless_ngx_conf_http_remote_user_header_name` | HTTP_REMOTE_USER | Y | Y |   |   |
 | `paperless_ngx_conf_ignore_dates` | "" | Y | Y |   |   |
@@ -186,6 +189,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_model_file` | "{{ paperless_ngx_conf_data_dir }}/classification_model.pickle" | Y | Y |   | 2.9 |
 | `paperless_ngx_conf_nltk_dir` | /usr/share/nltk_data | Y | Y |   | 1.11 |
 | `paperless_ngx_conf_number_of_suggested_dates` |3| Y | Y |   |   |
+| `paperless_ngx_conf_oauth_callback_base_url` | None | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_ocr_clean` | clean | Y | Y |   |   |
 | `paperless_ngx_conf_ocr_color_conversion_strategy` | "RGB" | Y | Y |   | 2.1 |
 | `paperless_ngx_conf_ocr_deskew` | true | Y | Y |   |   |
@@ -200,6 +204,8 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_ocr_rotate_pages` | true | Y | Y |   |   |
 | `paperless_ngx_conf_ocr_skip_archive_file` | "never" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_ocr_user_args` | [optimize=1] | Y | Y |   |   |
+| `paperless_ngx_conf_outlook_oauth_client_id` | None | Y | Y |   | 2.12 |
+| `paperless_ngx_conf_outlook_oauth_client_secret` | None | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_port` |8000| Y | Y |   |   |
 | `paperless_ngx_conf_post_consume_script` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_pre_consume_script` | "" | Y | Y |   |   |
@@ -209,6 +215,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_redis_prefix` | "" | Y | Y |  | 1.17 |
 | `paperless_ngx_conf_sanity_task_cron` | "30 0 * * sun" | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_secret_key` | "" | Y | Y | If not defined by the user, a random password will be generated -> see section below about passwords. |   |
+| `paperless_ngx_conf_session_cookie_age` | 1209600 | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_social_auto_signup` | false | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_socialaccount_allow_signups` | true | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_socialaccount_providers` | "{}" | Y | Y |   | 2.5 |
