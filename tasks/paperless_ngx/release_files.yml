@@ -12,7 +12,7 @@
     state: directory
     owner: "{{ paperless_ngx_system_user }}"
     group: "{{ paperless_ngx_system_group }}"
-    mode: "0744"
+    mode: "0750"
 
 - name: Create paperless-ngx app directories and set permissions
   become: true
@@ -106,21 +106,15 @@
     modification_time: preserve
     access_time: preserve
 
-- name: Make the config file the template file
+- name: Copy shipped paperless config to /etc/
   become: true
   ansible.builtin.copy:
     src: "{{ paperless_ngx_dir_installation }}/paperless.conf"
     remote_src: true
-    dest: "{{ paperless_ngx_config_file_template }}"
+    dest: "{{ paperless_ngx_config_file }}"
     owner: "{{ paperless_ngx_system_user }}"
     group: "{{ paperless_ngx_system_group }}"
-    mode: 0640
-
-- name: Delete paperless-ngx configuration from installation dir
-  become: true
-  ansible.builtin.file:
-    path: "{{ paperless_ngx_dir_installation }}/paperless.conf"
-    state: absent
+    mode: "0640"
 
 - name: Copy gunicorn configuration file to {{ paperless_ngx_config_path }}
   become: true

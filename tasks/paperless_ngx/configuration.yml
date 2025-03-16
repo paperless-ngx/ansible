@@ -5,8 +5,8 @@
     path: "{{ paperless_ngx_config_file }}"
     regexp: ^#?{{ item.pngx_var }}=
     line: "{{ item.pngx_var }}={{ item.role_var }}"
-    owner: root
-    group: root
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
     mode: "0640"
     create: true
   loop:
