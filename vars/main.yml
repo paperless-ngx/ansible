@@ -10,7 +10,6 @@ ansible_required_collections:
 github_public_repo_token: "{{ lookup('env', 'GH_TOKEN') | default(omit) }}"
 paperless_ngx_config_path: /etc/paperless.d
 paperless_ngx_config_file: "/etc/paperless.conf"
-paperless_ngx_config_file_template: "{{ paperless_ngx_dir_installation }}/paperless.conf.template"
 paperless_ngx_dir_force_permission_include:
   - "{{ paperless_ngx_dir_installation }}"
   - "{{ paperless_ngx_dir_runtime_data }}"
