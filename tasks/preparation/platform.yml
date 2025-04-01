@@ -28,6 +28,7 @@
       register: _ansible_installed_collections
       delegate_to: localhost
       run_once: true
+      check_mode: false
 
     - name: Loop through all dependencies
       ansible.builtin.fail:

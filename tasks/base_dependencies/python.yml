@@ -57,15 +57,18 @@
         - "not 'The read operation timed out' in _download_and_unarchive_python.msg | default('')"
       retries: 3
       delay: 60
+      when: not ansible_check_mode | bool
 
     - name: Run configure for python
       ansible.builtin.command: ./configure --prefix={{ paperless_ngx_dir_python }} --enable-optimizations --with-ensurepip=install
       args:
         chdir: "{{ _python_archive_dir.path }}"
       changed_when: true
+      when: not ansible_check_mode | bool
 
     - name: Run 'make and make altinstall' target
       become: true
       community.general.make:
         chdir: "{{ _python_archive_dir.path }}"
         target: altinstall
+      when: not ansible_check_mode | bool
