@@ -116,16 +116,6 @@
     group: "{{ paperless_ngx_system_group }}"
     mode: "0640"
 
-- name: Copy gunicorn configuration file to {{ paperless_ngx_config_path }}
-  become: true
-  ansible.builtin.copy:
-    src: "{{ paperless_ngx_dir_installation }}/gunicorn.conf.py"
-    remote_src: true
-    dest: "{{ paperless_ngx_config_path }}/gunicorn.conf.py"
-    owner: "{{ paperless_ngx_system_user }}"
-    group: "{{ paperless_ngx_system_group }}"
-    mode: 0640
-
 - name: Check if flower configuration file already exists
   become: true
   ansible.builtin.stat:

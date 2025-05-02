@@ -35,8 +35,9 @@
         exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/celery --app paperless beat --loglevel INFO" }
     - { service_name: paperless-task-queue.service,
         exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/celery --app paperless worker --loglevel INFO" }
-    - { service_name: paperless-webserver.service,
-        exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/gunicorn -c {{ paperless_ngx_config_path }}/gunicorn.conf.py paperless.asgi:application" }
+    # since https://github.com/paperless-ngx/paperless-ngx/commit/9944f815129f2ada49db90c3a6a85a8ed26219a3 the exec is handled in the script only
+    # - { service_name: paperless-webserver.service,
+    #    exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/python3 webserver.py" }
     - { service_name: paperless-flower.service,
         exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/celery --app paperless flower --conf={{ paperless_ngx_config_path }}/flowerconfig.py" }
 
