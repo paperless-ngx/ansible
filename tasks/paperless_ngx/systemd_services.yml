@@ -37,9 +37,16 @@
         exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/celery --app paperless worker --loglevel INFO" }
     # since https://github.com/paperless-ngx/paperless-ngx/commit/9944f815129f2ada49db90c3a6a85a8ed26219a3 the exec is handled in the script only
     # - { service_name: paperless-webserver.service,
-    #    exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/python3 webserver.py" }
+    #   exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/python3 -m granian" }
     - { service_name: paperless-flower.service,
         exec_start: "{{ paperless_ngx_dir_virtualenv }}/bin/celery --app paperless flower --conf={{ paperless_ngx_config_path }}/flowerconfig.py" }
+
+- name: Replace granian exec command in Paperless systemd service
+  become: true
+  ansible.builtin.replace:
+    path: "{{ paperless_ngx_dir_installation }}/scripts/paperless-webserver.service"
+    regexp: "exec granian"
+    replace: "exec {{ paperless_ngx_dir_virtualenv }}/bin/python3 -m granian"
 
 - name: Remove redis from service units if external
   become: true
