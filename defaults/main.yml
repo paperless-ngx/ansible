@@ -171,7 +171,7 @@ paperless_ngx_conf_consumer_ignore_patterns:
 paperless_ngx_conf_convert_binary: "convert"
 paperless_ngx_conf_gs_binary: "gs"
 paperless_ngx_conf_webserver_workers: 1
-paperless_ngx_conf_bind_addr: "[::]"
+paperless_ngx_conf_bind_addr: "::"
 paperless_ngx_conf_port: 8000
 paperless_ngx_conf_usermap_uid:
 paperless_ngx_conf_usermap_gid:
