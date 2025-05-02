@@ -116,6 +116,13 @@
     group: "{{ paperless_ngx_system_group }}"
     mode: "0640"
 
+- name: Delete gunicorn configuration file (from versions < 2.15.0)
+  become: true
+  ansible.builtin.file:
+    path: "{{ paperless_ngx_config_path }}/gunicorn.conf.py"
+    state: absent
+  when: not ansible_check_mode
+
 - name: Check if flower configuration file already exists
   become: true
   ansible.builtin.stat:
