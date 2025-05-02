@@ -2,9 +2,13 @@
 - name: Write the paperless-ngx config file
   become: true
   ansible.builtin.lineinfile:
-    path: "{{ paperless_ngx_config_file_template }}"
+    path: "{{ paperless_ngx_config_file }}"
     regexp: ^#?{{ item.pngx_var }}=
     line: "{{ item.pngx_var }}={{ item.role_var }}"
+    owner: "{{ paperless_ngx_system_user }}"
+    group: "{{ paperless_ngx_system_group }}"
+    mode: "0640"
+    create: true
   loop:
     # already alphabetical sorted
     - pngx_var: PAPERLESS_ACCOUNT_ALLOW_SIGNUPS
@@ -374,17 +378,6 @@
     - item.role_var is defined and item.role_var not in (None, omit)
     - item.condition | default(true)
     - (item.since_version | default('0.0.1')) is ansible.builtin.version(paperless_ngx_version, '<=', version_type='semver')
-  tags: pngx_conf
-
-- name: Deploy paperless-ngx configuration file
-  become: true
-  ansible.builtin.copy:
-    src: "{{ paperless_ngx_config_file_template }}"
-    remote_src: true
-    dest: "{{ paperless_ngx_config_file }}"
-    owner: root
-    group: root
-    mode: "0644"
   tags: pngx_conf
   notify: Restart paperless completely
 
