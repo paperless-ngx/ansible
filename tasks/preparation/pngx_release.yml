@@ -18,6 +18,8 @@
       register: _latest_release_api_response
       until: _latest_release_api_response.status == 200
       retries: 5
+      check_mode: false
+
 
     - name: "Set paperless version to {{ _latest_release_api_response.json.tag_name[1:] }}"
       ansible.builtin.set_fact:
@@ -46,6 +48,8 @@
       register: _release_download_uri_response
       until: _release_download_uri_response.status == 200
       retries: 5
+      check_mode: false
+
 
 - name: Check for existing paperless-ngx version file
   become: true
@@ -64,6 +68,7 @@
       changed_when: _paperless_ngx_version_installed_object.stdout != paperless_ngx_version | string
       # failed_when: false
       # ignore_errors: true
+      when: not ansible_check_mode | bool
 
     - name: Set version of current installation as variable
       ansible.builtin.set_fact:
