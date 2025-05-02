@@ -1,3 +1,4 @@
 **/pngx_instances/**
 **/__pycache__/**
 .venv/
+.ansible/
