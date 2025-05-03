@@ -77,7 +77,7 @@ The following sections are devided into:
 | `paperless_ngx_system_group` | paperlessngx | The group to which the system user belongs. |
 | `paperless_ngx_system_user` | paperlessngx | The user that will execute the services and own the data. |
 | `paperless_ngx_system_user_additional_groups` | [] | Optionally add the system user to more groups. For example to read TLS certificates that can be read by the group `ssl-cert`. |
-| `paperless_ngx_version` | latest | Sofware version to install. Use `latest` or any specific version in the format `'2.0.0'`. Only `paperless_ngx_version_minimum: '2.0.0'` and higher supported. |
+| `paperless_ngx_version` | latest | Sofware version to install. Use `latest` or any specific version in the format `'2.15.0'`. Only `paperless_ngx_version_minimum: '2.15.0'` and higher supported. |
 | `` |  |  |
 
 ###  2.2. <a name='Paperless-ngxconfigurationvariables'></a>Paperless-ngx configuration variables
@@ -105,7 +105,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_apps` | None | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_audit_log_enabled` | false | Y | Y |   | 2.0  |
 | `paperless_ngx_conf_auto_login_username` | "" | Y | Y |   |   |
-| `paperless_ngx_conf_bind_addr` | "[::]" | Y | Y |   |   |
+| `paperless_ngx_conf_bind_addr` | "::" | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_asn_barcode_prefix` | ASN | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_consumer_collate_double_sided_subdir_name` | "double-sided" | Y | Y |   | 1.17 |
 | `paperless_ngx_conf_consumer_collate_double_sided_tiff_support`| false | Y | Y |   | 1.17 |
