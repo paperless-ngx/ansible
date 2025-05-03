@@ -102,7 +102,7 @@
   ansible.builtin.file:
     path: "{{ paperless_ngx_dir_installation }}/paperless.conf"
     state: touch
-    mode: 0640
+    mode: "0640"
     modification_time: preserve
     access_time: preserve
 
@@ -136,7 +136,7 @@
     dest: "{{ paperless_ngx_config_path }}/flowerconfig.py"
     owner: "{{ paperless_ngx_system_user }}"
     group: "{{ paperless_ngx_system_group }}"
-    mode: 0640
+    mode: "0640"
   when: not _flower_config_exists.stat.exists
 
 - name: Copy flower systemd service file apps scripts folder
@@ -146,7 +146,7 @@
     dest: "{{ paperless_ngx_dir_installation }}/scripts/paperless-flower.service"
     owner: "{{ paperless_ngx_system_user }}"
     group: "{{ paperless_ngx_system_group }}"
-    mode: 0640
+    mode: "0640"
 
 - name: Remove temporary directory
   become: true

@@ -20,4 +20,4 @@
     content: "{{ paperless_ngx_version }}"
     owner: "{{ paperless_ngx_system_user }}"
     group: "{{ paperless_ngx_system_group }}"
-    mode: 0640
+    mode: "0640"
