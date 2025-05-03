@@ -4,7 +4,7 @@ extends: default
 
 ignore:
   - .venv/
-  - .ansible
+  - .ansible/
 
 rules:
   braces:
@@ -20,9 +20,9 @@ rules:
     max-spaces-after: -1
     level: error
   comments:
+    min-spaces-from-content: 1
     level: error
-  comments-indentation:
-    level: error
+  comments-indentation: false
   document-start:
     level: error
   empty-lines:
@@ -39,6 +39,9 @@ rules:
     level: error
   new-lines:
     type: unix
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
   trailing-spaces:
     level: error
   truthy:
