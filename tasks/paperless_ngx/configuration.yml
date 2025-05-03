@@ -14,6 +14,9 @@
     - pngx_var: PAPERLESS_ACCOUNT_ALLOW_SIGNUPS
       role_var: "{{ paperless_ngx_conf_account_allow_signups }}"
       since_version: '2.5.0'
+    - pngx_var: PAPERLESS_ACCOUNT_DEFAULT_GROUPS
+      role_var: "{{ paperless_ngx_conf_account_default_groups }}"
+      since_version: '2.15.0'
     - pngx_var: PAPERLESS_ACCOUNT_DEFAULT_HTTP_PROTOCOL
       role_var: "{{ paperless_ngx_conf_account_default_http_protocol }}"
       since_version: '2.5.0'
@@ -58,6 +61,9 @@
     - pngx_var: PAPERLESS_CONSUMER_COLLATE_DOUBLE_SIDED_TIFF_SUPPORT
       role_var: "{{ paperless_ngx_conf_consumer_collate_double_sided_tiff_support }}"
       since_version: '1.17.0'
+    - pngx_var: PAPERLESS_CONSUMER_DISABLE
+      role_var: "{{ paperless_ngx_conf_consumer_disable }}"
+      since_version: '2.15.0'
     - pngx_var: PAPERLESS_CONSUMER_ENABLE_COLLATE_DOUBLE_SIDED
       role_var: "{{ paperless_ngx_conf_consumer_enable_collate_double_sided }}"
       since_version: '1.17.0'
@@ -97,6 +103,9 @@
     - pngx_var: PAPERLESS_EMAIL_HOST_PASSWORD
       role_var: "{{ paperless_ngx_conf_email_host_password }}"
       since_version: '2.0.0'
+    - pngx_var: PAPERLESS_EMAIL_PARSE_DEFAULT_LAYOUT
+      role_var: "{{ paperless_ngx_conf_email_parse_default_layout }}"
+      since_version: '2.15.0'
     - pngx_var: PAPERLESS_EMAIL_PORT
       role_var: "{{ paperless_ngx_conf_email_port }}"
       since_version: '2.0.0'
@@ -172,6 +181,12 @@
     - pngx_var: PAPERLESS_SOCIALACCOUNT_PROVIDERS
       role_var: "{{ paperless_ngx_conf_socialaccount_providers }}"
       since_version: '2.5.0'
+    - pngx_var: PAPERLESS_SOCIAL_ACCOUNT_DEFAULT_GROUPS
+      role_var: "{{ paperless_ngx_conf_social_account_default_groups }}"
+      since_version: '2.15.0'
+    - pngx_var: PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS
+      role_var: "{{ paperless_ngx_conf_social_account_sync_groups }}"
+      since_version: '2.15.0'
     - pngx_var: PAPERLESS_SUPERVISORD_WORKING_DIR
       role_var: "{{ paperless_ngx_conf_supervisord_working_dir }}"
       since_version: '2.5.0'
