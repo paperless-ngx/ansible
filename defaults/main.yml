@@ -26,6 +26,7 @@ paperless_ngx_version: latest
 # paperless-ngx configuration variables
 ## already alphabetical sorted
 paperless_ngx_conf_account_allow_signups: false
+paperless_ngx_conf_account_default_groups:
 paperless_ngx_conf_account_default_http_protocol: https
 paperless_ngx_conf_account_email_verification: optional
 paperless_ngx_conf_account_session_remember: false
@@ -40,6 +41,7 @@ paperless_ngx_conf_consumer_barcode_scanner: "PYZBAR"
 paperless_ngx_conf_consumer_barcode_upscale: 0.0
 paperless_ngx_conf_consumer_collate_double_sided_subdir_name: "double-sided"
 paperless_ngx_conf_consumer_collate_double_sided_tiff_support: false
+paperless_ngx_conf_consumer_disable:
 paperless_ngx_conf_consumer_enable_collate_double_sided: false
 paperless_ngx_conf_consumer_enable_tag_barcode: false
 paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"}
@@ -61,6 +63,7 @@ paperless_ngx_conf_email_gnupg_home:
 paperless_ngx_conf_email_host: "localhost"
 paperless_ngx_conf_email_host_user: ""
 paperless_ngx_conf_email_host_password: ""
+paperless_ngx_conf_email_parse_default_layout: 1
 paperless_ngx_conf_email_port: 25
 paperless_ngx_conf_email_use_tls: false
 paperless_ngx_conf_email_use_ssl: false
@@ -85,6 +88,8 @@ paperless_ngx_conf_session_cookie_age: 1209600
 paperless_ngx_conf_social_auto_signup: false
 paperless_ngx_conf_socialaccount_allow_signups: true
 paperless_ngx_conf_socialaccount_providers: "{}"
+paperless_ngx_conf_social_account_default_groups:
+paperless_ngx_conf_social_account_sync_groups: false
 paperless_ngx_conf_supervisord_working_dir:
 paperless_ngx_conf_trusted_proxies: ""
 paperless_ngx_conf_use_x_forward_host: false
@@ -181,5 +186,5 @@ paperless_ngx_conf_ocr_languages:
   - fra
   - ita
   - spa
-paperless_ngx_conf_enable_flower: false
+paperless_ngx_conf_enable_flower:
 paperless_ngx_conf_enable_update_check: enable

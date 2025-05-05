@@ -93,6 +93,7 @@ To save reading space a few abbreviations are used in the table down below:
 | Name           | Default Value | I | O | H | V |
 | -------------- | ------------- |---|---|---|---|
 | `paperless_ngx_conf_account_allow_signups` | false | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_account_default_groups` | None | Y | Y |   | 2.15 |
 | `paperless_ngx_conf_account_default_http_protocol` | https | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_account_email_verification` | optional | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_account_session_remember` | false | Y | Y |   | 2.7 |
@@ -117,6 +118,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_consumer_barcode_tiff_support` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_barcode_upscale` | 0.0 | Y | Y |   | 1.16 |
 | `paperless_ngx_conf_consumer_delete_duplicates` | false | Y | Y |   |   |
+| `paperless_ngx_conf_consumer_disable` | None | Y | Y |   | 2.15 |
 | `paperless_ngx_conf_consumer_enable_asn_barcode` | false | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_consumer_enable_barcodes` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_enable_collate_double_sided` | false | Y | Y |   | 1.17 |
@@ -156,6 +158,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_email_host` | "localhost" | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_host_user` | "" | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_host_password` | "" | Y | Y |   | 2.0 |
+| `paperless_ngx_conf_email_parse_default_layout` | 1 | Y | Y |   | 2.15 |
 | `paperless_ngx_conf_email_port` | 25 | Y | Y |   | 2.0 |
 | `paperless_ngx_conf_email_task_cron` | "*/10 * * * *" | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_email_use_ssl` | false | Y | Y |   | 2.0 |
@@ -164,7 +167,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_empty_trash_dir` | "{{ paperless_ngx_dir_runtime_data }}/trash" | Y | Y |   | 2.10 |
 | `paperless_ngx_conf_empty_trash_task_cron` | "0 1 * * *" | Y | Y |   | 2.10 |
 | `paperless_ngx_conf_enable_compression` | true | Y | Y |   | 1.13 |
-| `paperless_ngx_conf_enable_flower` | false | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
+| `paperless_ngx_conf_enable_flower` | None | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
 | `paperless_ngx_conf_enable_http_remote_user` | false | Y | Y |   |   |
 | `paperless_ngx_conf_enable_http_remote_user_api` | false | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_enable_gpg_decryptor` | false | Y | Y |   | 2.12 |
@@ -219,6 +222,8 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_social_auto_signup` | false | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_socialaccount_allow_signups` | true | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_socialaccount_providers` | "{}" | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_social_account_default_groups` | None | Y | Y |   | 2.15 |
+| `paperless_ngx_conf_social_account_sync_groups` | false | Y | Y |   | 2.15 |
 | `paperless_ngx_conf_static_url` | /static/ | Y | Y |   |   |
 | `paperless_ngx_conf_staticdir` | ../static | Y | N |   |   |
 | `paperless_ngx_conf_supervisord_working_dir` | None | Y | Y |   | 2.5 |
@@ -232,8 +237,8 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_train_task_cron` | "5 */1 * * *" | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_trusted_proxies` | "" | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_url` | http://localhost:8000 | Y | Y |   |   |
-| `paperless_ngx_conf_use_x_forward_host` | False | Y | Y |   | 1.14 |
-| `paperless_ngx_conf_use_x_forward_port` | False | Y | Y |   | 1.14 |
+| `paperless_ngx_conf_use_x_forward_host` | false | Y | Y |   | 1.14 |
+| `paperless_ngx_conf_use_x_forward_port` | false | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_usermap_gid` |  | Y | Y | System users gid |   |
 | `paperless_ngx_conf_usermap_uid` |  | Y | Y | System users id |   |
 | `paperless_ngx_conf_webserver_workers` |1| Y | Y |   |   |
