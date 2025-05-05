@@ -118,7 +118,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_consumer_barcode_tiff_support` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_barcode_upscale` | 0.0 | Y | Y |   | 1.16 |
 | `paperless_ngx_conf_consumer_delete_duplicates` | false | Y | Y |   |   |
-| `paperless_ngx_conf_consumer_disable` | false | Y | Y |   | 2.15 |
+| `paperless_ngx_conf_consumer_disable` | None | Y | Y |   | 2.15 |
 | `paperless_ngx_conf_consumer_enable_asn_barcode` | false | Y | Y |   | 1.12 |
 | `paperless_ngx_conf_consumer_enable_barcodes` | false | Y | Y |   |   |
 | `paperless_ngx_conf_consumer_enable_collate_double_sided` | false | Y | Y |   | 1.17 |
@@ -167,7 +167,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_empty_trash_dir` | "{{ paperless_ngx_dir_runtime_data }}/trash" | Y | Y |   | 2.10 |
 | `paperless_ngx_conf_empty_trash_task_cron` | "0 1 * * *" | Y | Y |   | 2.10 |
 | `paperless_ngx_conf_enable_compression` | true | Y | Y |   | 1.13 |
-| `paperless_ngx_conf_enable_flower` | false | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
+| `paperless_ngx_conf_enable_flower` | None | Y | Y | Whether to start flower or not. See [using flower](docs/USING_FLOWER.md) for more information | 1.10 |
 | `paperless_ngx_conf_enable_http_remote_user` | false | Y | Y |   |   |
 | `paperless_ngx_conf_enable_http_remote_user_api` | false | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_enable_gpg_decryptor` | false | Y | Y |   | 2.12 |

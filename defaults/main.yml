@@ -41,7 +41,7 @@ paperless_ngx_conf_consumer_barcode_scanner: "PYZBAR"
 paperless_ngx_conf_consumer_barcode_upscale: 0.0
 paperless_ngx_conf_consumer_collate_double_sided_subdir_name: "double-sided"
 paperless_ngx_conf_consumer_collate_double_sided_tiff_support: false
-paperless_ngx_conf_consumer_disable: false
+paperless_ngx_conf_consumer_disable:
 paperless_ngx_conf_consumer_enable_collate_double_sided: false
 paperless_ngx_conf_consumer_enable_tag_barcode: false
 paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"}
@@ -186,5 +186,5 @@ paperless_ngx_conf_ocr_languages:
   - fra
   - ita
   - spa
-paperless_ngx_conf_enable_flower: false
+paperless_ngx_conf_enable_flower:
 paperless_ngx_conf_enable_update_check: enable
