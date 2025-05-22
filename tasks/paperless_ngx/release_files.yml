@@ -60,14 +60,20 @@
       {{ _install_tempdir_state.files[0].path }}
       {%- endif -%}
 
+- name: Pepare permissions of tmp dir for untaring paperless-ngx sources
+  ansible.builtin.file:
+    state: directory
+    owner: 1000
+    group: 1000
+    path: "{{ _install_tempdir }}"
+
 - name: Download and extract paperless-ngx
   become: true
+  become_user: "{{ _paperless_ngx_untar_username }}"
   ansible.builtin.unarchive:
     src: "{{ _release__download_url }}"
     remote_src: true
     dest: "{{ _install_tempdir }}"
-    owner: "{{ paperless_ngx_system_user }}"
-    group: "{{ paperless_ngx_system_group }}"
   register: _download_and_unarchive_pngx
   until:
     - "not 'urlopen error' in _download_and_unarchive_pngx.msg | default('')"
@@ -80,8 +86,8 @@
   ansible.builtin.command:
     cmd: "{{ item }}"
   with_items:
-    - find {{ _install_tempdir }} -type d -exec chmod -c 0750 {} ;
-    - find {{ _install_tempdir }} -type f -exec chmod -c 0640 {} ;
+    - find {{ _install_tempdir }} -type d -exec chmod -c 0750 {} \; -exec chown {{ paperless_ngx_system_user }}:{{ paperless_ngx_system_group }} {} \;
+    - find {{ _install_tempdir }} -type f -exec chmod -c 0640 {} \; -exec chown {{ paperless_ngx_system_user }}:{{ paperless_ngx_system_group }} {} \;
   register: _set_temp_install_permissions
   changed_when:
     - 'not _set_temp_install_permissions.stdout == ""'

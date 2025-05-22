@@ -11,6 +11,25 @@
     fail_msg: "This role only works with systemd"
     success_msg: "systemd found"
 
+- name: Determine user name with id 1000 as become-user for unarchive tasks
+  block:
+    - name: Query passwd database for user with id 1000
+      ansible.builtin.getent:
+        database: passwd
+        key: 1000
+        split: ':'
+      register: _getent_query_result
+
+    - name: Set fact username for user with id 1000
+      ansible.builtin.set_fact:
+        _paperless_ngx_untar_username: "{{ ( _getent_query_result['ansible_facts']['getent_passwd'] | dict2items | selectattr('value.2', 'equalto', '1000') )[0].value[3] }}"
+  when: (paperless_ngx_conf_usermap_uid is undefined) or paperless_ngx_conf_usermap_uid != "1000"
+
+- name: Set fact username for user with id 1000
+  ansible.builtin.set_fact:
+    _paperless_ngx_untar_username: "{{ paperless_ngx_system_user }}"
+  when: (paperless_ngx_conf_usermap_uid is defined) and paperless_ngx_conf_usermap_uid == "1000"
+
 - name: Compare versions of installed ansible and required ansible
   ansible.builtin.assert:
     that: "ansible_version.full is version_compare(ansible_version_minimum, '>=')"
