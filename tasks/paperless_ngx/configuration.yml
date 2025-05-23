@@ -260,7 +260,7 @@
     - pngx_var: PAPERLESS_STATICDIR
       role_var: "{{ paperless_ngx_conf_staticdir }}"
     - pngx_var: PAPERLESS_FILENAME_FORMAT
-      role_var: "{{ paperless_ngx_conf_filename_format }}"
+      role_var: "{{ '{{' }} paperless_ngx_conf_filename_format {{ '}}' }}"
     - pngx_var: PAPERLESS_FILENAME_FORMAT_REMOVE_NONE
       role_var: "{{ paperless_ngx_conf_filename_format_remove_none }}"
     - pngx_var: PAPERLESS_LOGGING_DIR
