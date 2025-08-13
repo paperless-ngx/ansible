@@ -11,7 +11,7 @@
   ansible.builtin.assert:
     that: _services_state.ansible_facts.services["{{ item.name }}"].state == 'running'
   loop: "{{ paperless_ngx_services_list }}"
-  when: item.enabled
+  when: item.enabled|bool
 
 - name: Creating version info file with version string as content
   become: true
