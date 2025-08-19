@@ -22,7 +22,7 @@
 
     - name: Set fact username for user with id 1000
       ansible.builtin.set_fact:
-        _paperless_ngx_untar_username: "{{ ( _getent_query_result['ansible_facts']['getent_passwd'] | dict2items | selectattr('value.2', 'equalto', '1000') )[0].value[3] }}"
+        _paperless_ngx_untar_username: "{{ ( _getent_query_result['ansible_facts']['getent_passwd'] | dict2items | selectattr('value.2', 'equalto', '1000') )[0].key }}"
   when: (paperless_ngx_conf_usermap_uid is undefined) or paperless_ngx_conf_usermap_uid != "1000"
 
 - name: Set fact username for user with id 1000

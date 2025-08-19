@@ -41,7 +41,7 @@
         state: directory
         owner: "{{ paperless_ngx_system_user }}"
         group: "{{ paperless_ngx_system_group }}"
-        mode: "750"
+        mode: "755"
 
     - name: Create target temporary directory
       become: true
