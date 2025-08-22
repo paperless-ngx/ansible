@@ -6,7 +6,7 @@
     name: "{{ item.name }}"
     state: restarted
   loop: "{{ paperless_ngx_services_list }}"
-  when: item.enabled
+  when: item.enabled|bool
 
 - name: Restart webserver
   become: true
