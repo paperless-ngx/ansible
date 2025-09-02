@@ -36,6 +36,7 @@
       # Dev
       - git
       - sudo
+      - autoconf
   register: _install_base_deps_result
   until:
     - "not 'Connection timed out' in _install_base_deps_result.stderr|default('')"

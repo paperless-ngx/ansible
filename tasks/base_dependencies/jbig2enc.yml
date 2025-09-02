@@ -44,11 +44,14 @@
         path: "{{ paperless_ngx_dependency_install_tmp_dir }}"
       register: _jbig2enc_gitdir
 
+    # The newer jbig2enc uses newer build tools that are not available in older distributions
+    # Alternative: Bring in newer tools for Debian 11
+    # Alternative 2: Kick Debian 11 support
     - name: Pull jbig2enc
       ansible.builtin.git:
         repo: https://github.com/agl/jbig2enc.git
         dest: "{{ _jbig2enc_gitdir.path }}"
-        version: "{{ paperless_ngx_jbig2enc_version }}"
+        version: "{{ '0.29' if (ansible_os_family == 'Debian' and ansible_distribution_major_version == '11') else paperless_ngx_jbig2enc_version }}"
         recursive: true
       register: _jbig2enc_source
       until: _jbig2enc_source is succeeded
@@ -63,7 +66,10 @@
         src: jbig2enc-0.29-fix-reported-version.patch
         strip: 1
         state: present
-      when: not ansible_check_mode | bool
+      when:
+        - not ansible_check_mode | bool
+        - ansible_os_family == "Debian"
+        - ansible_distribution_major_version == "11"
 
     - name: Run autogen for jbig2enc
       ansible.builtin.command: ./autogen.sh
