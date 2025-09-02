@@ -29,7 +29,7 @@
       - ghostscript
       - icc-profiles-free
       - qpdf
-      - liblept5
+      - leptonica
       - libxml2
       - pngquant
       - zlib1g
