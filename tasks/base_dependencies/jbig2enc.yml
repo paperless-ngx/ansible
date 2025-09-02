@@ -56,6 +56,15 @@
       delay: 10
       when: not ansible_check_mode | bool
 
+
+    - name: Apply patch to fix reported version
+      ansible.posix.patch:
+        basedir: "{{ _jbig2enc_gitdir.path }}"
+        src: jbig2enc-0.29-fix-reported-version.patch
+        strip: 1
+        state: present
+      when: not ansible_check_mode | bool
+
     - name: Run autogen for jbig2enc
       ansible.builtin.command: ./autogen.sh
       args:
