@@ -95,6 +95,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_account_allow_signups` | false | Y | Y |   | 2.5 |
 | `paperless_ngx_conf_account_default_groups` | None | Y | Y |   | 2.15 |
 | `paperless_ngx_conf_account_default_http_protocol` | https | Y | Y |   | 2.5 |
+| `paperless_ngx_conf_account_email_unknown_accounts` | true | Y | Y |   | 2.16 |
 | `paperless_ngx_conf_account_email_verification` | optional | Y | Y |   | 2.6 |
 | `paperless_ngx_conf_account_session_remember` | false | Y | Y |   | 2.7 |
 | `paperless_ngx_conf_admin_mail` | root@localhost | Y | Y |   |   |
@@ -140,6 +141,9 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_csrf_trusted_origins` |  | Y | Y |   |   |
 | `paperless_ngx_conf_data_dir` | "{{ paperless_ngx_dir_runtime_data }}/data" | Y | Y |   |   |
 | `paperless_ngx_conf_date_order` | "DMY" | Y | Y |   |   |
+| `paperless_ngx_conf_date_parser_languages` | None | Y | Y |   | 2.18 |
+| `paperless_ngx_conf_db_poolsize` | None | Y | Y |   | 2.18 |
+| `paperless_ngx_conf_db_read_cache_enabled` | false | Y | Y |   | 2.18 |
 | `paperless_ngx_conf_db_timeout` |  | Y | Y |   |   |
 | `paperless_ngx_conf_dbengine` | | Y | N | Not used by the role |   |
 | `paperless_ngx_conf_dbhost` | localhost | Y | Y | |   |
@@ -213,6 +217,8 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_post_consume_script` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_pre_consume_script` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_proxy_ssl_header` | None | Y | Y |   | 1.14 |
+| `paperless_ngx_conf_read_cache_redis_url` | None | Y | Y |   | 2.18 |
+| `paperless_ngx_conf_read_cache_ttl` | 3600 | Y | Y |   | 2.18 |
 | `paperless_ngx_conf_redirect_login_to_sso` | false | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_redis` | redis://{{ paperless_ngx_redis_host }}:{{ paperless_ngx_redis_port }} | Y | N |  |   |
 | `paperless_ngx_conf_redis_prefix` | "" | Y | Y |  | 1.17 |
@@ -241,6 +247,9 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_use_x_forward_port` | false | Y | Y |   | 1.14 |
 | `paperless_ngx_conf_usermap_gid` |  | Y | Y | System users gid |   |
 | `paperless_ngx_conf_usermap_uid` |  | Y | Y | System users id |   |
+| `paperless_ngx_conf_webhooks_allow_internal_requests` | true | Y | Y |   | 2.18 |
+| `paperless_ngx_conf_webhooks_allowed_ports` | [] | Y | Y |   | 2.18 |
+| `paperless_ngx_conf_webhooks_allowed_schemes` | [http, https] | Y | Y |   | 2.18 |
 | `paperless_ngx_conf_webserver_workers` |1| Y | Y |   |   |
 | `paperless_ngx_conf_worker_timeout` |1800| Y | Y |   |   |
 ||

@@ -28,6 +28,7 @@ paperless_ngx_version: latest
 paperless_ngx_conf_account_allow_signups: false
 paperless_ngx_conf_account_default_groups:
 paperless_ngx_conf_account_default_http_protocol: https
+paperless_ngx_conf_account_email_unknown_accounts: true
 paperless_ngx_conf_account_email_verification: optional
 paperless_ngx_conf_account_session_remember: false
 paperless_ngx_conf_app_logo:
@@ -46,6 +47,7 @@ paperless_ngx_conf_consumer_enable_collate_double_sided: false
 paperless_ngx_conf_consumer_enable_tag_barcode: false
 paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"}
 paperless_ngx_conf_consumption_dir: "{{ paperless_ngx_dir_runtime_data }}/consumption"
+paperless_ngx_conf_date_parser_languages:
 paperless_ngx_conf_dbhost: localhost
 paperless_ngx_conf_dbname: paperlessngx
 paperless_ngx_conf_dbpass: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_db_pass.secret') }}"
@@ -55,6 +57,8 @@ paperless_ngx_conf_dbsslkey:
 paperless_ngx_conf_dbsslmode: prefer
 paperless_ngx_conf_dbsslrootcert:
 paperless_ngx_conf_dbuser: paperlessngx
+paperless_ngx_conf_db_poolsize:
+paperless_ngx_conf_db_read_cache_enabled: false
 paperless_ngx_conf_db_timeout:
 paperless_ngx_conf_disable_regular_login: false
 paperless_ngx_conf_email_certificate_location:
@@ -82,6 +86,8 @@ paperless_ngx_conf_ocr_skip_archive_file: "never"
 paperless_ngx_conf_outlook_oauth_client_id:
 paperless_ngx_conf_outlook_oauth_client_secret:
 paperless_ngx_conf_proxy_ssl_header:
+paperless_ngx_conf_read_cache_redis_url:
+paperless_ngx_conf_read_cache_ttl: 3600
 paperless_ngx_conf_redirect_login_to_sso: false
 paperless_ngx_conf_redis_prefix: ""
 paperless_ngx_conf_session_cookie_age: 1209600
@@ -94,6 +100,9 @@ paperless_ngx_conf_supervisord_working_dir:
 paperless_ngx_conf_trusted_proxies: ""
 paperless_ngx_conf_use_x_forward_host: false
 paperless_ngx_conf_use_x_forward_port: false
+paperless_ngx_conf_webhooks_allow_internal_requests: true
+paperless_ngx_conf_webhooks_allowed_ports: []
+paperless_ngx_conf_webhooks_allowed_schemes: [http, https]
 
 ## not yet sorted (former try to keep up with official docs ordering)
 paperless_ngx_conf_data_dir: "{{ paperless_ngx_dir_runtime_data }}/data"

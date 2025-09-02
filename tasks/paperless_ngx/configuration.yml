@@ -20,6 +20,9 @@
     - pngx_var: PAPERLESS_ACCOUNT_DEFAULT_HTTP_PROTOCOL
       role_var: "{{ paperless_ngx_conf_account_default_http_protocol }}"
       since_version: '2.5.0'
+    - pngx_var: PAPERLESS_ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS
+      role_var: "{{ paperless_ngx_conf_account_email_unknown_accounts }}"
+      since_version: '2.16.0'
     - pngx_var: PAPERLESS_ACCOUNT_EMAIL_VERIFICATION
       role_var: "{{ paperless_ngx_conf_account_email_verification }}"
       since_version: '2.6.0'
@@ -73,6 +76,15 @@
     - pngx_var: PAPERLESS_CONSUMER_TAG_BARCODE_MAPPING
       role_var: "{{ paperless_ngx_conf_consumer_tag_barcode_mapping | to_json }}"
       since_version: '2.5.0'
+    - pngx_var: PAPERLESS_DATE_PARSER_LANGUAGES
+      role_var: "{{ paperless_ngx_conf_date_parser_languages }}"
+      since_version: '2.18.0'
+    - pngx_var: PAPERLESS_DB_POOLSIZE
+      role_var: "{{ paperless_ngx_conf_db_poolsize }}"
+      since_version: '2.18.0'
+    - pngx_var: PAPERLESS_DB_READ_CACHE_ENABLED
+      role_var: "{{ paperless_ngx_conf_db_read_cache_enabled }}"
+      since_version: '2.18.0'
     - pngx_var: PAPERLESS_DBSSLCERT
       role_var: "{{ paperless_ngx_conf_dbsslcert }}"
       since_version: '1.14.0'
@@ -160,6 +172,12 @@
     - pngx_var: PAPERLESS_PROXY_SSL_HEADER
       role_var: "{{ paperless_ngx_conf_proxy_ssl_header }}"
       since_version: '1.14.0'
+    - pngx_var: PAPERLESS_READ_CACHE_REDIS_URL
+      role_var: "{{ paperless_ngx_conf_read_cache_redis_url }}"
+      since_version: '2.18.0'
+    - pngx_var: PAPERLESS_READ_CACHE_TTL
+      role_var: "{{ paperless_ngx_conf_read_cache_ttl }}"
+      since_version: '2.18.0'
     - pngx_var: PAPERLESS_REDIRECT_LOGIN_TO_SSO
       role_var: "{{ paperless_ngx_conf_redirect_login_to_sso }}"
       since_version: '2.12.0'
@@ -199,6 +217,15 @@
     - pngx_var: PAPERLESS_USE_X_FORWARD_PORT
       role_var: "{{ paperless_ngx_conf_use_x_forward_port }}"
       since_version: '1.14.0'
+    - pngx_var: PAPERLESS_WEBHOOKS_ALLOW_INTERNAL_REQUESTS
+      role_var: "{{ paperless_ngx_conf_webhooks_allow_internal_requests }}"
+      since_version: '2.18.0'
+    - pngx_var: PAPERLESS_WEBHOOKS_ALLOWED_PORTS
+      role_var: "{{ paperless_ngx_conf_webhooks_allowed_ports }}"
+      since_version: '2.18.0'
+    - pngx_var: PAPERLESS_WEBHOOKS_ALLOWED_SCHEMES
+      role_var: "{{ paperless_ngx_conf_webhooks_allowed_schemes }}"
+      since_version: '2.18.0'
     # not yet sorted (former try to keep up with official docs ordering)
     # Hosting & Security
     - pngx_var: PAPERLESS_CORS_ALLOWED_HOSTS
