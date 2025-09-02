@@ -29,7 +29,6 @@
       - ghostscript
       - icc-profiles-free
       - qpdf
-      - leptonica
       - libxml2
       - pngquant
       - zlib1g
@@ -43,6 +42,20 @@
     - "not 'Temporary failure resolving' in _install_base_deps_result.stderr|default('')"
   retries: 3
   delay: 60
+
+- name: Install liblept5 for most platforms
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - liblept5
+  when: not (ansible_distribution == 'Debian' and ansible_distribution_version is version('13', '>='))
+
+- name: Install libleptonica6 for Debian 13 Trixie and newer
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - libleptonica6
+  when: ansible_distribution == 'Debian' and ansible_distribution_version is version('13', '>=')
 
 - name: Install ocr languages
   become: true
