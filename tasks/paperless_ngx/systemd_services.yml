@@ -78,4 +78,4 @@
     masked: false
     state: started
   loop: "{{ paperless_ngx_services_list }}"
-  when: item.enabled
+  when: item.enabled|bool

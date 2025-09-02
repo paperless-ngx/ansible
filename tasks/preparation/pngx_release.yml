@@ -103,5 +103,5 @@
 - name: Fail if a downgrade is detected
   ansible.builtin.fail:
     msg: Downgrade detected - Downgrades are not allowed.
-  when: _paperless_ngx_installation_strategy_downgrade
+  when: _paperless_ngx_installation_strategy_downgrade|bool
   register: _exception

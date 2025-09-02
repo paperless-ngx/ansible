@@ -8,9 +8,9 @@
 
 - name: Pre configuration
   when: >-
-    _paperless_ngx_installation_strategy_upgrade
+    _paperless_ngx_installation_strategy_upgrade|bool
     or
-    _paperless_ngx_installation_strategy_fresh
+    _paperless_ngx_installation_strategy_fresh|bool
   block:
     - name: Get paperless-ngx release files
       ansible.builtin.include_tasks:
@@ -42,9 +42,9 @@
 
 - name: Post configuration
   when: >-
-    _paperless_ngx_installation_strategy_upgrade
+    _paperless_ngx_installation_strategy_upgrade|bool
     or
-    _paperless_ngx_installation_strategy_fresh
+    _paperless_ngx_installation_strategy_fresh|bool
   block:
     - name: Initialize and upgrade paperless-ngx database
       ansible.builtin.include_tasks:
