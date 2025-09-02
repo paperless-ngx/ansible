@@ -396,12 +396,30 @@
   tags: pngx_conf
   notify: Restart paperless completely
 
-- name: Configure ghostscript for PDF
+- name: Configure ghostscript for PDF (ImageMagick 6)
   become: true
   ansible.builtin.lineinfile:
     path: /etc/ImageMagick-6/policy.xml
     regexp: (\s+)<policy domain="coder" rights=".*" pattern="PDF" />
     line: \1<policy domain="coder" rights="read|write" pattern="PDF" />
     backrefs: true
+  when: >-
+    not (
+      (ansible_distribution == 'Debian' and ansible_distribution_version is version('13', '>=')) or
+      (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('25.04', '>='))
+    )
+  tags: pngx_conf_gs
+  notify: Restart paperless completely
+
+- name: Configure ghostscript for PDF (ImageMagick 7)
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ImageMagick-7/policy.xml
+    regexp: (\s+)<policy domain="coder" rights=".*" pattern="PDF" />
+    line: \1<policy domain="coder" rights="read|write" pattern="PDF" />
+    backrefs: true
+  when: >-
+    (ansible_distribution == 'Debian' and ansible_distribution_version is version('13', '>=')) or
+    (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('25.04', '>='))
   tags: pngx_conf_gs
   notify: Restart paperless completely
