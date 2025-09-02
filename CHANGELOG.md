@@ -1,5 +1,34 @@
 # Changelog
 
+## 4.1.0 - 2025-09-02
+
+### paperless-ngx ansible role 4.1.0
+
+#### Features
+
+- feat: add support for version 2.18 @stevenengland ([#251](https://github.com/paperless-ngx/ansible/pull/251))
+- feat: add debian13 support and upgrade jbig2enc tp 0.30.0 @stevenengland ([#249](https://github.com/paperless-ngx/ansible/pull/249))
+
+#### Bug Fixes
+
+- fix: recursive pattern expansion for paperless_ngx_conf_filename_format @stevenengland ([#250](https://github.com/paperless-ngx/ansible/pull/250))
+- fix(deps): bump pip from 25.1.1 to 25.2 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#244](https://github.com/paperless-ngx/ansible/pull/244))
+- fix(deps): bump actions/checkout from 4 to 5 @[dependabot[bot]](https://github.com/apps/dependabot) ([#245](https://github.com/paperless-ngx/ansible/pull/245))
+- fix(deps): bump requests from 2.32.3 to 2.32.5 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#248](https://github.com/paperless-ngx/ansible/pull/248))
+- fix: issues with newer ansible version where explicit boolean casts are necessary @NikJen26 ([#247](https://github.com/paperless-ngx/ansible/pull/247))
+
+#### Maintenance
+
+- feat: add debian13 support and upgrade jbig2enc tp 0.30.0 @stevenengland ([#249](https://github.com/paperless-ngx/ansible/pull/249))
+
+#### Dependencies
+
+- fix(deps): bump pip from 25.1.1 to 25.2 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#244](https://github.com/paperless-ngx/ansible/pull/244))
+- fix(deps): bump actions/checkout from 4 to 5 @[dependabot[bot]](https://github.com/apps/dependabot) ([#245](https://github.com/paperless-ngx/ansible/pull/245))
+- fix(deps): bump requests from 2.32.3 to 2.32.5 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#248](https://github.com/paperless-ngx/ansible/pull/248))
+
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/4.0.0...4.1.0
+
 ## 4.0.0 - 2025-05-05
 
 ### paperless-ngx ansible role 4.0.0
@@ -40,10 +69,8 @@
 - fix(deps): bump crazy-max/ghaction-github-labeler from 5.0.0 to 5.1.0 @[dependabot[bot]](https://github.com/apps/dependabot) ([#198](https://github.com/paperless-ngx/ansible/pull/198))
 - fix(deps): bump requests from 2.31.0 to 2.32.3 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#182](https://github.com/paperless-ngx/ansible/pull/182))
 - fix(deps): bump ansible-lint from 24.12.2 to 25.1.0 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#209](https://github.com/paperless-ngx/ansible/pull/209))
-
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/3.1.0...4.0.0
-
 ## 3.1.0 - 2025-01-19
 
 ### paperless-ngx ansible role 3.1.0
@@ -70,7 +97,6 @@
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/3.0.0...3.1.0
 ## 3.0.0 - 2024-09-12
-
 ### paperless-ngx ansible role 3.0.0
 
 #### Features
@@ -110,7 +136,6 @@
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/2.3.0...3.0.0
 ## 2.3.0 - 2024-07-13
 ### paperless-ngx ansible role 2.3.0
-
 #### Features
 
 - feat: add 2.11 support @stevenengland ([#178](https://github.com/paperless-ngx/ansible/pull/178))
@@ -193,7 +218,6 @@
 - feat: Add v2.0 support @stevenengland ([#136](https://github.com/paperless-ngx/ansible/pull/136))
 - feat(Config): add two config vars @stevenengland ([#123](https://github.com/paperless-ngx/ansible/pull/123))
 #### Bug Fixes
-
 - fix(deps): bump ansible from 9.0.1 to 9.1.0 in /.github/workflows @dependabot ([#134](https://github.com/paperless-ngx/ansible/pull/134))
 - fix(deps): bump ansible from 8.6.1 to 9.0.1 in /.github/workflows @dependabot ([#131](https://github.com/paperless-ngx/ansible/pull/131))
 - fix(deps): bump ansible from 8.5.0 to 8.6.1 in /.github/workflows @dependabot ([#128](https://github.com/paperless-ngx/ansible/pull/128))
@@ -239,7 +263,6 @@
 - fix: https://github.com/ansible/molecule/issues/4017 @stevenengland ([#99](https://github.com/paperless-ngx/ansible/pull/99))
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.3.0...1.3.1
 ## 1.3.0 - 2023-08-11
-
 ### paperless-ngx ansible role 1.3.0
 
 #### Features
@@ -288,7 +311,6 @@
 - fix(deps): bump ansible from 7.3.0 to 7.4.0 in /.github/workflows @dependabot ([#52](https://github.com/paperless-ngx/ansible/pull/52))
 #### Maintenance
 - test: remove unsused tests coming from role init @stevenengland ([#63](https://github.com/paperless-ngx/ansible/pull/63))
-
 #### Dependencies
 
 <details>
@@ -309,7 +331,6 @@
 ### paperless-ngx ansible role 1.1.0
 #### Features
 - feat(vars): add PAPERLESS_PRE_CONSUME_SCRIPT @stevenengland ([#46](https://github.com/paperless-ngx/ansible/pull/46))
-
 #### Bug Fixes
 
 - fix(deps): bump yamllint from 1.29.0 to 1.30.0 in /.github/workflows @dependabot ([#45](https://github.com/paperless-ngx/ansible/pull/45))
