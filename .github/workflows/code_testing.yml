@@ -26,6 +26,7 @@ jobs:
         distro:
           - debian11
           - debian12
+          - debian13
           # https://github.com/geerlingguy/docker-ubuntu2204-ansible/issues/6
           - ubuntu2204
           - ubuntu2404
