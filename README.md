@@ -248,7 +248,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_usermap_gid` |  | Y | Y | System users gid |   |
 | `paperless_ngx_conf_usermap_uid` |  | Y | Y | System users id |   |
 | `paperless_ngx_conf_webhooks_allow_internal_requests` | true | Y | Y |   | 2.18 |
-| `paperless_ngx_conf_webhooks_allowed_ports` | [] | Y | Y |   | 2.18 |
+| `paperless_ngx_conf_webhooks_allowed_ports` | None | Y | Y | Will be mapped to empty list [] | 2.18 |
 | `paperless_ngx_conf_webhooks_allowed_schemes` | [http, https] | Y | Y |   | 2.18 |
 | `paperless_ngx_conf_webserver_workers` |1| Y | Y |   |   |
 | `paperless_ngx_conf_worker_timeout` |1800| Y | Y |   |   |
