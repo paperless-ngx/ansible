@@ -1,21 +1,14 @@
 ---
 - name: Check if python is already installed with correct version
-  ansible.builtin.command:
-    cmd: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }} --version"
-  register: python_specific_version_installed_response
+  ansible.builtin.shell: |
+    which python{{ paperless_ngx_python_version_short }} || echo "not found"
+  register: python_check
   changed_when: false
   failed_when: false
-  ignore_errors: true
 
-- name: Setting python version  # noqa jinja[spacing]
+- name: Setting python version
   ansible.builtin.set_fact:
-    _python_wanted_version_specific_installed: >-
-      {%- if python_specific_version_installed_response.rc != 0 or
-        (python_specific_version_installed_response.stdout.split(' ')[-1] != paperless_ngx_python_version_full | string) -%}
-      false
-      {%- else -%}
-      true
-      {%- endif -%}
+    _python_wanted_version_specific_installed: "{{ python_check.stdout != 'not found' }}"
 
 - name: Install python if not already installed in the proper version
   become: true
@@ -72,3 +65,7 @@
         chdir: "{{ _python_archive_dir.path }}"
         target: altinstall
       when: not ansible_check_mode | bool
+
+- name: Pause für Debugging
+  ansible.builtin.pause:
+    prompt: "Drücke Enter zum Fortfahren..."
