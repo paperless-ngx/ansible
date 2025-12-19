@@ -1,63 +1,161 @@
 ---
-# Role specific variables
-## Data db
-paperless_ngx_db_type: sqlite  # or postgresql
-## Directories
-paperless_ngx_dir_force_permission_exclude: []
+# ============================================================================
+# ROLE-SPECIFIC CONFIGURATION
+# ============================================================================
+
+paperless_ngx_version: latest
+paperless_ngx_python_version_short: "3.11"
+paperless_ngx_jbig2enc_version: "0.30"
+
+# ============================================================================
+# SYSTEM & DIRECTORIES
+# ============================================================================
+
+paperless_ngx_system_user: paperlessngx
+paperless_ngx_system_group: paperlessngx
+paperless_ngx_system_user_additional_groups: []
+
 paperless_ngx_dir_installation: /opt/paperless-ngx
 paperless_ngx_dir_python: /opt/python/{{ paperless_ngx_python_version_short }}
-paperless_ngx_dir_runtime_data: /var/lib/paperless-ngx
 paperless_ngx_dir_virtualenv: "{{ paperless_ngx_dir_installation }}/.venv"
-## jbig2encode
-paperless_ngx_jbig2enc_enabled: true
-paperless_ngx_jbig2enc_lossy: false
-paperless_ngx_dependency_install_tmp_dir: "/tmp/"
-paperless_ngx_jbig2enc_version: "0.30"
-## Redis db
+paperless_ngx_dir_runtime_data: /var/lib/paperless-ngx
+paperless_ngx_dependency_install_tmp_dir: /tmp/
+paperless_ngx_dir_force_permission_exclude: []
+
+# ============================================================================
+# DATABASE
+# ============================================================================
+
+paperless_ngx_db_type: sqlite  # or postgresql
+
+paperless_ngx_conf_dbuser: paperlessngx
+paperless_ngx_conf_dbpass: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_db_pass.secret') }}"
+paperless_ngx_conf_dbhost: localhost
+paperless_ngx_conf_dbport: 5432
+paperless_ngx_conf_dbname: paperlessngx
+paperless_ngx_conf_dbsslmode: prefer
+paperless_ngx_conf_dbsslcert:
+paperless_ngx_conf_dbsslkey:
+paperless_ngx_conf_dbsslrootcert:
+paperless_ngx_conf_db_timeout:
+paperless_ngx_conf_db_poolsize:
+paperless_ngx_conf_db_read_cache_enabled: false
+paperless_ngx_conf_read_cache_ttl: 3600
+paperless_ngx_conf_read_cache_redis_url:
+
+# ============================================================================
+# REDIS
+# ============================================================================
+
 paperless_ngx_redis_host: localhost
 paperless_ngx_redis_port: 6379
-## paperless-ngx user
-paperless_ngx_system_group: paperlessngx
-paperless_ngx_system_user: paperlessngx
-paperless_ngx_system_user_additional_groups: []
-## paperless meta data
-paperless_ngx_version: latest
+paperless_ngx_conf_redis_prefix: ""
 
-# paperless-ngx configuration variables
-## already alphabetical sorted
+# ============================================================================
+# ACCOUNT & AUTHENTICATION
+# ============================================================================
+
+paperless_ngx_conf_admin_user: admin
+paperless_ngx_conf_admin_mail: root@localhost
+paperless_ngx_conf_admin_password: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_superuser_password.secret') }}"
+
 paperless_ngx_conf_account_allow_signups: false
 paperless_ngx_conf_account_default_groups:
 paperless_ngx_conf_account_default_http_protocol: https
 paperless_ngx_conf_account_email_unknown_accounts: true
 paperless_ngx_conf_account_email_verification: optional
 paperless_ngx_conf_account_session_remember: false
-paperless_ngx_conf_admin_user: admin
-paperless_ngx_conf_admin_mail: root@localhost
-paperless_ngx_conf_admin_password: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_superuser_password.secret') }}"
-paperless_ngx_conf_allowed_hosts: "*"
-paperless_ngx_conf_app_logo:
-paperless_ngx_conf_app_title:
-paperless_ngx_conf_apps:
-paperless_ngx_conf_audit_log_enabled: false
-paperless_ngx_conf_auto_login_username:
+paperless_ngx_conf_disable_regular_login: false
+paperless_ngx_conf_redirect_login_to_sso: false
+paperless_ngx_conf_enable_http_remote_user: false
+paperless_ngx_conf_enable_http_remote_user_api: false
+paperless_ngx_conf_http_remote_user_header_name: HTTP_REMOTE_USER
+
+paperless_ngx_conf_social_auto_signup: false
+paperless_ngx_conf_socialaccount_allow_signups: true
+paperless_ngx_conf_socialaccount_providers: "{}"
+paperless_ngx_conf_social_account_default_groups:
+paperless_ngx_conf_social_account_sync_groups: false
+
+paperless_ngx_conf_gmail_oauth_client_id:
+paperless_ngx_conf_gmail_oauth_client_secret:
+paperless_ngx_conf_outlook_oauth_client_id:
+paperless_ngx_conf_outlook_oauth_client_secret:
+paperless_ngx_conf_oauth_callback_base_url:
+
+paperless_ngx_conf_secret_key: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_secret_key.secret') }}"
+paperless_ngx_conf_session_cookie_age: 1209600
+paperless_ngx_conf_logout_redirect_url:
+
+# ============================================================================
+# SERVER & NETWORK
+# ============================================================================
+
 paperless_ngx_conf_bind_addr: "::"
+paperless_ngx_conf_port: 8000
+paperless_ngx_conf_url: http://localhost:8000
+paperless_ngx_conf_allowed_hosts: "*"
+paperless_ngx_conf_use_x_forward_host: false
+paperless_ngx_conf_use_x_forward_port: false
+paperless_ngx_conf_proxy_ssl_header:
+paperless_ngx_conf_trusted_proxies: ""
+paperless_ngx_conf_force_script_name:
+
+paperless_ngx_conf_cors_allowed_hosts: http://localhost:8000
 paperless_ngx_conf_csrf_trusted_origins:
-paperless_ngx_conf_consumer_asn_barcode_prefix: ASN
-paperless_ngx_conf_consumer_barcode_dpi: 300
-paperless_ngx_conf_consumer_barcode_max_pages: 0
-paperless_ngx_conf_consumer_barcode_retain_split_pages: false
-paperless_ngx_conf_consumer_barcode_scanner: "PYZBAR"
-paperless_ngx_conf_consumer_barcode_string: 'PATCHT'
-paperless_ngx_conf_consumer_barcode_tiff_support: false
-paperless_ngx_conf_consumer_barcode_upscale: 0.0
-paperless_ngx_conf_consumer_collate_double_sided_subdir_name: "double-sided"
-paperless_ngx_conf_consumer_collate_double_sided_tiff_support: false
-paperless_ngx_conf_consumer_delete_duplicates: false
+paperless_ngx_conf_static_url: /static/
+
+paperless_ngx_conf_webserver_workers: 1
+paperless_ngx_conf_task_workers: 1
+paperless_ngx_conf_threads_per_worker: "{{ paperless_ngx_conf_task_workers }}"
+paperless_ngx_conf_worker_timeout: 1800
+
+# ============================================================================
+# FILE PATHS & STORAGE
+# ============================================================================
+
+paperless_ngx_conf_consumption_dir: "{{ paperless_ngx_dir_runtime_data }}/consumption"
+paperless_ngx_conf_data_dir: "{{ paperless_ngx_dir_runtime_data }}/data"
+paperless_ngx_conf_media_root: "{{ paperless_ngx_dir_runtime_data }}/media"
+paperless_ngx_conf_logging_dir: "{{ paperless_ngx_dir_runtime_data }}/log"
+paperless_ngx_conf_empty_trash_dir: "{{ paperless_ngx_dir_runtime_data }}/trash"
+
+paperless_ngx_conf_convert_binary: convert
+paperless_ngx_conf_convert_memory_limit: 0
+paperless_ngx_conf_convert_tmpdir:
+
+paperless_ngx_conf_gs_binary: gs
+paperless_ngx_conf_thumbnail_font_name: /usr/share/fonts/liberation/LiberationSerif-Regular.ttf
+paperless_ngx_conf_model_file: "{{ paperless_ngx_conf_data_dir }}/classification_model.pickle"
+
+# ============================================================================
+# USER INTERFACE
+# ============================================================================
+
+paperless_ngx_conf_app_title:
+paperless_ngx_conf_app_logo:
+paperless_ngx_conf_apps:
+paperless_ngx_conf_number_of_suggested_dates: 3
+paperless_ngx_conf_date_order: DMY
+paperless_ngx_conf_date_parser_languages:
+paperless_ngx_conf_time_zone: Europe/London
+
+paperless_ngx_conf_cookie_prefix: ""
+paperless_ngx_conf_max_image_pixels:
+
+# ============================================================================
+# DOCUMENT CONSUMER
+# ============================================================================
+
 paperless_ngx_conf_consumer_disable:
-paperless_ngx_conf_consumer_enable_asn_barcode: false
-paperless_ngx_conf_consumer_enable_barcodes: false
-paperless_ngx_conf_consumer_enable_collate_double_sided: false
-paperless_ngx_conf_consumer_enable_tag_barcode: false
+paperless_ngx_conf_consumer_delete_duplicates: false
+paperless_ngx_conf_consumer_recursive: false
+paperless_ngx_conf_consumer_subdirs_as_tags: false
+paperless_ngx_conf_consumer_polling: 0
+paperless_ngx_conf_consumer_polling_delay: 5
+paperless_ngx_conf_consumer_polling_retry_count: 5
+paperless_ngx_conf_consumer_inotify_delay: 0.5
+
 paperless_ngx_conf_consumer_ignore_patterns:
   - ".DS_STORE/*"
   - "._*"
@@ -65,80 +163,43 @@ paperless_ngx_conf_consumer_ignore_patterns:
   - ".stversions/*"
   - ".localized/*"
   - "desktop.ini"
-paperless_ngx_conf_consumer_inotify_delay: 0.5
-paperless_ngx_conf_consumer_polling: 0
-paperless_ngx_conf_consumer_polling_retry_count: 5
-paperless_ngx_conf_consumer_polling_delay: 5
-paperless_ngx_conf_consumer_recursive: false
-paperless_ngx_conf_consumer_subdirs_as_tags: false
-paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"}
-paperless_ngx_conf_consumption_dir: "{{ paperless_ngx_dir_runtime_data }}/consumption"
-paperless_ngx_conf_convert_binary: "convert"
-paperless_ngx_conf_convert_memory_limit: 0
-paperless_ngx_conf_convert_tmpdir:
-paperless_ngx_conf_cookie_prefix: ""
-paperless_ngx_conf_cors_allowed_hosts: http://localhost:8000
-paperless_ngx_conf_data_dir: "{{ paperless_ngx_dir_runtime_data }}/data"
-paperless_ngx_conf_date_order: "DMY"
-paperless_ngx_conf_date_parser_languages:
-paperless_ngx_conf_dbhost: localhost
-paperless_ngx_conf_dbname: paperlessngx
-paperless_ngx_conf_dbpass: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_db_pass.secret') }}"
-paperless_ngx_conf_dbport: 5432
-paperless_ngx_conf_dbsslcert:
-paperless_ngx_conf_dbsslkey:
-paperless_ngx_conf_dbsslmode: prefer
-paperless_ngx_conf_dbsslrootcert:
-paperless_ngx_conf_dbuser: paperlessngx
-paperless_ngx_conf_db_poolsize:
-paperless_ngx_conf_db_read_cache_enabled: false
-paperless_ngx_conf_db_timeout:
-paperless_ngx_conf_disable_regular_login: false
-paperless_ngx_conf_email_certificate_location:
-paperless_ngx_conf_email_from: "{{ paperless_ngx_conf_email_host_user }}"
-paperless_ngx_conf_email_gnupg_home:
-paperless_ngx_conf_email_host: "localhost"
-paperless_ngx_conf_email_host_user: ""
-paperless_ngx_conf_email_host_password: ""
-paperless_ngx_conf_email_parse_default_layout: 1
-paperless_ngx_conf_email_port: 25
-paperless_ngx_conf_email_task_cron: "*/10 * * * *"
-paperless_ngx_conf_email_use_tls: false
-paperless_ngx_conf_email_use_ssl: false
-paperless_ngx_conf_empty_trash_delay: 30
-paperless_ngx_conf_empty_trash_dir: "{{ paperless_ngx_dir_runtime_data }}/trash"
-paperless_ngx_conf_empty_trash_task_cron: "0 1 * * *"
+
+paperless_ngx_conf_pre_consume_script:
+paperless_ngx_conf_post_consume_script:
+
 paperless_ngx_conf_enable_compression: true
-paperless_ngx_conf_enable_flower:
-paperless_ngx_conf_enable_http_remote_user: false
-paperless_ngx_conf_enable_http_remote_user_api: false
-paperless_ngx_conf_enable_gpg_decryptor: false
-paperless_ngx_conf_enable_nltk: 1
-paperless_ngx_conf_enable_update_check: enable
-paperless_ngx_conf_filename_date_order:
 paperless_ngx_conf_filename_format:
+paperless_ngx_conf_filename_date_order:
 paperless_ngx_conf_filename_format_remove_none: false
-paperless_ngx_conf_force_script_name:
-paperless_ngx_conf_gmail_oauth_client_id:
-paperless_ngx_conf_gmail_oauth_client_secret:
-paperless_ngx_conf_gs_binary: "gs"
-paperless_ngx_conf_http_remote_user_header_name: HTTP_REMOTE_USER
-paperless_ngx_conf_ignore_dates: ""
-paperless_ngx_conf_index_task_cron: "0 0 * * *"
-paperless_ngx_conf_logging_dir: "{{ paperless_ngx_dir_runtime_data }}/log"
-paperless_ngx_conf_logrotate_max_size: 1048576
-paperless_ngx_conf_logrotate_max_backups: 20
-paperless_ngx_conf_logout_redirect_url:
-paperless_ngx_conf_max_image_pixels:
-paperless_ngx_conf_media_root: "{{ paperless_ngx_dir_runtime_data }}/media"
-paperless_ngx_conf_model_file: "{{ paperless_ngx_conf_data_dir }}/classification_model.pickle"
-paperless_ngx_conf_nltk_dir: /usr/share/nltk_data
-paperless_ngx_conf_number_of_suggested_dates: 3
-paperless_ngx_conf_oauth_callback_base_url:
-paperless_ngx_conf_ocr_clean: clean
-paperless_ngx_conf_ocr_color_conversion_strategy: "RGB"
-paperless_ngx_conf_ocr_deskew: true
-paperless_ngx_conf_ocr_image_dpi:
+paperless_ngx_conf_delete_duplicates: false
+
+# ============================================================================
+# BARCODE SUPPORT
+# ============================================================================
+
+paperless_ngx_conf_consumer_enable_barcodes: false
+paperless_ngx_conf_consumer_barcode_retain_split_pages: false
+paperless_ngx_conf_consumer_barcode_scanner: PYZBAR
+paperless_ngx_conf_consumer_barcode_string: PATCHT
+paperless_ngx_conf_consumer_barcode_dpi: 300
+paperless_ngx_conf_consumer_barcode_upscale: 0.0
+paperless_ngx_conf_consumer_barcode_max_pages: 0
+paperless_ngx_conf_consumer_barcode_tiff_support: false
+
+paperless_ngx_conf_consumer_enable_asn_barcode: false
+paperless_ngx_conf_consumer_asn_barcode_prefix: ASN
+
+paperless_ngx_conf_consumer_enable_tag_barcode: false
+paperless_ngx_conf_consumer_tag_barcode_mapping: !unsafe {"TAG:(.+)": "\\\\g<1>"}
+
+paperless_ngx_conf_consumer_enable_collate_double_sided: false
+paperless_ngx_conf_consumer_collate_double_sided_tiff_support: false
+paperless_ngx_conf_consumer_collate_double_sided_subdir_name: double-sided
+
+# ============================================================================
+# OCR & TEXT RECOGNITION
+# ============================================================================
+
 paperless_ngx_conf_ocr_language: eng
 paperless_ngx_conf_ocr_languages:
   - eng
@@ -146,52 +207,88 @@ paperless_ngx_conf_ocr_languages:
   - fra
   - ita
   - spa
-paperless_ngx_conf_ocr_max_image_pixels:
+
 paperless_ngx_conf_ocr_mode: skip
 paperless_ngx_conf_ocr_output_type: pdfa
 paperless_ngx_conf_ocr_pages: 0
+paperless_ngx_conf_ocr_clean: clean
+paperless_ngx_conf_ocr_deskew: true
 paperless_ngx_conf_ocr_rotate_pages: true
 paperless_ngx_conf_ocr_rotate_pages_threshold: 12
-paperless_ngx_conf_ocr_skip_archive_file: "never"
-# see https://ocrmypdf.readthedocs.io/en/latest/api.html#ocrmypdf.ocr
+paperless_ngx_conf_ocr_color_conversion_strategy: RGB
+paperless_ngx_conf_ocr_image_dpi:
+paperless_ngx_conf_ocr_max_image_pixels:
+paperless_ngx_conf_ocr_skip_archive_file: never
 paperless_ngx_conf_ocr_user_args:
   - optimize: 1
-paperless_ngx_conf_outlook_oauth_client_id:
-paperless_ngx_conf_outlook_oauth_client_secret:
-paperless_ngx_conf_port: 8000
-paperless_ngx_conf_post_consume_script:
-paperless_ngx_conf_pre_consume_script:
-paperless_ngx_conf_proxy_ssl_header:
-paperless_ngx_conf_read_cache_redis_url:
-paperless_ngx_conf_read_cache_ttl: 3600
-paperless_ngx_conf_redirect_login_to_sso: false
-paperless_ngx_conf_redis_prefix: ""
-paperless_ngx_conf_sanity_task_cron: "30 0 * * sun"
-paperless_ngx_conf_secret_key: "{{ lookup('password', 'pngx_instances/' + inventory_hostname + '/pnx_secret_key.secret') }}"
-paperless_ngx_conf_session_cookie_age: 1209600
-paperless_ngx_conf_social_auto_signup: false
-paperless_ngx_conf_socialaccount_allow_signups: true
-paperless_ngx_conf_socialaccount_providers: "{}"
-paperless_ngx_conf_social_account_default_groups:
-paperless_ngx_conf_social_account_sync_groups: false
-paperless_ngx_conf_static_url: /static/
-paperless_ngx_conf_supervisord_working_dir:
-paperless_ngx_conf_task_workers: 1
-paperless_ngx_conf_threads_per_worker: "{{ paperless_ngx_conf_task_workers }}"
-paperless_ngx_conf_thumbnail_font_name: /usr/share/fonts/liberation/LiberationSerif-Regular.ttf
+
+paperless_ngx_conf_enable_nltk: 1
+paperless_ngx_conf_nltk_dir: /usr/share/nltk_data
+
+# ============================================================================
+# EMAIL INTEGRATION
+# ============================================================================
+
+paperless_ngx_conf_email_host: localhost
+paperless_ngx_conf_email_port: 25
+paperless_ngx_conf_email_host_user: ""
+paperless_ngx_conf_email_host_password: ""
+paperless_ngx_conf_email_use_tls: false
+paperless_ngx_conf_email_use_ssl: false
+paperless_ngx_conf_email_from: "{{ paperless_ngx_conf_email_host_user }}"
+paperless_ngx_conf_email_certificate_location:
+paperless_ngx_conf_email_gnupg_home:
+paperless_ngx_conf_email_parse_default_layout: 1
+paperless_ngx_conf_email_task_cron: "*/10 * * * *"
+
+# ============================================================================
+# JBIG2ENC (DOCUMENT COMPRESSION)
+# ============================================================================
+
+paperless_ngx_jbig2enc_enabled: true
+paperless_ngx_jbig2enc_lossy: false
+
+# ============================================================================
+# ADVANCED FEATURES
+# ============================================================================
+
+paperless_ngx_conf_enable_flower:
+paperless_ngx_conf_enable_gpg_decryptor: false
+paperless_ngx_conf_enable_update_check: enable
+paperless_ngx_conf_audit_log_enabled: false
+
 paperless_ngx_conf_tika_enabled: false
 paperless_ngx_conf_tika_endpoint: http://localhost:9998
 paperless_ngx_conf_tika_gotenberg_endpoint: http://localhost:3000
-paperless_ngx_conf_time_zone: Europe/London
-paperless_ngx_conf_train_task_cron: "5 */1 * * *"
-paperless_ngx_conf_trusted_proxies: ""
-paperless_ngx_conf_url: http://localhost:8000
-paperless_ngx_conf_use_x_forward_host: false
-paperless_ngx_conf_use_x_forward_port: false
-paperless_ngx_conf_usermap_gid:
-paperless_ngx_conf_usermap_uid:
+
 paperless_ngx_conf_webhooks_allow_internal_requests: true
 paperless_ngx_conf_webhooks_allowed_ports:
 paperless_ngx_conf_webhooks_allowed_schemes: [http, https]
-paperless_ngx_conf_webserver_workers: 1
-paperless_ngx_conf_worker_timeout: 1800
+
+# ============================================================================
+# SCHEDULED TASKS
+# ============================================================================
+
+paperless_ngx_conf_index_task_cron: "0 0 * * *"
+paperless_ngx_conf_train_task_cron: "5 */1 * * *"
+paperless_ngx_conf_sanity_task_cron: "30 0 * * sun"
+paperless_ngx_conf_empty_trash_task_cron: "0 1 * * *"
+paperless_ngx_conf_empty_trash_delay: 30
+
+# ============================================================================
+# LOGGING & MAINTENANCE
+# ============================================================================
+
+paperless_ngx_conf_logrotate_max_size: 1048576
+paperless_ngx_conf_logrotate_max_backups: 20
+paperless_ngx_conf_supervisord_working_dir:
+
+# ============================================================================
+# DEPRECATED/LEGACY (remove if not needed)
+# ============================================================================
+
+paperless_ngx_conf_auto_login_username:
+paperless_ngx_conf_ignore_dates: ""
+paperless_ngx_conf_usermap_gid:
+paperless_ngx_conf_usermap_uid:
+...

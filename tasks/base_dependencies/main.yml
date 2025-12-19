@@ -2,21 +2,14 @@
 - name: Setup repo packages
   ansible.builtin.include_tasks:
     file: repo_packages.yml
-    apply:
-      tags: repo_packages
-  tags: repo_packages
 
 - name: Setup python version used in paperless-ngx venv
   ansible.builtin.include_tasks:
     file: python.yml
-    apply:
-      tags: python
-  tags: python
 
 - name: Setup jbig2enc
+  when:
+    - paperless_ngx_jbig2enc_enabled
   ansible.builtin.include_tasks:
     file: jbig2enc.yml
-    apply:
-      tags: jbig2enc
-  tags: jbig2enc
-  when: paperless_ngx_jbig2enc_enabled
+...

@@ -2,20 +2,12 @@
 - name: Check variables for logical errors
   ansible.builtin.include_tasks:
     file: vars.yml
-    apply:
-      tags: vars
-  tags: vars
 
 - name: Set & check infos about the underlying platform (os & packages)
   ansible.builtin.include_tasks:
     file: platform.yml
-    apply:
-      tags: platform
-  tags: platform
 
 - name: Set & check infos about paperless-ngx release
   ansible.builtin.include_tasks:
     file: pngx_release.yml
-    apply:
-      tags: pngx_release
-  tags: pngx_release
+...

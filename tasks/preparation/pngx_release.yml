@@ -1,5 +1,5 @@
 ---
-- name: Determine target version infos
+- name: Determine target version info
   when:
     - paperless_ngx_version == "latest"
   delegate_to: localhost
@@ -7,49 +7,44 @@
   block:
     - name: Get latest release info from github
       ansible.builtin.uri:
-        url: "https://api.github.com/repos/paperless-ngx/paperless-ngx/releases/latest"
+        url: https://api.github.com/repos/paperless-ngx/paperless-ngx/releases/latest
         method: GET
         return_content: true
         status_code: 200
         body_format: json
-        headers:
-          Authorization: "{{ 'Bearer ' + github_public_repo_token if github_public_repo_token != '' else omit }}"
+        headers: "{{ {'Authorization': 'Bearer ' + github_public_repo_token} if github_public_repo_token else {} }}"
       no_log: "{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}"
       register: _latest_release_api_response
       until: _latest_release_api_response.status == 200
       retries: 5
       check_mode: false
 
-
-    - name: "Set paperless version to {{ _latest_release_api_response.json.tag_name[1:] }}"
+    - name: Set paperless version to latest
       ansible.builtin.set_fact:
         paperless_ngx_version: "{{ _latest_release_api_response.json.tag_name[1:] }}"
 
-- name: Fail if version is detected that is not supported
-  ansible.builtin.fail:
-    msg: Unsupported version detected. Please use a version >= {{ paperless_ngx_version_minimum }}
-  when: paperless_ngx_version is ansible.builtin.version(paperless_ngx_version_minimum, '<', version_type='semver')
-  register: _exception
+- name: Validate paperless version
+  ansible.builtin.assert:
+    that: paperless_ngx_version is ansible.builtin.version(paperless_ngx_version_minimum, '>=', version_type='semver')
+    fail_msg: Unsupported version detected. Please use a version >= {{ paperless_ngx_version_minimum }}
 
-- name: Set and check download URL
+- name: Validate and check download URL
   delegate_to: localhost
   run_once: true
   block:
-    - name: Set download link
+    - name: Set download URL
       ansible.builtin.set_fact:
-        _release__download_url: "https://github.com/paperless-ngx/paperless-ngx/releases/download/v{{ paperless_ngx_version }}/paperless-ngx-v{{ paperless_ngx_version }}.tar.xz"
+        _release_download_url: >-
+          https://github.com/paperless-ngx/paperless-ngx/releases/download/v{{ paperless_ngx_version }}/paperless-ngx-v{{ paperless_ngx_version }}.tar.xz
 
     - name: Probe download link is valid
       ansible.builtin.uri:
-        url: "{{ _release__download_url }}"
-        method: GET
+        url: "{{ _release_download_url }}"
+        method: HEAD
         status_code: 200
-        return_content: false
       register: _release_download_uri_response
       until: _release_download_uri_response.status == 200
       retries: 5
-      check_mode: false
-
 
 - name: Check for existing paperless-ngx version file
   become: true
@@ -57,41 +52,39 @@
     path: "{{ paperless_ngx_dir_installation }}/.installed_version"
   register: _paperless_ngx_version_file_object
 
-- name: Set current installed version variable
-  when: _paperless_ngx_version_file_object.stat.exists
+- name: Determine installation strategy
+  when:
+    - _paperless_ngx_version_file_object.stat.exists
   block:
-    - name: Get the current installed version
+    - name: Get current installed version
       become: true
       ansible.builtin.command:
         cmd: cat {{ paperless_ngx_dir_installation }}/.installed_version
-      register: _paperless_ngx_version_installed_object
-      changed_when: _paperless_ngx_version_installed_object.stdout != paperless_ngx_version | string
-      # failed_when: false
-      # ignore_errors: true
-      when: not ansible_check_mode | bool
+      register: _paperless_ngx_installed_version_raw
+      changed_when: false
+      check_mode: false
 
-    - name: Set version of current installation as variable
+    - name: Set installation strategy variables
       ansible.builtin.set_fact:
-        _paperless_ngx_installed_version: "{{ _paperless_ngx_version_installed_object.stdout }}"
+        _paperless_ngx_installed_version: "{{ _paperless_ngx_installed_version_raw.stdout }}"
+        _paperless_ngx_installation_strategy_fresh: false
+        _paperless_ngx_installation_strategy_upgrade: "{{ _paperless_ngx_installed_version_raw.stdout is version(paperless_ngx_version, '<', version_type='semver') }}"
+        _paperless_ngx_installation_strategy_reconfigure: "{{ _paperless_ngx_installed_version_raw.stdout == paperless_ngx_version }}"
+        _paperless_ngx_installation_strategy_downgrade: "{{ _paperless_ngx_installed_version_raw.stdout is version(paperless_ngx_version, '>', version_type='semver') }}"
 
-- name: Set installation strategy  # noqa jinja[spacing]
+- name: Set fresh installation strategy
+  when:
+    - not _paperless_ngx_version_file_object.stat.exists
   ansible.builtin.set_fact:
-    _paperless_ngx_installation_strategy_fresh: >-
-      {{ 'true' if not _paperless_ngx_installed_version is defined else 'false' }}
-    _paperless_ngx_installation_strategy_upgrade: >-
-      {{ 'true' if _paperless_ngx_installed_version is defined and
-      _paperless_ngx_installed_version is ansible.builtin.version(paperless_ngx_version, '<', version_type='semver') else 'false' }}
-    _paperless_ngx_installation_strategy_reconfigure: >-
-      {{ 'true' if _paperless_ngx_installed_version is defined and
-      _paperless_ngx_installed_version is ansible.builtin.version(paperless_ngx_version, '==', version_type='semver') else 'false' }}
-    _paperless_ngx_installation_strategy_downgrade: >-
-      {{ 'true' if _paperless_ngx_installed_version is defined and
-      _paperless_ngx_installed_version is ansible.builtin.version(paperless_ngx_version, '>', version_type='semver') else 'false' }}
+    _paperless_ngx_installation_strategy_fresh: true
+    _paperless_ngx_installation_strategy_upgrade: false
+    _paperless_ngx_installation_strategy_reconfigure: false
+    _paperless_ngx_installation_strategy_downgrade: false
 
-- name: Print the current installation state detected
+- name: Print installation state
   ansible.builtin.debug:
     msg:
-      - "Paperless-ngx installed version:  {{ _paperless_ngx_installed_version if _paperless_ngx_installed_version is defined else '-' }}"
+      - "Paperless-ngx installed version:  {{ _paperless_ngx_installed_version | default('-') }}"
       - "Paperless-ngx target version:     {{ paperless_ngx_version }}"
       - "-------------------------------"
       - "Detected strategy:"
@@ -100,8 +93,8 @@
       - "Reconfiguration:                  {{ _paperless_ngx_installation_strategy_reconfigure }}"
       - "Downgrade:                        {{ _paperless_ngx_installation_strategy_downgrade }}"
 
-- name: Fail if a downgrade is detected
-  ansible.builtin.fail:
-    msg: Downgrade detected - Downgrades are not allowed.
-  when: _paperless_ngx_installation_strategy_downgrade|bool
-  register: _exception
+- name: Prevent downgrade
+  ansible.builtin.assert:
+    that: not _paperless_ngx_installation_strategy_downgrade | bool
+    fail_msg: Downgrade detected - Downgrades are not allowed.
+...

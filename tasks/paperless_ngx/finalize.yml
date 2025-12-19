@@ -2,18 +2,21 @@
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Collect facts about system services
+- name: Verify all paperless services are running
   become: true
   ansible.builtin.service_facts:
   register: _services_state
 
-- name: Check that all services are running
+- name: Assert all enabled services are running
+  when:
+    - item.enabled is not none
+    - item.enabled | bool
   ansible.builtin.assert:
-    that: _services_state.ansible_facts.services["{{ item.name }}"].state == 'running'
+    that: _services_state.ansible_facts.services[item.name].state == 'running'
+    fail_msg: "Service {{ item.name }} is not running"
   loop: "{{ paperless_ngx_services_list }}"
-  when: item.enabled|bool
 
-- name: Creating version info file with version string as content
+- name: Write installation version file
   become: true
   ansible.builtin.copy:
     dest: "{{ paperless_ngx_dir_installation }}/.installed_version"
@@ -21,3 +24,4 @@
     owner: "{{ paperless_ngx_system_user }}"
     group: "{{ paperless_ngx_system_group }}"
     mode: "0640"
+...

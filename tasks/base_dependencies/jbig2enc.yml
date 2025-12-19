@@ -1,95 +1,91 @@
 ---
-- name: Check if jbig2enc is already installed with correct version
+- name: Check if jbig2enc is already installed
   ansible.builtin.command:
     cmd: jbig2 --version
   register: _jbig2enc_version_installed_response
   changed_when: false
   failed_when: false
-  ignore_errors: true
+  check_mode: false
 
-- name: Setting host facts using complex arguments  # noqa jinja[spacing]
+- name: Determine target jbig2enc version
   ansible.builtin.set_fact:
-    _jbig2enc_wanted_version_installed: >-
-      {%- set expected_version = '0.29' if (ansible_os_family == 'Debian' and ansible_distribution_major_version == '11') else paperless_ngx_jbig2enc_version -%}
-      {%- if _jbig2enc_version_installed_response.rc != 0 or (_jbig2enc_version_installed_response.stderr.split(' ')[-1] != expected_version | string) -%}
-      false
-      {%- else -%}
-      true
-      {%- endif -%}
+    _jbig2enc_target_version: "{{ '0.29' if (ansible_os_family == 'Debian' and ansible_distribution_major_version == '11') else paperless_ngx_jbig2enc_version }}"
 
-- name: Install jbi2enc if not already installed in the proper version
+- name: Check if installation is needed
+  ansible.builtin.set_fact:
+    _jbig2enc_needs_install: "{{ _jbig2enc_version_installed_response.rc != 0 or (_jbig2enc_version_installed_response.stderr.split(' ')[-1] != _jbig2enc_target_version | string) }}"
+
+- name: Install jbig2enc if not already installed in proper version
+  when:
+    - _jbig2enc_needs_install
   become: true
-  when: not _jbig2enc_wanted_version_installed
   block:
-    - name: Install dev dependencies
-      ansible.builtin.package:
-        name: "{{ item }}"
+    - name: Install build dependencies
+      ansible.builtin.apt:
+        name:
+          - autotools-dev
+          - automake
+          - libtool
+          - libleptonica-dev
         update_cache: true
-      with_items:
-        - autotools-dev
-        - automake
-        - libtool
-        - libleptonica-dev
 
-    - name: Install Debian specific libs
-      ansible.builtin.package:
-        name: "{{ item }}"
+    - name: Install Debian-specific build dependencies
+      when:
+        - ansible_os_family == "Debian"
+      ansible.builtin.apt:
+        name:
+          - zlib1g-dev
         update_cache: true
-      with_items:
-        - zlib1g-dev
-      when: ansible_os_family == "Debian"
 
-    - name: Create temporary git directory
+    - name: Create temporary directory for jbig2enc
       ansible.builtin.tempfile:
         state: directory
         path: "{{ paperless_ngx_dependency_install_tmp_dir }}"
-      register: _jbig2enc_gitdir
+      register: _jbig2enc_tempdir
+      check_mode: false
 
-    # The newer jbig2enc uses newer build tools that are not available in older distributions
-    # Alternative: Bring in newer tools for Debian 11
-    # Alternative 2: Kick Debian 11 support
-    - name: Pull jbig2enc
+    - name: Clone jbig2enc repository
       ansible.builtin.git:
         repo: https://github.com/agl/jbig2enc.git
-        dest: "{{ _jbig2enc_gitdir.path }}"
-        version: "{{ '0.29' if (ansible_os_family == 'Debian' and ansible_distribution_major_version == '11') else paperless_ngx_jbig2enc_version }}"
+        dest: "{{ _jbig2enc_tempdir.path }}"
+        version: "{{ _jbig2enc_target_version }}"
         recursive: true
       register: _jbig2enc_source
       until: _jbig2enc_source is succeeded
       retries: 3
       delay: 10
-      when: not ansible_check_mode | bool
+      check_mode: false
 
-
-    - name: Apply patch to fix reported version
-      ansible.posix.patch:
-        basedir: "{{ _jbig2enc_gitdir.path }}"
-        src: jbig2enc-0.29-fix-reported-version.patch
-        strip: 1
-        state: present
+    - name: Apply version reporting fix for Debian 11
       when:
-        - not ansible_check_mode | bool
         - ansible_os_family == "Debian"
         - ansible_distribution_major_version == "11"
+      ansible.posix.patch:
+        basedir: "{{ _jbig2enc_tempdir.path }}"
+        src: jbig2enc-0.29-fix-reported-version.patch
+        strip: 1
 
     - name: Run autogen for jbig2enc
-      ansible.builtin.command: ./autogen.sh
-      args:
-        chdir: "{{ _jbig2enc_gitdir.path }}"
+      ansible.builtin.command:
+        cmd: ./autogen.sh
+        chdir: "{{ _jbig2enc_tempdir.path }}"
       changed_when: true
-      when: not ansible_check_mode | bool
-
 
     - name: Run configure for jbig2enc
-      ansible.builtin.command: ./configure
-      args:
-        chdir: "{{ _jbig2enc_gitdir.path }}"
+      ansible.builtin.command:
+        cmd: ./configure
+        chdir: "{{ _jbig2enc_tempdir.path }}"
       changed_when: true
-      when: not ansible_check_mode | bool
 
-
-    - name: Run 'make and make install' target
+    - name: Build and install jbig2enc
+      when:
+        - not ansible_check_mode
       community.general.make:
-        chdir: "{{ _jbig2enc_gitdir.path }}"
+        chdir: "{{ _jbig2enc_tempdir.path }}"
         target: install
-      when: not ansible_check_mode | bool
+
+    - name: Clean up temporary directory
+      ansible.builtin.file:
+        path: "{{ _jbig2enc_tempdir.path }}"
+        state: absent
+...
