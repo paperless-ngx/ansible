@@ -1,44 +1,39 @@
 ---
-# upstream virtualenv in Ubuntu 20.04 is broken
-# https://github.com/pypa/virtualenv/issues/1873
-- name: Install python virtualenv
+- name: Prepare Python virtual environment
   become: true
   become_user: "{{ paperless_ngx_system_user }}"
-  ansible.builtin.pip:
-    name: virtualenv
-    extra_args: --upgrade --user
-    executable: "{{ paperless_ngx_dir_python }}/bin/pip{{ paperless_ngx_python_version_short }}"
+  block:
+    - name: Install virtualenv
+      ansible.builtin.pip:
+        name: virtualenv
+        extra_args: --upgrade --user
+        executable: "{{ paperless_ngx_dir_python }}/bin/pip{{ paperless_ngx_python_version_short }}"
 
-- name: Install latest pip
-  become: true
-  become_user: "{{ paperless_ngx_system_user }}"
-  ansible.builtin.pip:
-    name: pip
-    virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
-    virtualenv_python: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }}"
-    virtualenv_command: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }} -m virtualenv"
-    extra_args: --upgrade
+    - name: Create and upgrade pip in virtual environment
+      ansible.builtin.pip:
+        name: pip
+        virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
+        virtualenv_python: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }}"
+        virtualenv_command: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }} -m virtualenv"
 
-- name: Install paperless-ngx python requirements
-  become: true
-  become_user: "{{ paperless_ngx_system_user }}"
-  ansible.builtin.pip:
-    requirements: "{{ paperless_ngx_dir_installation }}/requirements.txt"
-    virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
-    virtualenv_python: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }}"
-    extra_args: --upgrade
-  register: _install_python_requirements
-  until: 'not "ReadTimeoutError" in _install_python_requirements.msg | default("")'
-  retries: 3
-  delay: 60
+    - name: Install paperless-ngx Python requirements
+      ansible.builtin.pip:
+        requirements: "{{ paperless_ngx_dir_installation }}/requirements.txt"
+        virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
+        virtualenv_python: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }}"
+        extra_args: --upgrade
+      register: _install_python_requirements
+      until: '"ReadTimeoutError" not in _install_python_requirements.msg | default("")'
+      retries: 3
+      delay: 60
 
-- name: Set ownership and permissions on pngx venv
-  become: true
-  ansible.builtin.file:
-    path: "{{ paperless_ngx_dir_virtualenv }}"
-    state: directory
-    # recurse: true
-    # follow: false
-    owner: "{{ paperless_ngx_system_user }}"
-    group: "{{ paperless_ngx_system_group }}"
-    mode: g-w,o-rwx
+    - name: Set ownership and permissions on virtual environment
+      become: false
+      ansible.builtin.file:
+        path: "{{ paperless_ngx_dir_virtualenv }}"
+        state: directory
+        owner: "{{ paperless_ngx_system_user }}"
+        group: "{{ paperless_ngx_system_group }}"
+        mode: "0750"
+        recurse: false
+...

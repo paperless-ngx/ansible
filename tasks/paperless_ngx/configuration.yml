@@ -1,5 +1,9 @@
 ---
 - name: Write the paperless-ngx config file
+  when:
+    - item.role_var is defined and item.role_var not in (None, omit)
+    - item.condition | default(true)
+    - (item.since_version | default('0.0.1')) is ansible.builtin.version(paperless_ngx_version, '<=', version_type='semver')
   become: true
   ansible.builtin.lineinfile:
     path: "{{ paperless_ngx_config_file }}"
@@ -10,7 +14,6 @@
     mode: "0640"
     create: true
   loop:
-    # already alphabetical sorted
     - pngx_var: PAPERLESS_ACCOUNT_ALLOW_SIGNUPS
       role_var: "{{ paperless_ngx_conf_account_allow_signups }}"
       since_version: '2.5.0'
@@ -226,8 +229,6 @@
     - pngx_var: PAPERLESS_WEBHOOKS_ALLOWED_SCHEMES
       role_var: "{{ paperless_ngx_conf_webhooks_allowed_schemes }}"
       since_version: '2.18.0'
-    # not yet sorted (former try to keep up with official docs ordering)
-    # Hosting & Security
     - pngx_var: PAPERLESS_CORS_ALLOWED_HOSTS
       role_var: "{{ paperless_ngx_conf_cors_allowed_hosts }}"
     - pngx_var: PAPERLESS_FORCE_SCRIPT_NAME
@@ -248,12 +249,10 @@
       role_var: "{{ paperless_ngx_conf_http_remote_user_header_name }}"
     - pngx_var: PAPERLESS_LOGOUT_REDIRECT_URL
       role_var: "{{ paperless_ngx_conf_logout_redirect_url }}"
-    # Logging
     - pngx_var: PAPERLESS_LOGROTATE_MAX_SIZE
       role_var: "{{ paperless_ngx_conf_logrotate_max_size }}"
     - pngx_var: PAPERLESS_LOGROTATE_MAX_BACKUPS
       role_var: "{{ paperless_ngx_conf_logrotate_max_backups }}"
-    # Required services
     - pngx_var: PAPERLESS_REDIS
       role_var: "{{ paperless_ngx_conf_redis }}"
     - pngx_var: PAPERLESS_DBHOST
@@ -277,7 +276,6 @@
       condition: "{{ paperless_ngx_db_type == 'postgresql' }}"
     - pngx_var: PAPERLESS_DB_TIMEOUT
       role_var: "{{ paperless_ngx_conf_db_timeout }}"
-    # Paths and folders
     - pngx_var: PAPERLESS_CONSUMPTION_DIR
       role_var: "{{ paperless_ngx_conf_consumption_dir }}"
     - pngx_var: PAPERLESS_DATA_DIR
@@ -295,7 +293,6 @@
     - pngx_var: PAPERLESS_NLTK_DIR
       role_var: "{{ paperless_ngx_conf_nltk_dir }}"
       since_version: '1.11.0'
-    # OCR settings
     - pngx_var: PAPERLESS_OCR_LANGUAGE
       role_var: "{{ paperless_ngx_conf_ocr_language }}"
     - pngx_var: PAPERLESS_OCR_MODE
@@ -318,14 +315,12 @@
       role_var: "{{ paperless_ngx_conf_ocr_max_image_pixels }}"
     - pngx_var: PAPERLESS_OCR_USER_ARGS
       role_var: "{{ paperless_ngx_conf_ocr_user_args | combine({'jbig2_lossy': true} if paperless_ngx_jbig2enc_lossy else {}) | to_json }}"
-    # Tika settings
     - pngx_var: PAPERLESS_TIKA_ENABLED
       role_var: "{{ paperless_ngx_conf_tika_enabled }}"
     - pngx_var: PAPERLESS_TIKA_ENDPOINT
       role_var: "{{ paperless_ngx_conf_tika_endpoint }}"
     - pngx_var: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
       role_var: "{{ paperless_ngx_conf_tika_gotenberg_endpoint }}"
-    # Software tweaks
     - pngx_var: PAPERLESS_TASK_WORKERS
       role_var: "{{ paperless_ngx_conf_task_workers }}"
     - pngx_var: PAPERLESS_THREADS_PER_WORKER
@@ -352,14 +347,12 @@
     - pngx_var: PAPERLESS_ENABLE_COMPRESSION
       role_var: "{{ paperless_ngx_conf_enable_compression }}"
       since_version: '1.13.0'
-    # Polling
     - pngx_var: PAPERLESS_CONSUMER_POLLING
       role_var: "{{ paperless_ngx_conf_consumer_polling }}"
     - pngx_var: PAPERLESS_CONSUMER_POLLING_RETRY_COUNT
       role_var: "{{ paperless_ngx_conf_consumer_polling_retry_count }}"
     - pngx_var: PAPERLESS_CONSUMER_POLLING_DELAY
       role_var: "{{ paperless_ngx_conf_consumer_polling_delay }}"
-    # iNotify
     - pngx_var: PAPERLESS_CONSUMER_INOTIFY_DELAY
       role_var: "{{ paperless_ngx_conf_consumer_inotify_delay }}"
     - pngx_var: PAPERLESS_CONSUMER_DELETE_DUPLICATES
@@ -400,53 +393,35 @@
       role_var: "{{ paperless_ngx_conf_date_order }}"
     - pngx_var: PAPERLESS_CONSUMER_IGNORE_PATTERNS
       role_var: "{{ paperless_ngx_conf_consumer_ignore_patterns | to_json }}"
-    # Binary
     - pngx_var: PAPERLESS_CONVERT_BINARY
       role_var: "{{ paperless_ngx_conf_convert_binary }}"
     - pngx_var: PAPERLESS_GS_BINARY
       role_var: "{{ paperless_ngx_conf_gs_binary }}"
-    # Docker specific options
     - pngx_var: PAPERLESS_WEBSERVER_WORKERS
       role_var: "{{ paperless_ngx_conf_webserver_workers }}"
     - pngx_var: PAPERLESS_BIND_ADDR
       role_var: "{{ paperless_ngx_conf_bind_addr }}"
     - pngx_var: PAPERLESS_PORT
       role_var: "{{ paperless_ngx_conf_port }}"
-    # Update checking
     - pngx_var: PAPERLESS_ENABLE_UPDATE_CHECK
       role_var: "{{ paperless_ngx_conf_enable_update_check }}"
   no_log: "{{ not item.log | default(omit) }}"
+  notify: Restart paperless completely
+
+- name: Configure ghostscript for PDF
   when:
-    - item.role_var is defined and item.role_var not in (None, omit)
-    - item.condition | default(true)
-    - (item.since_version | default('0.0.1')) is ansible.builtin.version(paperless_ngx_version, '<=', version_type='semver')
-  tags: pngx_conf
-  notify: Restart paperless completely
-
-- name: Configure ghostscript for PDF (ImageMagick 6)
+    - item.when | bool
+    - not ansible_check_mode
   become: true
   ansible.builtin.lineinfile:
-    path: /etc/ImageMagick-6/policy.xml
-    regexp: (\s+)<policy domain="coder" rights=".*" pattern="PDF" />
-    line: \1<policy domain="coder" rights="read|write" pattern="PDF" />
+    path: "/etc/ImageMagick-{{ item.version }}/policy.xml"
+    regexp: '(\s+)<policy domain="coder" rights=".*" pattern="PDF" />'
+    line: '\1<policy domain="coder" rights="read|write" pattern="PDF" />'
     backrefs: true
-  when: >-
-    not (
-      (ansible_distribution == 'Debian' and ansible_distribution_version is version('13', '>=')) or
-      (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('25.04', '>='))
-    )
-  tags: pngx_conf_gs
+  loop:
+    - version: "6"
+      when: "{{ not ((ansible_distribution == 'Debian' and ansible_distribution_version is version('13', '>=')) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('25.04', '>='))) }}"
+    - version: "7"
+      when: "{{ (ansible_distribution == 'Debian' and ansible_distribution_version is version('13', '>=')) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('25.04', '>=')) }}"
   notify: Restart paperless completely
-
-- name: Configure ghostscript for PDF (ImageMagick 7)
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/ImageMagick-7/policy.xml
-    regexp: (\s+)<policy domain="coder" rights=".*" pattern="PDF" />
-    line: \1<policy domain="coder" rights="read|write" pattern="PDF" />
-    backrefs: true
-  when: >-
-    (ansible_distribution == 'Debian' and ansible_distribution_version is version('13', '>=')) or
-    (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('25.04', '>='))
-  tags: pngx_conf_gs
-  notify: Restart paperless completely
+...

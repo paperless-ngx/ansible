@@ -1,25 +1,20 @@
 ---
+- name: Set user and group for check mode
+  when:
+    - ansible_check_mode
+  ansible.builtin.set_fact:
+    paperless_ngx_system_user: "{{ ansible_user_id }}"
+    paperless_ngx_system_group: "{{ ansible_user_gid }}"
+
 - name: Do preparatory work
   ansible.builtin.include_tasks:
     file: preparation/main.yml
-    apply:
-      tags:
-        - preparation_all
-        - always  # can be slipped by '--skip-tags always' if needed for some reason
-  tags:
-    - preparation
-    - always
 
 - name: Install and configure base dependencies
   ansible.builtin.include_tasks:
     file: base_dependencies/main.yml
-    apply:
-      tags: base_dependencies_all
-  tags: base_dependencies
 
 - name: Install and configure paperless-ngx
   ansible.builtin.include_tasks:
     file: paperless_ngx/main.yml
-    apply:
-      tags: paperless_ngx_all
-  tags: paperless_ngx
+...

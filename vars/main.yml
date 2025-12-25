@@ -1,9 +1,7 @@
 ---
 # Vars that shouldn't be altered by the user
-## Vars without reference to the paperless-ngx docs
 ansible_version_minimum: "2.15"
 ansible_required_collections:
-  # [a-z_]+\.[a-z_]+(\.[a-z_]+)?:
   - community.general
   - ansible.posix
 
@@ -36,7 +34,6 @@ paperless_ngx_python_version_full: '{{ paperless_ngx_python_version_short }}.7'
 paperless_ngx_python_version_short: '3.11'
 paperless_ngx_version_minimum: '2.15.0'
 
-## Vars with reference to the paperless-ngx docs
-paperless_ngx_conf_dbengine:  # Not used by the role
 paperless_ngx_conf_redis: redis://{{ paperless_ngx_redis_host }}:{{ paperless_ngx_redis_port }}
 paperless_ngx_conf_staticdir: ../static
+...
