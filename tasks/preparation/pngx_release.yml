@@ -50,7 +50,6 @@
       retries: 5
       check_mode: false
 
-
 - name: Check for existing paperless-ngx version file
   become: true
   ansible.builtin.stat:
@@ -68,7 +67,7 @@
       changed_when: _paperless_ngx_version_installed_object.stdout != paperless_ngx_version | string
       # failed_when: false
       # ignore_errors: true
-      when: not ansible_check_mode | bool
+      check_mode: false
 
     - name: Set version of current installation as variable
       ansible.builtin.set_fact:
