@@ -1,36 +1,32 @@
 # PostgreSQL example installation for Paperless-ngx
 
-Here is an example playbook that uses `galaxyproject.postgresql` to build up a ready to use PostgreSQL instance
+Here is an example playbook that uses `community.postgresql` to build up a ready to use PostgreSQL instance.
+Install the collection with `ansible-galaxy collection install community.postgresql`
 
 ```yaml
-- name: Install psycopg2
-  become: yes
-  apt:
-    name: "python{{ (ansible_python.version.major == 3) | ternary('3', '') }}-psycopg2"
+- name: Install PostgreSQL
+  ansible.builtin.apt:
+    name:
+      - postgresql
+      - python3-psycopg2
+    state: present
+    update_cache: true
 
-- name: Install postgresql
-  include_role:
-    name: galaxyproject.postgresql
-    apply:
-      become: yes
-  vars:
-    postgresql_flavor: pgdg
-    postgresql_version: 15
-    postgresql_conf:
-      - port: "{{ paperless_ngx_conf_dbport }}"
-      - listen_addresses: "'{{ paperless_ngx_conf_dbhost }}'"
+- name: Create PostgreSQL role
+  community.postgresql.postgresql_user:
+    name: "{{ paperless_ngx_conf_dbuser }}"
+    password: "{{ paperless_ngx_conf_dbpass }}"
+  become: true
+  become_user: "postgres"
 
-- name: Create postgresql user and db
-  include_role:
-    name: galaxyproject.postgresql_objects
-    apply:
-      become: yes
-      become_user: postgres
-  vars:
-    postgresql_objects_users:
-      - name: "{{ paperless_ngx_conf_dbuser }}"
-        password: "{{ paperless_ngx_conf_dbpass }}"
-    postgresql_objects_databases:
-      - name: "{{ paperless_ngx_conf_dbname }}"
-        owner: "{{ paperless_ngx_conf_dbuser }}"
+- name: Create PostgreSQL database
+  community.postgresql.postgresql_db:
+    name: "{{ paperless_ngx_conf_dbname }}"
+    owner: "{{ paperless_ngx_conf_dbuser }}"
+    encoding: UTF8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    template: template0
+  become: true
+  become_user: "postgres"
 ```
