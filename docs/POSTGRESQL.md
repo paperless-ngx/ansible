@@ -1,6 +1,7 @@
 # PostgreSQL example installation for Paperless-ngx
 
-Here is an example playbook that uses `galaxyproject.postgresql` to build up a ready to use PostgreSQL instance
+Here is an example playbook that uses `community.postgresql` to build up a ready to use PostgreSQL instance.
+Install the collection with `ansible-galaxy collection install community.postgresql`
 
 ```yaml
 - name: Install PostgreSQL
