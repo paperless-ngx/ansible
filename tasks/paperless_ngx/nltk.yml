@@ -18,4 +18,4 @@
   loop:
     - snowball_data
     - stopwords
-    - punkt
+    - punkt_tab
