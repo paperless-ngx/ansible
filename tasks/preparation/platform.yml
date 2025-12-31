@@ -13,7 +13,7 @@
 
 - name: Compare versions of installed ansible and required ansible
   ansible.builtin.assert:
-    that: "ansible_version.full is version_compare(ansible_version_minimum, '>=')"
+    that: "ansible_version.full is version(ansible_version_minimum, '>=')"
     msg: >
       "You must update Ansible to at least {{ ansible_version_minimum }} to use this role."
   delegate_to: localhost
