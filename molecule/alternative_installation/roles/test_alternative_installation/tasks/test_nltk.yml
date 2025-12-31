@@ -4,6 +4,6 @@
   become_user: "{{ paperless_ngx_system_user }}"
   ansible.builtin.shell: |
     {{ paperless_ngx_dir_virtualenv }}/bin/python3 {{ paperless_ngx_dir_installation }}/src/manage.py document_create_classifier
-  register: _classifier_output
+  register: test_alternative_installation_classifier_output
   changed_when: false
-  failed_when: '"Classifier error" in _classifier_output.stderr'
+  failed_when: '"Classifier error" in test_alternative_installation_classifier_output.stderr'
