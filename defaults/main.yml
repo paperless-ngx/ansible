@@ -194,4 +194,5 @@ paperless_ngx_conf_webhooks_allow_internal_requests: true
 paperless_ngx_conf_webhooks_allowed_ports:
 paperless_ngx_conf_webhooks_allowed_schemes: [http, https]
 paperless_ngx_conf_webserver_workers: 1
+paperless_ngx_conf_workflow_scheduled_task_cron: "5 */1 * * *"
 paperless_ngx_conf_worker_timeout: 1800

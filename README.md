@@ -251,6 +251,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_webhooks_allowed_ports` | None | Y | Y | Will be mapped to empty list [] | 2.18 |
 | `paperless_ngx_conf_webhooks_allowed_schemes` | [http, https] | Y | Y |   | 2.18 |
 | `paperless_ngx_conf_webserver_workers` |1| Y | Y |   |   |
+| `paperless_ngx_conf_workflow_scheduled_task_cron` | "5 */1 * * *" | Y | Y |   | 2.20 |
 | `paperless_ngx_conf_worker_timeout` |1800| Y | Y |   |   |
 ||
 
