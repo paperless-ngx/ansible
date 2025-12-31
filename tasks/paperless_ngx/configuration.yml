@@ -226,6 +226,9 @@
     - pngx_var: PAPERLESS_WEBHOOKS_ALLOWED_SCHEMES
       role_var: "{{ paperless_ngx_conf_webhooks_allowed_schemes }}"
       since_version: '2.18.0'
+    - pngx_var: PAPERLESS_WORKFLOW_SCHEDULED_TASK_CRON
+      role_var: "{{ paperless_ngx_conf_workflow_scheduled_task_cron }}"
+      since_version: '2.20.3'
     # not yet sorted (former try to keep up with official docs ordering)
     # Hosting & Security
     - pngx_var: PAPERLESS_CORS_ALLOWED_HOSTS
