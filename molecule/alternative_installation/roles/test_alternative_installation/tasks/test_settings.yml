@@ -5,12 +5,12 @@
       become: true
       become_user: "{{ paperless_ngx_system_user }}"
       ansible.builtin.command: "{{ paperless_ngx_dir_virtualenv }}/bin/python3 {{ paperless_ngx_dir_installation }}/src/manage.py diffsettings --output unified"
-      register: _active_settings
+      register: test_alternative_installation__active_settings
       changed_when: false
 
     - name: Check values
       ansible.builtin.assert:
-        that: _active_settings.stdout is regex(item.setting_key + ' = ' + item.expected_value)
+        that: test_alternative_installation__active_settings.stdout is regex(item.setting_key + ' = ' + item.expected_value)
         success_msg: "{{ item.setting_key }} found."
         fail_msg:
           - "The setting"
@@ -18,7 +18,7 @@
           - "and its expected value"
           - "{{ item.expected_value }}"
           - "was not found in"
-          - "{{ _active_settings.stdout }}"
+          - "{{ test_alternative_installation__active_settings.stdout }}"
       loop:
         - setting_key: CONSUMER_IGNORE_PATTERNS
           expected_value: '\[.*?\]'
