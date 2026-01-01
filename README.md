@@ -77,7 +77,7 @@ The following sections are devided into:
 | `paperless_ngx_system_group` | paperlessngx | The group to which the system user belongs. |
 | `paperless_ngx_system_user` | paperlessngx | The user that will execute the services and own the data. |
 | `paperless_ngx_system_user_additional_groups` | [] | Optionally add the system user to more groups. For example to read TLS certificates that can be read by the group `ssl-cert`. |
-| `paperless_ngx_version` | latest | Sofware version to install. Use `latest` or any specific version in the format `'2.15.0'`. Only `paperless_ngx_version_minimum: '2.16.0'` and higher supported. |
+| `paperless_ngx_version` | latest | Sofware version to install. Use `latest` or any specific version in the format `'2.17.0'`. Only `paperless_ngx_version_minimum: '2.17.0'` and higher supported. |
 | `` |  |  |
 
 ###  2.2. <a name='Paperless-ngxconfigurationvariables'></a>Paperless-ngx configuration variables
