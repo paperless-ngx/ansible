@@ -32,8 +32,8 @@ paperless_ngx_services_list:
     enabled: "{{ paperless_ngx_conf_enable_flower }}"
 
 paperless_ngx_python_release_url: 'https://www.python.org/ftp/python/{{ paperless_ngx_python_version_full }}/Python-{{ paperless_ngx_python_version_full }}.tgz'
-paperless_ngx_python_version_full: '{{ paperless_ngx_python_version_short }}.7'
-paperless_ngx_python_version_short: '3.11'
+paperless_ngx_python_version_full: '{{ paperless_ngx_python_version_short }}.8'
+paperless_ngx_python_version_short: '3.12'
 paperless_ngx_version_minimum: '2.15.0'
 
 ## Vars with reference to the paperless-ngx docs
