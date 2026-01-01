@@ -197,7 +197,7 @@
       role_var: "{{ paperless_ngx_conf_socialaccount_allow_signups }}"
       since_version: '2.5.0'
     - pngx_var: PAPERLESS_SOCIALACCOUNT_PROVIDERS
-      role_var: "{{ paperless_ngx_conf_socialaccount_providers }}"
+      role_var: "{{ paperless_ngx_conf_socialaccount_providers | to_json }}"
       since_version: '2.5.0'
     - pngx_var: PAPERLESS_SOCIAL_ACCOUNT_DEFAULT_GROUPS
       role_var: "{{ paperless_ngx_conf_social_account_default_groups }}"
