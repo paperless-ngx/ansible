@@ -1,5 +1,47 @@
 # Changelog
 
+## 5.0.0 - 2026-01-02
+
+### paperless-ngx ansible role 5.0.0
+
+#### Features
+
+- feat: update Python version to 3.12 @stevenengland ([#284](https://github.com/paperless-ngx/ansible/pull/284))
+- feat: Add workflow scheduled task cron configuration for version 2.20.3 @stevenengland ([#281](https://github.com/paperless-ngx/ansible/pull/281))
+
+#### Bug Fixes
+
+- fix: socialaccount_providers config should be json @jan--f ([#285](https://github.com/paperless-ngx/ansible/pull/285))
+- fix(deps): bump ansible from 11.1.0 to 13.2.0 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#278](https://github.com/paperless-ngx/ansible/pull/278))
+- fix(deps): bump actions/checkout from 5 to 6 @[dependabot[bot]](https://github.com/apps/dependabot) ([#265](https://github.com/paperless-ngx/ansible/pull/265))
+- fix(deps): bump falti/dotenv-action from 1.1.4 to 1.1.5 @[dependabot[bot]](https://github.com/apps/dependabot) ([#262](https://github.com/paperless-ngx/ansible/pull/262))
+- fix(deps): bump ansible-lint from 25.1.3 to 25.12.2 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#276](https://github.com/paperless-ngx/ansible/pull/276))
+- fix: update NLTK package punkt to punkt_tab @stevenengland ([#280](https://github.com/paperless-ngx/ansible/pull/280))
+- fix: execute version number check also in check mode @Tealk ([#272](https://github.com/paperless-ngx/ansible/pull/272))
+- fix: python check @Tealk ([#271](https://github.com/paperless-ngx/ansible/pull/271))
+- fix(deps): bump peter-evans/create-pull-request from 7 to 8 @[dependabot[bot]](https://github.com/apps/dependabot) ([#269](https://github.com/paperless-ngx/ansible/pull/269))
+- fix(deps): bump pip from 25.2 to 25.3 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#259](https://github.com/paperless-ngx/ansible/pull/259))
+- fix(deps): bump actions/setup-python from 5 to 6 @[dependabot[bot]](https://github.com/apps/dependabot) ([#254](https://github.com/paperless-ngx/ansible/pull/254))
+
+#### Maintenance
+
+- refactor: Simplify PostgreSQL installation and user creation @Tealk ([#277](https://github.com/paperless-ngx/ansible/pull/277))
+
+#### Dependencies
+
+<details>
+<summary>7 changes</summary>
+- fix(deps): bump ansible from 11.1.0 to 13.2.0 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#278](https://github.com/paperless-ngx/ansible/pull/278))
+- fix(deps): bump actions/checkout from 5 to 6 @[dependabot[bot]](https://github.com/apps/dependabot) ([#265](https://github.com/paperless-ngx/ansible/pull/265))
+- fix(deps): bump falti/dotenv-action from 1.1.4 to 1.1.5 @[dependabot[bot]](https://github.com/apps/dependabot) ([#262](https://github.com/paperless-ngx/ansible/pull/262))
+- fix(deps): bump ansible-lint from 25.1.3 to 25.12.2 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#276](https://github.com/paperless-ngx/ansible/pull/276))
+- fix(deps): bump peter-evans/create-pull-request from 7 to 8 @[dependabot[bot]](https://github.com/apps/dependabot) ([#269](https://github.com/paperless-ngx/ansible/pull/269))
+- fix(deps): bump pip from 25.2 to 25.3 in /.github/workflows @[dependabot[bot]](https://github.com/apps/dependabot) ([#259](https://github.com/paperless-ngx/ansible/pull/259))
+- fix(deps): bump actions/setup-python from 5 to 6 @[dependabot[bot]](https://github.com/apps/dependabot) ([#254](https://github.com/paperless-ngx/ansible/pull/254))
+
+</details>
+**Full Changelog**: https://github.com/paperless-ngx/ansible/compare/4.1.0...5.0.0
+
 ## 4.1.0 - 2025-09-02
 
 ### paperless-ngx ansible role 4.1.0
@@ -72,7 +114,6 @@
 </details>
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/3.1.0...4.0.0
 ## 3.1.0 - 2025-01-19
-
 ### paperless-ngx ansible role 3.1.0
 
 #### Features
@@ -98,7 +139,6 @@
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/3.0.0...3.1.0
 ## 3.0.0 - 2024-09-12
 ### paperless-ngx ansible role 3.0.0
-
 #### Features
 
 - feat: Add new configuration options for version 2.12 @stevenengland ([#191](https://github.com/paperless-ngx/ansible/pull/191))
@@ -137,7 +177,6 @@
 ## 2.3.0 - 2024-07-13
 ### paperless-ngx ansible role 2.3.0
 #### Features
-
 - feat: add 2.11 support @stevenengland ([#178](https://github.com/paperless-ngx/ansible/pull/178))
 
 #### Bug Fixes
@@ -230,7 +269,6 @@
 - fix(deps): bump actions/checkout from 3 to 4 @dependabot ([#105](https://github.com/paperless-ngx/ansible/pull/105))
 - fix(deps): bump ansible-lint from 6.17.2 to 6.21.1 in /.github/workflows @dependabot ([#118](https://github.com/paperless-ngx/ansible/pull/118))
 - docs: typo in word postgres in README.md @felbinger ([#121](https://github.com/paperless-ngx/ansible/pull/121))
-
 #### Documentation
 
 - docs: typo in word postgres in README.md @felbinger ([#121](https://github.com/paperless-ngx/ansible/pull/121))
@@ -264,7 +302,6 @@
 **Full Changelog**: https://github.com/paperless-ngx/ansible/compare/1.3.0...1.3.1
 ## 1.3.0 - 2023-08-11
 ### paperless-ngx ansible role 1.3.0
-
 #### Features
 
 - feat: add support for v1.16 and 1.17 @stevenengland ([#90](https://github.com/paperless-ngx/ansible/pull/90))
@@ -312,7 +349,6 @@
 #### Maintenance
 - test: remove unsused tests coming from role init @stevenengland ([#63](https://github.com/paperless-ngx/ansible/pull/63))
 #### Dependencies
-
 <details>
 <summary>5 changes</summary>
 - fix(deps): bump ansible-lint from 6.14.3 to 6.15.0 in /.github/workflows @dependabot ([#62](https://github.com/paperless-ngx/ansible/pull/62))
@@ -332,7 +368,6 @@
 #### Features
 - feat(vars): add PAPERLESS_PRE_CONSUME_SCRIPT @stevenengland ([#46](https://github.com/paperless-ngx/ansible/pull/46))
 #### Bug Fixes
-
 - fix(deps): bump yamllint from 1.29.0 to 1.30.0 in /.github/workflows @dependabot ([#45](https://github.com/paperless-ngx/ansible/pull/45))
 
 #### Documentation
