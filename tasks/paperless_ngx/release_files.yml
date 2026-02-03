@@ -69,11 +69,11 @@
 
 - name: Download and extract paperless-ngx
   become: true
-  become_user: "{{ _paperless_ngx_untar_username }}"
   ansible.builtin.unarchive:
     src: "{{ _release__download_url }}"
     remote_src: true
     dest: "{{ _install_tempdir }}"
+    owner: "{{ _paperless_ngx_untar_username }}"
   register: _download_and_unarchive_pngx
   until:
     - "not 'urlopen error' in _download_and_unarchive_pngx.msg | default('')"

@@ -45,12 +45,12 @@
 
     - name: Download and extract python sources
       become: true
-      become_user: "{{ _paperless_ngx_untar_username }}"
       ansible.builtin.unarchive:
         src: "{{ paperless_ngx_python_release_url }}"
         remote_src: true
         dest: "{{ _python_archive_dir.path }}"
         extra_opts: [--strip-components=1]
+        owner: "{{ _paperless_ngx_untar_username }}"
       register: _download_and_unarchive_python
       until:
         - "not 'urlopen error' in _download_and_unarchive_python.msg | default('')"
