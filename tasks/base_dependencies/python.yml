@@ -36,13 +36,17 @@
         path: "{{ paperless_ngx_dependency_install_tmp_dir }}"
       register: _python_archive_dir
 
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "LURURURURURURU!!!!"
+
     - name: Download and extract python sources
       become: true
       ansible.builtin.unarchive:
         src: "{{ paperless_ngx_python_release_url }}"
         remote_src: true
         dest: "{{ _python_archive_dir.path }}"
-        extra_opts: [--strip-components=1]
+        extra_opts: [--strip-components=1,--no-same-owner]
       register: _download_and_unarchive_python
       until:
         - "not 'urlopen error' in _download_and_unarchive_python.msg | default('')"
