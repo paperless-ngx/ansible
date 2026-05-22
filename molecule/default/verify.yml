@@ -6,3 +6,4 @@
     - name: Test the installation with default verifier
       ansible.builtin.include_tasks:
         file: ../default_verification.yml
+...

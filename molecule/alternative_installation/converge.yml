@@ -21,3 +21,4 @@
         paperless_ngx_conf_enable_nltk: 1
         # PR 242
         paperless_ngx_conf_filename_format: '{% raw %}{{ created_year_short }}-{{ correspondent }}-{{ title }}{% endraw %}'
+...

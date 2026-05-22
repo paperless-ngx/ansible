@@ -22,3 +22,4 @@
       loop:
         - setting_key: CONSUMER_IGNORE_PATTERNS
           expected_value: '\[.*?\]'
+...

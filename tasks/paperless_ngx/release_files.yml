@@ -51,7 +51,7 @@
         suffix: tempgit_pngx
       register: _install_tempdir_created
 
-- name: Determine temporary directory to use  # noqa jinja[spacing]
+- name: Determine temporary directory to use # noqa jinja[spacing]
   ansible.builtin.set_fact:
     _install_tempdir: >-
       {%- if _install_tempdir_created.path is defined -%}
@@ -153,3 +153,4 @@
   ansible.builtin.file:
     path: "{{ _install_tempdir }}"
     state: absent
+...

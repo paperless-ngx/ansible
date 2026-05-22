@@ -11,3 +11,4 @@
     msg:
       - "Do not set a directory for runtime data as subdirectory of the installation folder."
       - "This will keep us from overcomplicating the role development and you from unwanted deletions during upgrades etc."
+...

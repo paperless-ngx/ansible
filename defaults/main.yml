@@ -1,7 +1,7 @@
 ---
 # Role specific variables
 ## Data db
-paperless_ngx_db_type: sqlite  # or postgresql
+paperless_ngx_db_type: sqlite # or postgresql
 ## Directories
 paperless_ngx_dir_force_permission_exclude: []
 paperless_ngx_dir_installation: /opt/paperless-ngx
@@ -47,7 +47,7 @@ paperless_ngx_conf_consumer_barcode_dpi: 300
 paperless_ngx_conf_consumer_barcode_max_pages: 0
 paperless_ngx_conf_consumer_barcode_retain_split_pages: false
 paperless_ngx_conf_consumer_barcode_scanner: "PYZBAR"
-paperless_ngx_conf_consumer_barcode_string: 'PATCHT'
+paperless_ngx_conf_consumer_barcode_string: "PATCHT"
 paperless_ngx_conf_consumer_barcode_tiff_support: false
 paperless_ngx_conf_consumer_barcode_upscale: 0.0
 paperless_ngx_conf_consumer_collate_double_sided_subdir_name: "double-sided"
@@ -196,3 +196,4 @@ paperless_ngx_conf_webhooks_allowed_schemes: [http, https]
 paperless_ngx_conf_webserver_workers: 1
 paperless_ngx_conf_workflow_scheduled_task_cron: "5 */1 * * *"
 paperless_ngx_conf_worker_timeout: 1800
+...

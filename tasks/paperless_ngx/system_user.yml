@@ -16,3 +16,4 @@
     shell: /usr/sbin/nologin
     # GNUPG_HOME required due to paperless db.py
     create_home: true
+...

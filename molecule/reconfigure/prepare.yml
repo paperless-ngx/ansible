@@ -12,3 +12,4 @@
     - name: "Install latest version of pngx (reconfigure)"
       ansible.builtin.include_role:
         name: "paperless_ngx.paperless_ngx"
+...

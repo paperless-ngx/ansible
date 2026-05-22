@@ -44,3 +44,4 @@
         postgresql_objects_databases:
           - name: "{{ paperless_ngx_conf_dbname }}"
             owner: "{{ paperless_ngx_conf_dbuser }}"
+...

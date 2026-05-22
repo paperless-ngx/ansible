@@ -12,3 +12,4 @@
           - "'tesseract-ocr-ces' in ansible_facts.packages"
         success_msg: "All OCR languages installed."
         fail_msg: "At least one OCR language is not installed."
+...

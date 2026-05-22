@@ -12,3 +12,4 @@
         name: "paperless_ngx.paperless_ngx"
       vars:
         paperless_ngx_version: "{{ paperless_ngx_version_minimum }}"
+...

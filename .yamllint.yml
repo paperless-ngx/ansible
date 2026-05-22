@@ -34,7 +34,7 @@ rules:
     level: error
   key-duplicates:
     level: error
-  line-length: {level: error, max: 180}
+  line-length: { level: error, max: 180 }
   new-line-at-end-of-file:
     level: error
   new-lines:
@@ -46,3 +46,4 @@ rules:
     level: error
   truthy:
     level: error
+...

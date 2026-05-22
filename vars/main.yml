@@ -37,6 +37,7 @@ paperless_ngx_python_version_short: '3.12'
 paperless_ngx_version_minimum: '2.18.0'
 
 ## Vars with reference to the paperless-ngx docs
-paperless_ngx_conf_dbengine:  # Not used by the role
+paperless_ngx_conf_dbengine: # Not used by the role
 paperless_ngx_conf_redis: redis://{{ paperless_ngx_redis_host }}:{{ paperless_ngx_redis_port }}
 paperless_ngx_conf_staticdir: ../static
+...

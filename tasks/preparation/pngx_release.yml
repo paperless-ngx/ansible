@@ -20,7 +20,6 @@
       retries: 5
       check_mode: false
 
-
     - name: "Set paperless version to {{ _latest_release_api_response.json.tag_name[1:] }}"
       ansible.builtin.set_fact:
         paperless_ngx_version: "{{ _latest_release_api_response.json.tag_name[1:] }}"
@@ -73,7 +72,7 @@
       ansible.builtin.set_fact:
         _paperless_ngx_installed_version: "{{ _paperless_ngx_version_installed_object.stdout }}"
 
-- name: Set installation strategy  # noqa jinja[spacing]
+- name: Set installation strategy # noqa jinja[spacing]
   ansible.builtin.set_fact:
     _paperless_ngx_installation_strategy_fresh: >-
       {{ 'true' if not _paperless_ngx_installed_version is defined else 'false' }}
@@ -104,3 +103,4 @@
     msg: Downgrade detected - Downgrades are not allowed.
   when: _paperless_ngx_installation_strategy_downgrade|bool
   register: _exception
+...

@@ -6,3 +6,4 @@
     - name: Prepare the installation with default preparation
       ansible.builtin.include_tasks:
         file: ../default_preparation.yml
+...

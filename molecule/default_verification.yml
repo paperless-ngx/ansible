@@ -32,7 +32,7 @@
   register: _post_document
   failed_when: "'OK' not in _post_document.msg"
 
-- name: Output post register  # noqa: run-once[task]
+- name: Output post register # noqa: run-once[task]
   ansible.builtin.debug:
     var: _post_document
   run_once: true
@@ -46,7 +46,7 @@
   register: _logs
   failed_when: ('Consuming ' + filename + '.txt') not in _logs.content
 
-- name: Output _logs register  # noqa: run-once[task]
+- name: Output _logs register # noqa: run-once[task]
   ansible.builtin.debug:
     var: _logs
   run_once: true
@@ -98,3 +98,4 @@
       Authorization: Basic {{ (paperless_ngx_conf_admin_user + ":" + paperless_ngx_conf_admin_password) | b64encode }}
   register: _delete_document
   failed_when: "'OK' not in _delete_document.json['result']"
+...
