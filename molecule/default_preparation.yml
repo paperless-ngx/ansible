@@ -1,7 +1,7 @@
 ---
 - name: Update all packages to the latest version
   become: true
-  ansible.builtin.apt:  # noqa package-latest
+  ansible.builtin.apt: # noqa package-latest
     upgrade: dist
     state: latest
     update_cache: true
@@ -11,3 +11,4 @@
   ansible.builtin.apt:
     pkg:
       - rsyslog
+...

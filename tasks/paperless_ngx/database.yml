@@ -18,3 +18,4 @@
   register: _superuser_created
   changed_when: '"Created superuser" in _superuser_created.stdout'
   no_log: true
+...

@@ -42,3 +42,4 @@
     owner: "{{ paperless_ngx_system_user }}"
     group: "{{ paperless_ngx_system_group }}"
     mode: g-w,o-rwx
+...

@@ -8,3 +8,4 @@
     - name: "Install latest version of pngx"
       ansible.builtin.include_role:
         name: "paperless_ngx.paperless_ngx"
+...

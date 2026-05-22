@@ -10,3 +10,4 @@
     - name: "Include test_alternative_installation"
       ansible.builtin.import_role:
         name: "test_alternative_installation"
+...

@@ -17,7 +17,7 @@
       - { option: NoNewPrivileges, value: "true" }
       - { option: PrivateUsers, value: "true" }
       - { option: PrivateDevices, value: "true" }
-      - { option: EnvironmentFile, value: "{{ paperless_ngx_config_file }}"}
+      - { option: EnvironmentFile, value: "{{ paperless_ngx_config_file }}" }
 
 - name: Configure systemd services (exec start)
   become: true
@@ -79,3 +79,4 @@
     state: started
   loop: "{{ paperless_ngx_services_list }}"
   when: item.enabled|bool
+...

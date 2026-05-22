@@ -7,3 +7,4 @@
   register: test_alternative_installation__classifier_output
   changed_when: false
   failed_when: '"Classifier error" in test_alternative_installation__classifier_output.stderr'
+...

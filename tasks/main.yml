@@ -5,7 +5,7 @@
     apply:
       tags:
         - preparation_all
-        - always  # can be slipped by '--skip-tags always' if needed for some reason
+        - always # can be slipped by '--skip-tags always' if needed for some reason
   tags:
     - preparation
     - always
@@ -23,3 +23,4 @@
     apply:
       tags: paperless_ngx_all
   tags: paperless_ngx
+...

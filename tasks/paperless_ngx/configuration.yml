@@ -13,222 +13,222 @@
     # already alphabetical sorted
     - pngx_var: PAPERLESS_ACCOUNT_ALLOW_SIGNUPS
       role_var: "{{ paperless_ngx_conf_account_allow_signups }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_ACCOUNT_DEFAULT_GROUPS
       role_var: "{{ paperless_ngx_conf_account_default_groups }}"
-      since_version: '2.15.0'
+      since_version: "2.15.0"
     - pngx_var: PAPERLESS_ACCOUNT_DEFAULT_HTTP_PROTOCOL
       role_var: "{{ paperless_ngx_conf_account_default_http_protocol }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS
       role_var: "{{ paperless_ngx_conf_account_email_unknown_accounts }}"
-      since_version: '2.16.0'
+      since_version: "2.16.0"
     - pngx_var: PAPERLESS_ACCOUNT_EMAIL_VERIFICATION
       role_var: "{{ paperless_ngx_conf_account_email_verification }}"
-      since_version: '2.6.0'
+      since_version: "2.6.0"
     - pngx_var: PAPERLESS_ACCOUNT_SESSION_REMEMBER
       role_var: "{{ paperless_ngx_conf_account_session_remember }}"
-      since_version: '2.7.0'
+      since_version: "2.7.0"
     - pngx_var: PAPERLESS_ALLOWED_HOSTS
       role_var: "{{ paperless_ngx_conf_allowed_hosts }}"
     - pngx_var: PAPERLESS_APP_LOGO
       role_var: "{{ paperless_ngx_conf_app_logo }}"
-      since_version: '2.4.0'
+      since_version: "2.4.0"
     - pngx_var: PAPERLESS_APP_TITLE
       role_var: "{{ paperless_ngx_conf_app_title }}"
-      since_version: '2.4.0'
+      since_version: "2.4.0"
     - pngx_var: PAPERLESS_APPS
       role_var: "{{ paperless_ngx_conf_apps }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_AUDIT_LOG_ENABLED
       role_var: "{{ paperless_ngx_conf_audit_log_enabled }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_DPI
       role_var: "{{ paperless_ngx_conf_consumer_barcode_dpi }}"
-      since_version: '1.16.0'
+      since_version: "1.16.0"
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_MAX_PAGES
       role_var: "{{ paperless_ngx_conf_consumer_barcode_max_pages }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_RETAIN_SPLIT_PAGES
       role_var: "{{ paperless_ngx_conf_consumer_barcode_retain_split_pages }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_SCANNER
       role_var: "{{ paperless_ngx_conf_consumer_barcode_scanner }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_CONSUMER_BARCODE_UPSCALE
       role_var: "{{ paperless_ngx_conf_consumer_barcode_upscale }}"
-      since_version: '1.16.0'
+      since_version: "1.16.0"
     - pngx_var: PAPERLESS_CONSUMER_COLLATE_DOUBLE_SIDED_SUBDIR_NAME
       role_var: "{{ paperless_ngx_conf_consumer_collate_double_sided_subdir_name }}"
-      since_version: '1.17.0'
+      since_version: "1.17.0"
     - pngx_var: PAPERLESS_CONSUMER_COLLATE_DOUBLE_SIDED_TIFF_SUPPORT
       role_var: "{{ paperless_ngx_conf_consumer_collate_double_sided_tiff_support }}"
-      since_version: '1.17.0'
+      since_version: "1.17.0"
     - pngx_var: PAPERLESS_CONSUMER_DISABLE
       role_var: "{{ paperless_ngx_conf_consumer_disable }}"
-      since_version: '2.15.0'
+      since_version: "2.15.0"
     - pngx_var: PAPERLESS_CONSUMER_ENABLE_COLLATE_DOUBLE_SIDED
       role_var: "{{ paperless_ngx_conf_consumer_enable_collate_double_sided }}"
-      since_version: '1.17.0'
+      since_version: "1.17.0"
     - pngx_var: PAPERLESS_CONSUMER_ENABLE_TAG_BARCODE
       role_var: "{{ paperless_ngx_conf_consumer_enable_tag_barcode }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_CONSUMER_TAG_BARCODE_MAPPING
       role_var: "{{ paperless_ngx_conf_consumer_tag_barcode_mapping | to_json }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_DATE_PARSER_LANGUAGES
       role_var: "{{ paperless_ngx_conf_date_parser_languages }}"
-      since_version: '2.18.0'
+      since_version: "2.18.0"
     - pngx_var: PAPERLESS_DB_POOLSIZE
       role_var: "{{ paperless_ngx_conf_db_poolsize }}"
-      since_version: '2.18.0'
+      since_version: "2.18.0"
     - pngx_var: PAPERLESS_DB_READ_CACHE_ENABLED
       role_var: "{{ paperless_ngx_conf_db_read_cache_enabled }}"
-      since_version: '2.18.0'
+      since_version: "2.18.0"
     - pngx_var: PAPERLESS_DBSSLCERT
       role_var: "{{ paperless_ngx_conf_dbsslcert }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_DBSSLKEY
       role_var: "{{ paperless_ngx_conf_dbsslkey }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_DBSSLROOTCERT
       role_var: "{{ paperless_ngx_conf_dbsslrootcert }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_DISABLE_REGULAR_LOGIN
       role_var: "{{ paperless_ngx_conf_disable_regular_login }}"
-      since_version: '2.6.0'
+      since_version: "2.6.0"
     - pngx_var: PAPERLESS_EMAIL_CERTIFICATE_LOCATION
       role_var: "{{ paperless_ngx_conf_email_certificate_location }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_EMAIL_FROM
       role_var: "{{ paperless_ngx_conf_email_from }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_EMAIL_GNUPG_HOME
       role_var: "{{ paperless_ngx_conf_email_gnupg_home }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_EMAIL_HOST
       role_var: "{{ paperless_ngx_conf_email_host }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_EMAIL_HOST_USER
       role_var: "{{ paperless_ngx_conf_email_host_user }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_EMAIL_HOST_PASSWORD
       role_var: "{{ paperless_ngx_conf_email_host_password }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_EMAIL_PARSE_DEFAULT_LAYOUT
       role_var: "{{ paperless_ngx_conf_email_parse_default_layout }}"
-      since_version: '2.15.0'
+      since_version: "2.15.0"
     - pngx_var: PAPERLESS_EMAIL_PORT
       role_var: "{{ paperless_ngx_conf_email_port }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_EMAIL_USE_SSL
       role_var: "{{ paperless_ngx_conf_email_use_ssl }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_EMAIL_USE_TLS
       role_var: "{{ paperless_ngx_conf_email_use_tls }}"
-      since_version: '2.0.0'
+      since_version: "2.0.0"
     - pngx_var: PAPERLESS_EMPTY_TRASH_DELAY
       role_var: "{{ paperless_ngx_conf_empty_trash_delay }}"
-      since_version: '2.10.0'
+      since_version: "2.10.0"
     - pngx_var: PAPERLESS_EMPTY_TRASH_DIR
       role_var: "{{ paperless_ngx_conf_empty_trash_dir }}"
-      since_version: '2.10.0'
+      since_version: "2.10.0"
     - pngx_var: PAPERLESS_EMPTY_TRASH_TASK_CRON
       role_var: "{{ paperless_ngx_conf_empty_trash_task_cron }}"
-      since_version: '2.10.0'
+      since_version: "2.10.0"
     - pngx_var: PAPERLESS_ENABLE_HTTP_REMOTE_USER_API
       role_var: "{{ paperless_ngx_conf_enable_http_remote_user_api }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_ENABLE_GPG_DECRYPTOR
       role_var: "{{ paperless_ngx_conf_enable_gpg_decryptor }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_GMAIL_OAUTH_CLIENT_ID
       role_var: "{{ paperless_ngx_conf_gmail_oauth_client_id }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_GMAIL_OAUTH_CLIENT_SECRET
       role_var: "{{ paperless_ngx_conf_gmail_oauth_client_secret }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_MAX_IMAGE_PIXELS
       role_var: "{{ paperless_ngx_conf_max_image_pixels }}"
-      since_version: '2.6.0'
+      since_version: "2.6.0"
     - pngx_var: PAPERLESS_MODEL_FILE
       role_var: "{{ paperless_ngx_conf_model_file }}"
-      since_version: '2.9.0'
+      since_version: "2.9.0"
     - pngx_var: PAPERLESS_OAUTH_CALLBACK_BASE_URL
       role_var: "{{ paperless_ngx_conf_oauth_callback_base_url }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_OCR_COLOR_CONVERSION_STRATEGY
       role_var: "{{ paperless_ngx_conf_ocr_color_conversion_strategy }}"
-      since_version: '2.1.0'
+      since_version: "2.1.0"
     - pngx_var: PAPERLESS_OCR_SKIP_ARCHIVE_FILE
       role_var: "{{ paperless_ngx_conf_ocr_skip_archive_file }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_OUTLOOK_OAUTH_CLIENT_ID
       role_var: "{{ paperless_ngx_conf_outlook_oauth_client_id }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_OUTLOOK_OAUTH_CLIENT_SECRET
       role_var: "{{ paperless_ngx_conf_outlook_oauth_client_secret }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_PROXY_SSL_HEADER
       role_var: "{{ paperless_ngx_conf_proxy_ssl_header }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_READ_CACHE_REDIS_URL
       role_var: "{{ paperless_ngx_conf_read_cache_redis_url }}"
-      since_version: '2.18.0'
+      since_version: "2.18.0"
     - pngx_var: PAPERLESS_READ_CACHE_TTL
       role_var: "{{ paperless_ngx_conf_read_cache_ttl }}"
-      since_version: '2.18.0'
+      since_version: "2.18.0"
     - pngx_var: PAPERLESS_REDIRECT_LOGIN_TO_SSO
       role_var: "{{ paperless_ngx_conf_redirect_login_to_sso }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_REDIS_PREFIX
       role_var: "{{ paperless_ngx_conf_redis_prefix }}"
-      since_version: '1.17.0'
+      since_version: "1.17.0"
     - pngx_var: PAPERLESS_SECRET_KEY
       role_var: "{{ paperless_ngx_conf_secret_key }}"
       log: false
     - pngx_var: PAPERLESS_SESSION_COOKIE_AGE
       role_var: "{{ paperless_ngx_conf_session_cookie_age }}"
-      since_version: '2.12.0'
+      since_version: "2.12.0"
     - pngx_var: PAPERLESS_SOCIAL_AUTO_SIGNUP
       role_var: "{{ paperless_ngx_conf_social_auto_signup }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
       role_var: "{{ paperless_ngx_conf_socialaccount_allow_signups }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_SOCIALACCOUNT_PROVIDERS
       role_var: "{{ paperless_ngx_conf_socialaccount_providers | to_json }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_SOCIAL_ACCOUNT_DEFAULT_GROUPS
       role_var: "{{ paperless_ngx_conf_social_account_default_groups }}"
-      since_version: '2.15.0'
+      since_version: "2.15.0"
     - pngx_var: PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS
       role_var: "{{ paperless_ngx_conf_social_account_sync_groups }}"
-      since_version: '2.15.0'
+      since_version: "2.15.0"
     - pngx_var: PAPERLESS_SUPERVISORD_WORKING_DIR
       role_var: "{{ paperless_ngx_conf_supervisord_working_dir }}"
-      since_version: '2.5.0'
+      since_version: "2.5.0"
     - pngx_var: PAPERLESS_TRUSTED_PROXIES
       role_var: "{{ paperless_ngx_conf_trusted_proxies }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_USE_X_FORWARD_HOST
       role_var: "{{ paperless_ngx_conf_use_x_forward_host }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_USE_X_FORWARD_PORT
       role_var: "{{ paperless_ngx_conf_use_x_forward_port }}"
-      since_version: '1.14.0'
+      since_version: "1.14.0"
     - pngx_var: PAPERLESS_WEBHOOKS_ALLOW_INTERNAL_REQUESTS
       role_var: "{{ paperless_ngx_conf_webhooks_allow_internal_requests }}"
-      since_version: '2.18.0'
+      since_version: "2.18.0"
     - pngx_var: PAPERLESS_WEBHOOKS_ALLOWED_PORTS
       role_var: "{{ paperless_ngx_conf_webhooks_allowed_ports }}"
-      since_version: '2.18.0'
+      since_version: "2.18.0"
     - pngx_var: PAPERLESS_WEBHOOKS_ALLOWED_SCHEMES
       role_var: "{{ paperless_ngx_conf_webhooks_allowed_schemes }}"
-      since_version: '2.18.0'
+      since_version: "2.18.0"
     - pngx_var: PAPERLESS_WORKFLOW_SCHEDULED_TASK_CRON
       role_var: "{{ paperless_ngx_conf_workflow_scheduled_task_cron }}"
-      since_version: '2.20.3'
+      since_version: "2.20.3"
     # not yet sorted (former try to keep up with official docs ordering)
     # Hosting & Security
     - pngx_var: PAPERLESS_CORS_ALLOWED_HOSTS
@@ -297,7 +297,7 @@
       role_var: "{{ paperless_ngx_conf_logging_dir }}"
     - pngx_var: PAPERLESS_NLTK_DIR
       role_var: "{{ paperless_ngx_conf_nltk_dir }}"
-      since_version: '1.11.0'
+      since_version: "1.11.0"
     # OCR settings
     - pngx_var: PAPERLESS_OCR_LANGUAGE
       role_var: "{{ paperless_ngx_conf_ocr_language }}"
@@ -339,22 +339,22 @@
       role_var: "{{ paperless_ngx_conf_time_zone }}"
     - pngx_var: PAPERLESS_ENABLE_NLTK
       role_var: "{{ paperless_ngx_conf_enable_nltk }}"
-      since_version: '1.11.0'
+      since_version: "1.11.0"
     - pngx_var: PAPERLESS_EMAIL_TASK_CRON
       role_var: "{{ paperless_ngx_conf_email_task_cron }}"
-      since_version: '1.12.0'
+      since_version: "1.12.0"
     - pngx_var: PAPERLESS_TRAIN_TASK_CRON
       role_var: "{{ paperless_ngx_conf_train_task_cron }}"
-      since_version: '1.12.0'
+      since_version: "1.12.0"
     - pngx_var: PAPERLESS_INDEX_TASK_CRON
       role_var: "{{ paperless_ngx_conf_index_task_cron }}"
-      since_version: '1.12.0'
+      since_version: "1.12.0"
     - pngx_var: PAPERLESS_SANITY_TASK_CRON
       role_var: "{{ paperless_ngx_conf_sanity_task_cron }}"
-      since_version: '1.12.0'
+      since_version: "1.12.0"
     - pngx_var: PAPERLESS_ENABLE_COMPRESSION
       role_var: "{{ paperless_ngx_conf_enable_compression }}"
-      since_version: '1.13.0'
+      since_version: "1.13.0"
     # Polling
     - pngx_var: PAPERLESS_CONSUMER_POLLING
       role_var: "{{ paperless_ngx_conf_consumer_polling }}"
@@ -379,10 +379,10 @@
       role_var: "{{ paperless_ngx_conf_consumer_barcode_string }}"
     - pngx_var: PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE
       role_var: "{{ paperless_ngx_conf_consumer_enable_asn_barcode }}"
-      since_version: '1.12.0'
+      since_version: "1.12.0"
     - pngx_var: PAPERLESS_CONSUMER_ASN_BARCODE_PREFIX
       role_var: "{{ paperless_ngx_conf_consumer_asn_barcode_prefix }}"
-      since_version: '1.12.0'
+      since_version: "1.12.0"
     - pngx_var: PAPERLESS_CONVERT_MEMORY_LIMIT
       role_var: "{{ paperless_ngx_conf_convert_memory_limit }}"
     - pngx_var: PAPERLESS_CONVERT_TMPDIR
@@ -453,3 +453,4 @@
     (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('25.04', '>='))
   tags: pngx_conf_gs
   notify: Restart paperless completely
+...

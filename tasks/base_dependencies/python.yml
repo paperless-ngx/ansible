@@ -4,7 +4,6 @@
     path: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }}"
   register: python_check
 
-
 - name: Setting python version
   ansible.builtin.set_fact:
     _python_wanted_version_specific_installed: "{{ python_check.stat.exists }}"
@@ -64,3 +63,4 @@
         chdir: "{{ _python_archive_dir.path }}"
         target: altinstall
       when: not ansible_check_mode | bool
+...

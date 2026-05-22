@@ -84,3 +84,4 @@
     masked: false
     state: started
   when: paperless_ngx_redis_host == 'localhost' or paperless_ngx_redis_host == '127.0.0.1'
+...
