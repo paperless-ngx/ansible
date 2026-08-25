@@ -3,6 +3,24 @@
   ansible.builtin.include_vars:
     file: ../defaults/main.yml
 
+- name: Read paperless config file
+  become: true
+  ansible.builtin.slurp:
+    src: /etc/paperless.conf
+  register: _paperless_conf
+
+- name: Assert PAPERLESS_FILENAME_FORMAT is omitted when unset
+  ansible.builtin.assert:
+    that:
+      - filename_format_lines | length == 0
+      - "'paperless_ngx_conf_filename_format' not in conf_text"
+    fail_msg: >-
+      PAPERLESS_FILENAME_FORMAT must not be written when paperless_ngx_conf_filename_format is unset.
+      Found: {{ filename_format_lines }}
+  vars:
+    conf_text: "{{ _paperless_conf.content | b64decode }}"
+    filename_format_lines: "{{ conf_text.splitlines() | select('match', '^#?PAPERLESS_FILENAME_FORMAT=') | list }}"
+
 - name: Check if webserver is up
   ansible.builtin.uri:
     url: http://localhost:{{ paperless_ngx_conf_port }}

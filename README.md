@@ -21,6 +21,7 @@ Installs and configures paperless-ngx EDMS.
 	* 3.3. [Generated password](#Generatedpassword)
 	* 3.4. [Separation of static (~ installation) and dynamic (~ runtime) data](#Separationofstaticinstallationanddynamicruntimedata)
 	* 3.5. [PostgreSQL usage](#PostgreSQLusage)
+	* 3.6. [Filename format](#Filenameformat)
 * 4. [Dependencies](#Dependencies)
 * 5. [Example Playbooks](#ExamplePlaybooks)
 * 6. [Contributing](#Contributing)
@@ -179,7 +180,7 @@ To save reading space a few abbreviations are used in the table down below:
 | `paperless_ngx_conf_enable_update_check` |  | Y | Y | Will be removed in the future |   |
 | `paperless_ngx_conf_filename_date_order` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_filename_format_remove_none` | false | Y | Y |   |   |
-| `paperless_ngx_conf_filename_format` | "" | Y | Y | If you want to use paperless variables, wrap them like so: {% raw %}{{ created_year_short }}-{{ correspondent }}-{{ title }}{% endraw %} |   |
+| `paperless_ngx_conf_filename_format` | "" | Y | Y | Omitted from the config file when empty. Paperless placeholders must use YAML `!unsafe` (see [filename format](#Filenameformat)) |   |
 | `paperless_ngx_conf_force_script_name` | "" | Y | Y |   |   |
 | `paperless_ngx_conf_gmail_oauth_client_id` | None | Y | Y |   | 2.12 |
 | `paperless_ngx_conf_gmail_oauth_client_secret` | None | Y | Y |   | 2.12 |
@@ -284,6 +285,14 @@ This role checks that you do not set one of the data dirs (like consumption etc.
 
 ###  3.5. <a name='PostgreSQLusage'></a>PostgreSQL usage
 If you want to use Paperless-ngx together with PostgreSQL a running instance of PostgreSQL is required. This role does not automatically install such a database instance for you. However, here is you can read an example how to set up such an instance from scretch: [Link to example playbook](docs/POSTGRESQL.md)
+
+###  3.6. <a name='Filenameformat'></a>Filename format
+
+`paperless_ngx_conf_filename_format` is written to `PAPERLESS_FILENAME_FORMAT` only when it is non-empty. Paperless filename templates use `{{ … }}`, which Ansible would otherwise expand as its own variable. Tag the value as unsafe so it is copied into `/etc/paperless.conf` unchanged:
+
+```yaml
+paperless_ngx_conf_filename_format: !unsafe "{{ created_year_short }}-{{ correspondent }}-{{ title }}"
+```
 
 ##  4. <a name='Dependencies'></a>Dependencies
 
