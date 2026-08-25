@@ -22,3 +22,25 @@
       loop:
         - setting_key: CONSUMER_IGNORE_PATTERNS
           expected_value: '\[.*?\]'
+
+- name: Check PAPERLESS_FILENAME_FORMAT in paperless.conf
+  vars:
+    expected_filename_format_line: !unsafe "PAPERLESS_FILENAME_FORMAT={{ created_year_short }}-{{ correspondent }}-{{ title }}"
+  block:
+    - name: Read paperless config file
+      become: true
+      ansible.builtin.slurp:
+        src: "{{ paperless_ngx_config_file }}"
+      register: test_alternative_installation__paperless_conf
+
+    - name: Assert PAPERLESS_FILENAME_FORMAT writes Paperless placeholders
+      ansible.builtin.assert:
+        that:
+          - expected_filename_format_line in conf_lines
+          - "'paperless_ngx_conf_filename_format' not in conf_text"
+        fail_msg: >-
+          Expected {{ expected_filename_format_line }} in {{ paperless_ngx_config_file }}.
+          Found filename-format lines: {{ conf_lines | select('match', '^#?PAPERLESS_FILENAME_FORMAT=') | list }}
+      vars:
+        conf_text: "{{ test_alternative_installation__paperless_conf.content | b64decode }}"
+        conf_lines: "{{ conf_text.splitlines() }}"
