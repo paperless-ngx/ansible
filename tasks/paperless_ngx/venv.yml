@@ -26,7 +26,7 @@
     requirements: "{{ paperless_ngx_dir_installation }}/requirements.txt"
     virtualenv: "{{ paperless_ngx_dir_virtualenv }}"
     virtualenv_python: "{{ paperless_ngx_dir_python }}/bin/python{{ paperless_ngx_python_version_short }}"
-    extra_args: --upgrade
+    extra_args: "--upgrade --extra-index-url https://download.pytorch.org/whl/cpu"
   register: _install_python_requirements
   until: 'not "ReadTimeoutError" in _install_python_requirements.msg | default("")'
   retries: 3
