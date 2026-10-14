@@ -94,8 +94,8 @@
     dest: "{{ paperless_ngx_dir_installation }}/"
     owner: "{{ paperless_ngx_system_user }}"
     group: "{{ paperless_ngx_system_group }}"
-    mode: preserve
-    directory_mode: preserve
+    mode: "0640"
+    directory_mode: "0750"
 
 - name: Create paperless config file if it does not exist
   become: true
