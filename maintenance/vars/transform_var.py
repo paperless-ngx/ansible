@@ -9,7 +9,7 @@ default_doc = 'TBD'
 # First argument is the DOC var "PAPERLESS_..."
 if len(sys.argv) > 0:
     var = sys.argv[1]
-# sedond argument is the default value for the code (see https://github.com/paperless-ngx/paperless-ngx/blob/47b4a602a72609c7f9ecee4401d782af3148c860/src/paperless/settings.py)
+# second argument is the default value for the code (see https://github.com/paperless-ngx/paperless-ngx/blob/47b4a602a72609c7f9ecee4401d782af3148c860/src/paperless/settings.py)
 if len(sys.argv) > 1:
     default_doc = sys.argv[2]
 # third argument is the version since the var is available (2.x)

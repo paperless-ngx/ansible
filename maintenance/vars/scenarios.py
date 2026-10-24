@@ -27,7 +27,7 @@ def readme_vs_docs(version:str = 'latest'):
 
 #############################################
 # VARS (defaults only) vs README
-# - What:   Every var in defaults should be documented in README because they are ment to be overridden by the user.
+# - What:   Every var in defaults should be documented in README because they are meant to be overridden by the user.
 # - How:    Compare VARS defaults with roles README complete var set.
 #############################################
 def default_vars_vs_readme():
@@ -38,7 +38,7 @@ def default_vars_vs_readme():
 
 #############################################
 # README vs VARS (defaults and vars)
-# - What:   Every var in README should have a correspondant in either defaults/main.yml or vars/main.yml file
+# - What:   Every var in README should have a correspondent in either defaults/main.yml or vars/main.yml file
 # - How:    Compare VARS defaults/main.yml + vars/main.yml with roles README complete var set.
 #############################################
 def readme_vs_all_vars():
@@ -51,7 +51,7 @@ def readme_vs_all_vars():
 
 #############################################
 # VARS (conf in defaults and vars) vs CONFIGURATION TASK
-# - What:   Every conf var in in either defaults/main.yml should have a correspondant or CONFIGURATION TASK file
+# - What:   Every conf var in either defaults/main.yml should have a correspondent or CONFIGURATION TASK file
 # - How:    Compare VARS defaults/main.yml + vars/main.yml with roles CONFIGURATION TASK file complete var set.
 #############################################
 def all_conf_vars_vs_configuration_task_file():
